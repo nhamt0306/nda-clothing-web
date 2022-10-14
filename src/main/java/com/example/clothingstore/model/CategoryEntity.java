@@ -10,7 +10,7 @@ public class CategoryEntity extends BaseClassEntity{
     private Long id;
     private String name;
     private String status = "Active";
-    private String parentId;
+    private Long parentId;
 
     // Relationship with table ProductEntity
     @OneToOne(mappedBy = "categoryEntity")
@@ -21,7 +21,7 @@ public class CategoryEntity extends BaseClassEntity{
     public CategoryEntity() {
     }
 
-    public CategoryEntity(Long id, String name, String status, String parentId) {
+    public CategoryEntity(Long id, String name, String status, Long parentId) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -52,11 +52,11 @@ public class CategoryEntity extends BaseClassEntity{
         this.status = status;
     }
 
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 }
