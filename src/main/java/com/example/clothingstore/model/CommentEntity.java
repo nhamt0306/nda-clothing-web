@@ -12,7 +12,6 @@ public class CommentEntity extends BaseClassEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private String status = "Active";
     private Long rating;
 
     // Relationship with table ProductEntity
@@ -26,10 +25,9 @@ public class CommentEntity extends BaseClassEntity{
     public CommentEntity() {
     }
 
-    public CommentEntity(Long id, String content, String status, Long rating) {
+    public CommentEntity(Long id, String content, Long rating) {
         this.id = id;
         this.content = content;
-        this.status = status;
         this.rating = rating;
     }
 
@@ -49,13 +47,6 @@ public class CommentEntity extends BaseClassEntity{
         this.content = content;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Long getRating() {
         return rating;

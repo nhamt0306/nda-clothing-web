@@ -14,7 +14,8 @@ public class TypeEntity extends BaseClassEntity{
     private Long quantity;
     private Long price;
     private Long size;
-    private Long color;
+    private String color;
+    private String status;
 
     // Relationship with table ProductEntity
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,12 +29,13 @@ public class TypeEntity extends BaseClassEntity{
     public TypeEntity() {
     }
 
-    public TypeEntity(Long id, Long quantity, Long price, Long size, Long color) {
+    public TypeEntity(Long id, Long quantity, Long price, Long size, String color, String s) {
         this.id = id;
         this.quantity = quantity;
         this.price = price;
         this.size = size;
         this.color = color;
+        this.status = s;
     }
 
     public Long getId() {
@@ -68,11 +70,19 @@ public class TypeEntity extends BaseClassEntity{
         this.size = size;
     }
 
-    public Long getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Long color) {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setColor(String color) {
         this.color = color;
     }
 }

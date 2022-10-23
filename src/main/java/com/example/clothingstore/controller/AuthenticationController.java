@@ -4,11 +4,13 @@ import com.example.clothingstore.mapper.JwtResponse;
 import com.example.clothingstore.mapper.ResponseMessage;
 import com.example.clothingstore.mapper.SignInForm;
 import com.example.clothingstore.mapper.SignUpForm;
+import com.example.clothingstore.model.CartEntity;
 import com.example.clothingstore.model.RoleEntity;
 import com.example.clothingstore.model.RoleName;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.jwt.JwtProvider;
 import com.example.clothingstore.security.principal.UserPrinciple;
+import com.example.clothingstore.service.impl.CartServiceImpl;
 import com.example.clothingstore.service.impl.RoleServiceImpl;
 import com.example.clothingstore.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class AuthenticationController {
     AuthenticationManager authenticationManager;
     @Autowired
     JwtProvider jwtProvider;
+    @Autowired
+    CartServiceImpl cartService;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody SignUpForm signUpForm){
         if (userService.existsByUsername(signUpForm.getUsername())){
@@ -67,7 +72,9 @@ public class AuthenticationController {
             }
         });
         user.setRoles(roles);
+        user.setCartEntity(new CartEntity(user.getId()));
         userService.save(user);
+        cartService.save(user.getId());
         return new ResponseEntity<>(new ResponseMessage("Tạo user thành công!"), HttpStatus.OK);
     }
 

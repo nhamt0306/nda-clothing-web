@@ -12,6 +12,7 @@ public class CartProductEntity extends BaseClassEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long quantity;
+    private String type;
 
     //  Relationship with table Cart
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,6 +35,20 @@ public class CartProductEntity extends BaseClassEntity {
     public CartProductEntity(Long id, Long quantity) {
         this.id = id;
         this.quantity = quantity;
+    }
+
+    public CartProductEntity(Long id, Long quantity, String type) {
+        this.id = id;
+        this.quantity = quantity;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Long getId() {

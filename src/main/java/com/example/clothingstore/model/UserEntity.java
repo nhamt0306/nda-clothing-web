@@ -83,6 +83,14 @@ public class UserEntity extends BaseClassEntity{
         this.password = encode;
     }
 
+    public CartEntity getCartEntity() {
+        return cartEntity;
+    }
+
+    public void setCartEntity(CartEntity cartEntity) {
+        this.cartEntity = cartEntity;
+    }
+
     public Long getId() {
         return id;
     }
