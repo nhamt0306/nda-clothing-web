@@ -61,6 +61,14 @@ public class ProductEntity extends BaseClassEntity {
         this.status = status;
     }
 
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
+    }
+
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
+    }
+
     public Long getId() {
         return id;
     }

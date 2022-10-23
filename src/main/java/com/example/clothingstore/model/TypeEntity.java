@@ -15,10 +15,10 @@ public class TypeEntity extends BaseClassEntity{
     private Long price;
     private Long size;
     private String color;
-    private String status;
+    private String status = "Active";
 
     // Relationship with table ProductEntity
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "productId", nullable = false, referencedColumnName = "id")
     private ProductEntity productEntity;
@@ -36,6 +36,14 @@ public class TypeEntity extends BaseClassEntity{
         this.size = size;
         this.color = color;
         this.status = s;
+    }
+
+    public ProductEntity getProductEntity() {
+        return productEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
     }
 
     public Long getId() {

@@ -4,16 +4,19 @@ import com.example.clothingstore.model.CartProductEntity;
 import com.example.clothingstore.repository.CartProductRepository;
 import com.example.clothingstore.service.CartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
+@Service
 public class CartProductServiceImpl implements CartProductService {
     @Autowired
     CartProductRepository cartProductRepository;
     @Override
     public CartProductEntity save(CartProductEntity cartProductEntity) {
-        if (existsByProduct(cartProductEntity.getId()))
+        // Tim cart product tuong ung
+        // kiem tra san pham co ton tai trong gio hang cua user do hay khong --> thieu check user
+        if (existsByProduct(cartProductEntity.getProductEntity().getId()))
         {
             cartProductEntity.setQuantity(cartProductEntity.getQuantity()+1);
         }
@@ -33,6 +36,6 @@ public class CartProductServiceImpl implements CartProductService {
 
     @Override
     public Boolean existsByProduct(Long productId) {
-        return cartProductRepository.existsByProductId(productId);
+        return cartProductRepository.existsByProductEntityId(productId);
     }
 }

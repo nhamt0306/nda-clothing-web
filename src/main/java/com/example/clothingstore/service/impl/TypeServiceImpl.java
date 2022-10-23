@@ -15,9 +15,10 @@ public class TypeServiceImpl implements TypeService {
     @Autowired
     TypeRepository typeRepository;
 
+
     @Override
-    public List<TypeEntity> getAllType() {
-        return typeRepository.findAll();
+    public List<TypeEntity> getAll() {
+        return typeRepository.getAllByStatus("Active");
     }
 
     @Override
@@ -26,9 +27,10 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public TypeEntity findById(Long id) {
+    public TypeEntity findTypeById(Long id) {
         return typeRepository.findById(id).get();
     }
+
 
     @Override
     public void delete(Long id) {

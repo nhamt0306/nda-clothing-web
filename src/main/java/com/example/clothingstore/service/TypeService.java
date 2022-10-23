@@ -5,8 +5,8 @@ import com.example.clothingstore.model.TypeEntity;
 import java.util.List;
 
 public interface TypeService {
-    List<TypeEntity> getAllType();
+    List<TypeEntity> getAll();
     TypeEntity save(TypeEntity type);
-    TypeEntity findById(Long id);
+    TypeEntity findTypeById(Long id);
     void delete(Long id);
 }

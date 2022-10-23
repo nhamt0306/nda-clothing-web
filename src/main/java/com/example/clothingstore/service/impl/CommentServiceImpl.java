@@ -7,10 +7,11 @@ import com.example.clothingstore.repository.CommentRepository;
 import com.example.clothingstore.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
+@Service
 public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentRepository commentRepository;
