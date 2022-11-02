@@ -9,5 +9,5 @@ public interface CartProductService {
     CartProductEntity save(CartProductEntity cartProductEntity);
     List<CartProductEntity> getAllProductByCartId(Long cartId);
     void delete(Long id);
-    Boolean existsByProduct(Long productId);
+    Boolean existsByProduct(Long productId, String color, Long size, Long cartId);
 }

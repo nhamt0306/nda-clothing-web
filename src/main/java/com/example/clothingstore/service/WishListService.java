@@ -9,4 +9,5 @@ public interface WishListService {
     WishListEntity findById(Long id);
     WishListEntity save(WishListEntity wishListEntity);
     void delete(Long id);
+    WishListEntity addToWishlist(Long productId, Long userId);
 }

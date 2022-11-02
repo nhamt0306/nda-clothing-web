@@ -36,6 +36,22 @@ public class WishListEntity extends BaseClassEntity{
         this.productEntity = productEntity;
     }
 
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public ProductEntity getProductEntity() {
+        return productEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
+    }
+
     public WishListEntity(Long id) {
         this.id = id;
     }

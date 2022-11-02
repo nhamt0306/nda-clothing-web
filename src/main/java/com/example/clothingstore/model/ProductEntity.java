@@ -37,7 +37,7 @@ public class ProductEntity extends BaseClassEntity {
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<TypeEntity> typeEntities =new ArrayList<>();
 
-    // Relationship with table BrandEntity
+    // Relationship with table categoryEntity
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoryId", referencedColumnName = "id")
     private CategoryEntity categoryEntity;

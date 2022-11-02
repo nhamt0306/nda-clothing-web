@@ -1,7 +1,9 @@
 package com.example.clothingstore.service.impl;
 
 import com.example.clothingstore.model.CartProductEntity;
+import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.repository.CartProductRepository;
+import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.CartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +14,17 @@ import java.util.List;
 public class CartProductServiceImpl implements CartProductService {
     @Autowired
     CartProductRepository cartProductRepository;
+    @Autowired
+    UserDetailService userDetailService;
     @Override
     public CartProductEntity save(CartProductEntity cartProductEntity) {
         // Tim cart product tuong ung
         // kiem tra san pham co ton tai trong gio hang cua user do hay khong --> thieu check user
-        if (existsByProduct(cartProductEntity.getProductEntity().getId()))
+        if (existsByProduct(cartProductEntity.getProductEntity().getId(), cartProductEntity.getColor(), cartProductEntity.getSize(), cartProductEntity.getCartEntity().getId()))
         {
-            cartProductEntity.setQuantity(cartProductEntity.getQuantity()+1);
+            CartProductEntity cartProduct = cartProductRepository.findByCartEntityIdAndProductEntityIdAndColorAndSize(cartProductEntity.getCartEntity().getId(), cartProductEntity.getProductEntity().getId(),cartProductEntity.getColor(), cartProductEntity.getSize());
+            cartProduct.setQuantity(cartProduct.getQuantity()+cartProductEntity.getQuantity());
+            return cartProductRepository.save(cartProduct);
         }
         return cartProductRepository.save(cartProductEntity);
     }
@@ -35,7 +41,7 @@ public class CartProductServiceImpl implements CartProductService {
     }
 
     @Override
-    public Boolean existsByProduct(Long productId) {
-        return cartProductRepository.existsByProductEntityId(productId);
+    public Boolean existsByProduct(Long productId, String color, Long size, Long cartId) {
+        return cartProductRepository.existsByProductEntityIdAndColorAndSizeAndCartEntityId(productId, color, size, cartId);
     }
 }
