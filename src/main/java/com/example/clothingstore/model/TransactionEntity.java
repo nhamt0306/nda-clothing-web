@@ -11,10 +11,10 @@ public class TransactionEntity extends BaseClassEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
-    private String unitPrice;
-    private String quantity;
-    private String type;
+    private Long unitPrice;
+    private Long quantity;
+    private String color;
+    private Long size;
 
     //  Relationship with table Product
     @ManyToOne(fetch = FetchType.EAGER)
@@ -33,12 +33,28 @@ public class TransactionEntity extends BaseClassEntity {
     public TransactionEntity() {
     }
 
-    public TransactionEntity(Long id, String status, String unitPrice, String quantity, String type) {
+
+    public TransactionEntity(Long id, Long unitPrice, Long quantity, String color, Long size) {
         this.id = id;
-        this.status = status;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
-        this.type = type;
+        this.color = color;
+        this.size = size;
+    }
+
+    public TransactionEntity(Long unitPrice, Long quantity, String color, Long size, ProductEntity productEntity) {
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.color = color;
+        this.size = size;
+        this.productEntity = productEntity;
+    }
+
+    public TransactionEntity(Long unitPrice, Long quantity, String color, Long size) {
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.color = color;
+        this.size = size;
     }
 
     public Long getId() {
@@ -49,35 +65,52 @@ public class TransactionEntity extends BaseClassEntity {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getUnitPrice() {
+    public Long getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(String unitPrice) {
+    public void setUnitPrice(Long unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public String getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 
-    public String getType() {
-        return type;
+    public String getColor() {
+        return color;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public ProductEntity getProductEntity() {
+        return productEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
+    }
+
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
+    }
+
+    public void setOrderEntity(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
     }
 }

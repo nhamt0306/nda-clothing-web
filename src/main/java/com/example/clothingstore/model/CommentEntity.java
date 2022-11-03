@@ -13,6 +13,7 @@ public class CommentEntity extends BaseClassEntity{
     private Long id;
     private String content;
     private Long rating;
+    private Long userId;
 
     // Relationship with table ProductEntity
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,6 +30,29 @@ public class CommentEntity extends BaseClassEntity{
         this.id = id;
         this.content = content;
         this.rating = rating;
+    }
+
+    public CommentEntity(Long id, String content, Long rating, Long userId) {
+        this.id = id;
+        this.content = content;
+        this.rating = rating;
+        this.userId = userId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public ProductEntity getProductEntity() {
+        return productEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
     }
 
     public Long getId() {

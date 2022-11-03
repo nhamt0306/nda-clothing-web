@@ -44,4 +44,9 @@ public class CartProductServiceImpl implements CartProductService {
     public Boolean existsByProduct(Long productId, String color, Long size, Long cartId) {
         return cartProductRepository.existsByProductEntityIdAndColorAndSizeAndCartEntityId(productId, color, size, cartId);
     }
+
+    @Override
+    public void deleteProductInCart(Long cartId, Long productId, String color, Long size) {
+        cartProductRepository.deleteByCartEntityIdAndProductEntityIdAndColorAndSize(cartId, productId, color, size);
+    }
 }

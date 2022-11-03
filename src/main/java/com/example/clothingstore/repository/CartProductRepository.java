@@ -15,4 +15,5 @@ public interface CartProductRepository extends JpaRepository<CartProductEntity, 
     Boolean existsByProductEntityIdAndColorAndSizeAndCartEntityId(Long prodcutId, String color, Long size, Long cartId);
     CartProductEntity save(CartProductEntity cartProductEntity);
     CartProductEntity findByCartEntityIdAndProductEntityIdAndColorAndSize(Long cartId, Long productId, String color, Long size);
+    void deleteByCartEntityIdAndProductEntityIdAndColorAndSize(Long cartId, Long productId, String color, Long size);
 }
