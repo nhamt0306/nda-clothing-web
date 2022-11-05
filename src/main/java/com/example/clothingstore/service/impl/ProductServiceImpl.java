@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductEntity> findProductByName(String name) {
-        return productRepository.findByNameContaining(name);
+        return productRepository.findAllByNameContaining(name);
     }
 
     @Override
@@ -42,5 +42,10 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         productEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));
         productRepository.save(productEntity);
+    }
+
+    @Override
+    public List<ProductEntity> findProductByCat(Long catId) {
+        return productRepository.findAllByCategoryEntityId(catId);
     }
 }

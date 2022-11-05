@@ -10,6 +10,7 @@ import com.example.clothingstore.service.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -52,5 +53,21 @@ public class WishListServiceImpl implements WishListService {
         wishListEntity.setUserEntity(user);
         wishListEntity.setProductEntity(productEntity);
         return wishListRepository.save(wishListEntity);
+    }
+
+    @Override
+    public Boolean existByProduct(Long productId, Long userId) {
+        return wishListRepository.existsByProductEntityIdAndUserEntityId(productId, userId);
+    }
+
+    @Transactional
+    @Override
+    public void deleteByProductIdAndUserId(Long productId, Long userId) {
+        wishListRepository.deleteByProductEntityIdAndUserEntityId(productId, userId);
+    }
+
+    @Override
+    public List<WishListEntity> findAllByUser(Long userId) {
+        return wishListRepository.findAllByUserEntityId(userId);
     }
 }

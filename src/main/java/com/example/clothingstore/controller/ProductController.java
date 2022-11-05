@@ -30,9 +30,20 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<?> getCategoryById(@PathVariable long id){
+    public ResponseEntity<?> getProductById(@PathVariable long id){
         try {
             return ResponseEntity.ok(productService.findProductById(id));
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/product/category/{id}")
+    public ResponseEntity<?> getProductByCategory(@PathVariable long id){
+        try {
+            return ResponseEntity.ok(productService.findProductByCat(id));
         }
         catch (Exception e)
         {

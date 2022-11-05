@@ -75,6 +75,19 @@ public class UserEntity extends BaseClassEntity{
         this.roles = roles;
     }
 
+    public UserEntity(Long id, String fullname, String username, String password, String phone, String email, String address, String gender, Timestamp dob, String status) {
+        this.id = id;
+        this.fullname = fullname;
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.gender = gender;
+        this.dob = dob;
+        this.status = status;
+    }
+
     public UserEntity(String name, String username, String email, String phonenumber, String encode) {
         this.fullname = name;
         this.username = username;

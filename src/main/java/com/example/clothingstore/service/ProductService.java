@@ -10,4 +10,5 @@ public interface ProductService {
     ProductEntity findProductById(Long id);
     List<ProductEntity> findProductByName(String name);
     void delete(Long id);
+    List<ProductEntity> findProductByCat(Long catId);
 }
