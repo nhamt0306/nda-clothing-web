@@ -55,12 +55,24 @@ public class ProductController {
     @PostMapping("/admin/product/create")
     public Object createProduct(@RequestBody ProductDTO productDTO) throws ParseException {
         ProductEntity productEntity = new ProductEntity();
+        if (productDTO.getName().equals(null))
+        {
+            return "Tên danh mục không hợp lê!";
+        }
         productEntity.setName(productDTO.getName());
+        if (productDTO.getImage().equals(null))
+        {
+            return "Hình ảnh không hợp lê!";
+        }
         productEntity.setImage(productDTO.getImage());
         productEntity.setDescription(productDTO.getDescription());
         productEntity.setSold(0L);
         productEntity.setSale(0L);
         CategoryEntity categoryEntity = categoryService.findCategoryById(productDTO.getCategory_id());
+        if (categoryEntity == null)
+        {
+            return "Danh mục không tồn tại!";
+        }
         productEntity.setCategoryEntity(categoryEntity);
         productEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         productEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));

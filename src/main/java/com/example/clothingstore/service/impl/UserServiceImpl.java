@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    // down role user to admin
+    // down role admin to user
     @Override
     public Boolean downRole(String email) {
         // Get user
