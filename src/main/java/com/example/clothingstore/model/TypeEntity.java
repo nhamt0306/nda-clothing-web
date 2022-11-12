@@ -15,6 +15,8 @@ public class TypeEntity extends BaseClassEntity{
     private Long price;
     private Long size;
     private String color;
+    private Long sale;
+    private Long sold;
     private String status = "Active";
 
     // Relationship with table ProductEntity
@@ -36,6 +38,33 @@ public class TypeEntity extends BaseClassEntity{
         this.size = size;
         this.color = color;
         this.status = s;
+    }
+
+    public TypeEntity(Long id, Long quantity, Long price, Long size, String color, Long sale, Long sold, String status) {
+        this.id = id;
+        this.quantity = quantity;
+        this.price = price;
+        this.size = size;
+        this.color = color;
+        this.sale = sale;
+        this.sold = sold;
+        this.status = status;
+    }
+
+    public Long getSale() {
+        return sale;
+    }
+
+    public void setSale(Long sale) {
+        this.sale = sale;
+    }
+
+    public Long getSold() {
+        return sold;
+    }
+
+    public void setSold(Long sold) {
+        this.sold = sold;
     }
 
     public ProductEntity getProductEntity() {

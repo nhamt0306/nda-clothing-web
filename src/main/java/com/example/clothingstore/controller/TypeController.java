@@ -3,6 +3,7 @@ package com.example.clothingstore.controller;
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.ProductDTO;
 import com.example.clothingstore.dto.TypeDTO;
+import com.example.clothingstore.mapper.TypeMapper;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.model.TypeEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*")   //Để ghép AuthController với các controller khác
 @RequestMapping
@@ -28,7 +31,14 @@ public class TypeController {
     @GetMapping("/admin/type/getAll")
     public ResponseEntity<?> getAllType()
     {
-        return ResponseEntity.ok(typeService.getAll());
+        List<TypeEntity> typeEntityList = typeService.getAll();
+        List<TypeMapper> responseList = new ArrayList<>();
+        for (TypeEntity type : typeEntityList)
+        {
+            TypeMapper mapper = new TypeMapper(type.getQuantity(), type.getPrice(), type.getSize(), type.getColor(), type.getSale(), type.getSold(), type.getProductEntity().getId());
+            responseList.add(mapper);
+        }
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/admin/type/{id}")
@@ -42,16 +52,34 @@ public class TypeController {
         }
     }
 
+    @GetMapping("/type/product/{id}")
+    public ResponseEntity<?> getTypeByProductId(@PathVariable long id){
+        try {
+            List<TypeEntity> typeEntityList = typeService.getAllTypeByProduct(id);
+            List<TypeMapper> responseList = new ArrayList<>();
+            for (TypeEntity type : typeEntityList)
+            {
+                TypeMapper mapper = new TypeMapper(type.getQuantity(), type.getPrice(), type.getSize(), type.getColor(), type.getSale(), type.getSold(), type.getProductEntity().getId());
+                responseList.add(mapper);
+            }
+            return ResponseEntity.ok(responseList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("Cannot find any type in product with id = " + id, HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/admin/type/create")
     public Object createType(@RequestBody TypeDTO typeDTO) throws ParseException {
         TypeEntity type = new TypeEntity();
-
         type.setColor(typeDTO.getColor());
         type.setSize(typeDTO.getSize());
         type.setQuantity(typeDTO.getQuantity());
         type.setPrice(typeDTO.getPrice());
         type.setProductEntity(productService.findProductById(typeDTO.getProduct_id()));
+        type.setSale(0L);
+        type.setSold(0L);
         type.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         type.setCreate_at(new Timestamp(System.currentTimeMillis()));
         return typeService.save(type);

@@ -1,6 +1,8 @@
 package com.example.clothingstore.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,7 +18,8 @@ public class AddressEntity {
     private String address;
     private String name;
     private String phoneNumber;
-    private String add_default = "1";
+    private String note;
+    private Boolean add_default = true;
 
     //  Relationship with table User
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,12 +33,38 @@ public class AddressEntity {
     public AddressEntity() {
     }
 
-    public AddressEntity(Long id, String address, String name, String phoneNumber, String add_default) {
+    public AddressEntity(Long id, String address, String name, String phoneNumber, String Boolean) {
         this.id = id;
         this.address = address;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.add_default = add_default;
+    }
+
+    public AddressEntity(Long id, String address, String name, String phoneNumber, String note, Boolean add_default, UserEntity userEntity) {
+        this.id = id;
+        this.address = address;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.note = note;
+        this.add_default = add_default;
+        this.userEntity = userEntity;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public Long getId() {
@@ -70,11 +99,11 @@ public class AddressEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAdd_default() {
+    public Boolean getAdd_default() {
         return add_default;
     }
 
-    public void setAdd_default(String add_default) {
+    public void setAdd_default(Boolean add_default) {
         this.add_default = add_default;
     }
 }

@@ -40,4 +40,14 @@ public class TypeServiceImpl implements TypeService {
         type.setCreate_at(new Timestamp(System.currentTimeMillis()));
         typeRepository.save(type);
     }
+
+    @Override
+    public List<TypeEntity> getAllTypeByProduct(Long proId) {
+        return typeRepository.getAllByProductEntityId(proId);
+    }
+
+    @Override
+    public TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId) {
+        return typeRepository.getTypeEntityByColorAndSizeAndProductEntityId(color, size, productId);
+    }
 }

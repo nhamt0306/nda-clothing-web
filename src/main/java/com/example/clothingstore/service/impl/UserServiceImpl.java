@@ -86,6 +86,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean downRole(String email) {
         // Get user
+        if (!existsByEmail(email))
+        {
+            return false;
+        }
         Optional<UserEntity> curUser = userRepository.findByEmail(email);
         // Get admin role
         Optional<RoleEntity> roleAdmin = roleRepository.findById(Long.parseLong("1"));

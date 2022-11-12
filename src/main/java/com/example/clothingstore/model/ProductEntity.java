@@ -15,8 +15,6 @@ public class ProductEntity extends BaseClassEntity {
     private Long id;
     private String name;
     private String description;
-    private Long sale;
-    private Long sold;
     private String image;
     private Long avgRating;
     private String status = "Active";
@@ -42,24 +40,52 @@ public class ProductEntity extends BaseClassEntity {
     @JoinColumn(name = "categoryId", referencedColumnName = "id")
     private CategoryEntity categoryEntity;
 
-    // Relationship with table WishList
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
-    private List<WishListEntity> wishListEntities =new ArrayList<>();
 
     // Constructor, Getter and Setter
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id, String name, String description, Long sale, Long sold, String image, Long avgRating, String status) {
+    public ProductEntity(Long id, String name, String description, String image, Long avgRating, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.sale = sale;
-        this.sold = sold;
         this.image = image;
         this.avgRating = avgRating;
         this.status = status;
     }
+
+    public List<TransactionEntity> getTransactionEntities() {
+        return transactionEntities;
+    }
+
+    public void setTransactionEntities(List<TransactionEntity> transactionEntities) {
+        this.transactionEntities = transactionEntities;
+    }
+
+    public List<CartProductEntity> getCartProductEntities() {
+        return cartProductEntities;
+    }
+
+    public void setCartProductEntities(List<CartProductEntity> cartProductEntities) {
+        this.cartProductEntities = cartProductEntities;
+    }
+
+    public List<CommentEntity> getCommentEntities() {
+        return commentEntities;
+    }
+
+    public void setCommentEntities(List<CommentEntity> commentEntities) {
+        this.commentEntities = commentEntities;
+    }
+
+    public List<TypeEntity> getTypeEntities() {
+        return typeEntities;
+    }
+
+    public void setTypeEntities(List<TypeEntity> typeEntities) {
+        this.typeEntities = typeEntities;
+    }
+
 
     public CategoryEntity getCategoryEntity() {
         return categoryEntity;
@@ -93,21 +119,6 @@ public class ProductEntity extends BaseClassEntity {
         this.description = description;
     }
 
-    public Long getSale() {
-        return sale;
-    }
-
-    public void setSale(Long sale) {
-        this.sale = sale;
-    }
-
-    public Long getSold() {
-        return sold;
-    }
-
-    public void setSold(Long sold) {
-        this.sold = sold;
-    }
 
     public String getImage() {
         return image;

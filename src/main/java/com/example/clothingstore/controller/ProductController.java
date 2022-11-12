@@ -66,8 +66,6 @@ public class ProductController {
         }
         productEntity.setImage(productDTO.getImage());
         productEntity.setDescription(productDTO.getDescription());
-        productEntity.setSold(0L);
-        productEntity.setSale(0L);
         CategoryEntity categoryEntity = categoryService.findCategoryById(productDTO.getCategory_id());
         if (categoryEntity == null)
         {

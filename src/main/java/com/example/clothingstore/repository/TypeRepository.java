@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface TypeRepository extends JpaRepository<TypeEntity, Long> {
     List<TypeEntity> findAll();
     Optional<TypeEntity> findById(Long id);
+    List<TypeEntity> getAllByProductEntityId(Long productId);
     List<TypeEntity> getAllByStatus(String status);
+    TypeEntity getTypeEntityByColorAndSizeAndProductEntityId(String color, Long size, Long productId);
 }

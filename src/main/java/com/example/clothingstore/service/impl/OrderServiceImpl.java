@@ -46,4 +46,9 @@ public class OrderServiceImpl implements OrderService {
     public void addNewOrder(OrderEntity orderEntity) {
         orderRepository.save(orderEntity);
     }
+
+    @Override
+    public List<OrderEntity> getAllOrderByUserId(Long userid) {
+        return orderRepository.getAllByUserEntityId(userid);
+    }
 }

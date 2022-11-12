@@ -1,7 +1,9 @@
 package com.example.clothingstore.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -30,7 +32,7 @@ public class UserEntity extends BaseClassEntity{
     // Relationship with table AddressEntity
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<AddressEntity> addressEntityList = new ArrayList<>();
+    private List<AddressEntity> addressEntities = new ArrayList<>();
 
     // Relationship with table OrderEntity (1:n)
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
@@ -42,10 +44,6 @@ public class UserEntity extends BaseClassEntity{
     @JoinColumn(name = "cartId", referencedColumnName = "id")
     private CartEntity cartEntity; // mappedBy in table CartEntity
 
-    // Relationship with table WishList
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<WishListEntity> wishListEntities = new ArrayList<>();
 
     //Ràng buộc quan hệ JPA data spring
     @ManyToMany(fetch = FetchType.EAGER)

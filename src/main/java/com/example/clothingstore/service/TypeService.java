@@ -9,4 +9,6 @@ public interface TypeService {
     TypeEntity save(TypeEntity type);
     TypeEntity findTypeById(Long id);
     void delete(Long id);
+    List<TypeEntity> getAllTypeByProduct(Long proId);
+    TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId);
 }

@@ -1,16 +1,14 @@
 package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
-import com.example.clothingstore.model.OrderEntity;
-import com.example.clothingstore.model.ProductEntity;
-import com.example.clothingstore.model.TransactionEntity;
-import com.example.clothingstore.model.UserEntity;
+import com.example.clothingstore.mapper.OrderMapper;
+import com.example.clothingstore.mapper.TransactionMapper;
+import com.example.clothingstore.model.*;
 import com.example.clothingstore.security.principal.UserDetailService;
-import com.example.clothingstore.service.impl.CartProductServiceImpl;
-import com.example.clothingstore.service.impl.OrderServiceImpl;
-import com.example.clothingstore.service.impl.ProductServiceImpl;
-import com.example.clothingstore.service.impl.TransactionServiceImpl;
+import com.example.clothingstore.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -36,6 +34,10 @@ public class OrderController {
     ProductServiceImpl productService;
     @Autowired
     TransactionServiceImpl orderDetailService;
+    @Autowired
+    AddressServiceImpl addressService;
+    @Autowired
+    TypeServiceImpl typeService;
 
     @PostMapping("/user/order/create")
     public Object createOrder(@RequestBody List<Object> req) throws ParseException {
@@ -47,12 +49,7 @@ public class OrderController {
         // get user information
         UserEntity user = userDetailService.getCurrentUser();
         long totalcost = Long.valueOf(0);
-        // analyze order Product data
-//        List<TransactionEntity> orderDetailsEntityList = orderDetailsEntityListReq.stream().map(orderEntityReq -> {
-//            TransactionEntity orderDetailsEntity = new TransactionEntity(Long.parseLong(orderEntityReq.get("unit_price")), Long.parseLong(orderEntityReq.get("quantity")), productService.findProductById(Long.parseLong(orderEntityReq.get("product_id"))));
-//            totalcost.set(totalcost.get() + (Long.parseLong(orderEntityReq.get("unit_price")) * Long.parseLong(orderEntityReq.get("quantity"))));
-//            return orderDetailsEntity;
-//        }).collect(Collectors.toList());
+
         List<TransactionEntity> transactionEntities = new ArrayList<TransactionEntity>();
         for (Map<String, String> transaction : orderDetailsEntityListReq)
         {
@@ -63,6 +60,15 @@ public class OrderController {
 
             ProductEntity productEntity = productService.findProductById(Long.parseLong(transaction.get("product_id")));
             TransactionEntity transactionEntity = new TransactionEntity(unitPrice, quantity, color, size, productEntity);
+            TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(color, size, productEntity.getId());
+            if (quantity > typeEntity.getQuantity())
+            {
+                return "Dont enought quantity of "+ productEntity.getName();
+            }
+            // update type entity
+            typeEntity.setSold(typeEntity.getSold() + quantity);
+            typeEntity.setQuantity(typeEntity.getQuantity() - quantity);
+
             totalcost += unitPrice*quantity;
             transactionEntities.add(transactionEntity);
         }
@@ -71,7 +77,13 @@ public class OrderController {
             orderEntity = new OrderEntity(totalcost, orderInformation.get("note") == null ? "" : orderInformation.get("note"), Long.parseLong(orderInformation.get("shipping_fee") == null ? "25000" : orderInformation.get("shipping_fee")), orderInformation.get("payment") == null ? "COD" : orderInformation.get("payment"), "PENDING" , user.getFullname() ,user.getAddress(), user.getPhone());
         } else
         {
-            orderEntity = new OrderEntity(totalcost, orderInformation.get("note") == null ? "" : orderInformation.get("note"), Long.parseLong(orderInformation.get("shipping_fee") == null ? "25000" : orderInformation.get("shipping_fee")), orderInformation.get("payment") == null ? "COD" : orderInformation.get("payment"), "PENDING" ,orderInformation.get("name") == null ? user.getFullname() : orderInformation.get("name"), orderInformation.get("address") == null ? user.getAddress() : orderInformation.get("address"), user.getPhone());
+            AddressEntity address = addressService.getAddressDefaultOfUser(user.getId());
+            orderEntity = new OrderEntity(totalcost, orderInformation.get("note") == null ? address.getNote() : orderInformation.get("note"), Long.valueOf(25000) ,"PENDING" , "COD", address.getName(), address.getAddress(), address.getPhoneNumber());
+            if (totalcost > Long.valueOf(250000L))
+            {
+                orderEntity.setShippingFee(Long.valueOf(0L));
+            }
+
         }
         orderEntity.setUserEntity(user);
         System.out.println(orderEntity);
@@ -91,6 +103,33 @@ public class OrderController {
             cartProductService.deleteProductInCart(user.getId(), transactionEntity.getProductEntity().getId(), transactionEntity.getColor(), transactionEntity.getSize());
         }
         return "create order success";
+    }
+
+    @GetMapping("/admin/orders/getOrderByUserId/{id}")
+    public ResponseEntity<?> getOrderByUserId(@PathVariable long id){
+        try {
+            List<OrderEntity> orderEntityList = orderService.getAllOrderByUserId(id);
+            List<OrderMapper> orderMappers = new ArrayList<>();
+            for (OrderEntity orderEntity : orderEntityList)
+            {
+                OrderMapper orderMapper = new OrderMapper(orderEntity.getId(), orderEntity.getTotalPrice(), orderEntity.getNote(), orderEntity.getShippingFee(), orderEntity.getPayment(), orderEntity.getStatus(), orderEntity.getAddress(), orderEntity.getPhone(), orderEntity.getCreate_at());
+                // get transaction of ~ order
+                List<TransactionMapper> transactionMappers = new ArrayList<>();
+                for(TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId()))
+                {
+                    TransactionMapper transactionMapper = new TransactionMapper(transactionEntity.getId(), transactionEntity.getUnitPrice(), transactionEntity.getQuantity(), transactionEntity.getProductEntity().getId(), transactionEntity.getProductEntity().getImage(), transactionEntity.getProductEntity().getName(), transactionEntity.getColor(), transactionEntity.getSize());
+                    transactionMappers.add(transactionMapper);
+                }
+                orderMapper.setTransactionMapper(transactionMappers);
+                orderMappers.add(orderMapper);
+            }
+
+            return ResponseEntity.ok(orderMappers);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/user/order/cancel")
