@@ -33,7 +33,7 @@ public class ProductController {
         List<ProductMapper> responseProductList = new ArrayList<>();
         for (ProductEntity productEntity : productEntityList)
         {
-            ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(1).getPrice(), productEntity.getTypeEntities().get(1).getSize(), productEntity.getTypeEntities().get(1).getColor(), productEntity.getTypeEntities().get(1).getSale(), productEntity.getTypeEntities().get(1).getSold(), productEntity.getTypeEntities().get(1).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+            ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
             responseProductList.add(productMapper);
         }
         return ResponseEntity.ok(responseProductList);
@@ -43,7 +43,7 @@ public class ProductController {
     public ResponseEntity<?> getProductById(@PathVariable long id){
         try {
             ProductEntity productEntity = productService.findProductById(id);
-            ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(1).getPrice(), productEntity.getTypeEntities().get(1).getSize(), productEntity.getTypeEntities().get(1).getColor(), productEntity.getTypeEntities().get(1).getSale(), productEntity.getTypeEntities().get(1).getSold(), productEntity.getTypeEntities().get(1).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+            ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
             return ResponseEntity.ok(productMapper);
         }
         catch (Exception e)
@@ -59,7 +59,7 @@ public class ProductController {
             List<ProductMapper> responseProductList = new ArrayList<>();
             for (ProductEntity productEntity : productEntityList)
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(1).getPrice(), productEntity.getTypeEntities().get(1).getSize(), productEntity.getTypeEntities().get(1).getColor(), productEntity.getTypeEntities().get(1).getSale(), productEntity.getTypeEntities().get(1).getSold(), productEntity.getTypeEntities().get(1).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
                 responseProductList.add(productMapper);
             }
             return ResponseEntity.ok(responseProductList);
@@ -83,6 +83,7 @@ public class ProductController {
         {
             return "Hình ảnh không hợp lê!";
         }
+        productEntity.setAvgRating(Long.valueOf(5));
         productEntity.setImage(productDTO.getImage());
         productEntity.setDescription(productDTO.getDescription());
         CategoryEntity categoryEntity = categoryService.findCategoryById(productDTO.getCategory_id());
