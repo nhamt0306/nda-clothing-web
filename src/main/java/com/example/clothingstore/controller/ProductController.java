@@ -42,22 +42,31 @@ public class ProductController {
     @GetMapping("/product/{id}")
     public ResponseEntity<?> getProductById(@PathVariable long id){
         try {
-            return ResponseEntity.ok(productService.findProductById(id));
+            ProductEntity productEntity = productService.findProductById(id);
+            ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(1).getPrice(), productEntity.getTypeEntities().get(1).getSize(), productEntity.getTypeEntities().get(1).getColor(), productEntity.getTypeEntities().get(1).getSale(), productEntity.getTypeEntities().get(1).getSold(), productEntity.getTypeEntities().get(1).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+            return ResponseEntity.ok(productMapper);
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cannot find product with id = " + id, HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/product/category/{id}")
     public ResponseEntity<?> getProductByCategory(@PathVariable long id){
         try {
-            return ResponseEntity.ok(productService.findProductByCat(id));
+            List<ProductEntity> productEntityList = productService.findProductByCat(id);
+            List<ProductMapper> responseProductList = new ArrayList<>();
+            for (ProductEntity productEntity : productEntityList)
+            {
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(1).getPrice(), productEntity.getTypeEntities().get(1).getSize(), productEntity.getTypeEntities().get(1).getColor(), productEntity.getTypeEntities().get(1).getSale(), productEntity.getTypeEntities().get(1).getSold(), productEntity.getTypeEntities().get(1).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                responseProductList.add(productMapper);
+            }
+            return ResponseEntity.ok(responseProductList);
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cannot find product with category id = " + id, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -84,7 +93,8 @@ public class ProductController {
         productEntity.setCategoryEntity(categoryEntity);
         productEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         productEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));
-        return productService.save(productEntity);
+        productService.save(productEntity);
+        return "Create product success!";
     }
 
     @DeleteMapping("/admin/product/{id}")
