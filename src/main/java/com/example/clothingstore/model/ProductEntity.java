@@ -36,8 +36,9 @@ public class ProductEntity extends BaseClassEntity {
     private List<TypeEntity> typeEntities =new ArrayList<>();
 
     // Relationship with table categoryEntity
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "categoryId", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "categoryId", nullable = false, referencedColumnName = "id")
     private CategoryEntity categoryEntity;
 
 

@@ -1,6 +1,8 @@
 package com.example.clothingstore.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -13,8 +15,8 @@ public class CategoryEntity extends BaseClassEntity{
     private Long parentId;
 
     // Relationship with table ProductEntity
-    @OneToOne(mappedBy = "categoryEntity")
-    private ProductEntity productEntity;
+    @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL)
+    private List<ProductEntity> productEntities =new ArrayList<>();
 
     // Constructor
 
