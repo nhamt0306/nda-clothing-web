@@ -82,7 +82,8 @@ public class TypeController {
         type.setSold(0L);
         type.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         type.setCreate_at(new Timestamp(System.currentTimeMillis()));
-        return typeService.save(type);
+        typeService.save(type);
+        return "Create type success!";
     }
 
     @DeleteMapping("/admin/type/{id}")
