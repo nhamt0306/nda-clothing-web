@@ -2,6 +2,7 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.ProductDTO;
+import com.example.clothingstore.mapper.ProductMapper;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.service.impl.CategoryServiceImpl;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*")   //Để ghép AuthController với các controller khác
 @RequestMapping
@@ -26,7 +29,14 @@ public class ProductController {
     @GetMapping("/product/getAll")
     public ResponseEntity<?> getAllProduct()
     {
-        return ResponseEntity.ok(productService.getAllProduct());
+        List<ProductEntity> productEntityList = productService.getAllProduct();
+        List<ProductMapper> responseProductList = new ArrayList<>();
+        for (ProductEntity productEntity : productEntityList)
+        {
+            ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(1).getPrice(), productEntity.getTypeEntities().get(1).getSize(), productEntity.getTypeEntities().get(1).getColor(), productEntity.getTypeEntities().get(1).getSale(), productEntity.getTypeEntities().get(1).getSold(), productEntity.getTypeEntities().get(1).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+            responseProductList.add(productMapper);
+        }
+        return ResponseEntity.ok(responseProductList);
     }
 
     @GetMapping("/product/{id}")
