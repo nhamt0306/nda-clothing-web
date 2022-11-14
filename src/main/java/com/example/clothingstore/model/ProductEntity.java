@@ -23,6 +23,10 @@ public class ProductEntity extends BaseClassEntity {
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<TransactionEntity> transactionEntities = new ArrayList<>();
 
+    // Relationship with table ImageProductEntity
+    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
+    private List<ImageProductEntity> imageProductEntities = new ArrayList<>();
+
     // Relationship with table CartProductEntity
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<CartProductEntity> cartProductEntities = new ArrayList<>();

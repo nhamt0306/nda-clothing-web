@@ -2,6 +2,7 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CategoryDTO;
+import com.example.clothingstore.mapper.CategoryMapper;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.service.CategorySerivce;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RequestMapping
@@ -21,13 +24,27 @@ public class CategoryController {
     @GetMapping("/category/getAll")
     public ResponseEntity<?> getAllCategory()
     {
-        return ResponseEntity.ok(categorySerivce.getAllCategory());
+        List<CategoryEntity> categoryEntityList = categorySerivce.getAllCategory();
+        List<CategoryMapper> categoryMappers = new ArrayList<>();
+        for (CategoryEntity categoryEntity : categoryEntityList)
+        {
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            categoryMappers.add(categoryMapper);
+        }
+        return ResponseEntity.ok(categoryMappers);
     }
 
     @GetMapping("/category/getAllActive")
     public ResponseEntity<?> getAllCategoryActive()
     {
-        return ResponseEntity.ok(categorySerivce.findAllCategoryActive());
+        List<CategoryEntity> categoryEntityList = categorySerivce.findAllCategoryActive();
+        List<CategoryMapper> categoryMappers = new ArrayList<>();
+        for (CategoryEntity categoryEntity : categoryEntityList)
+        {
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            categoryMappers.add(categoryMapper);
+        }
+        return ResponseEntity.ok(categoryMappers);
     }
 
     @GetMapping("/category/{id}")
@@ -44,7 +61,14 @@ public class CategoryController {
     @GetMapping("/category/parentid/{id}")
     public ResponseEntity<?> getCategoryByParent(@PathVariable long id){
         try {
-            return ResponseEntity.ok(categorySerivce.findByCatParentId(id));
+            List<CategoryEntity> categoryEntityList = categorySerivce.findByCatParentId(id);
+            List<CategoryMapper> categoryMappers = new ArrayList<>();
+            for (CategoryEntity categoryEntity : categoryEntityList)
+            {
+                CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+                categoryMappers.add(categoryMapper);
+            }
+            return ResponseEntity.ok(categoryMappers);
         }
         catch (Exception e)
         {
@@ -57,7 +81,9 @@ public class CategoryController {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName(categoryDTO.getName());
         categoryEntity.setParentId(categoryDTO.getParend_id());
-        return categorySerivce.save(categoryEntity);
+        categorySerivce.save(categoryEntity);
+        CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+        return categoryMapper;
     }
 
     @DeleteMapping("/admin/category/{id}")

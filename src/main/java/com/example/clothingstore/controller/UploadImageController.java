@@ -25,4 +25,6 @@ public class UploadImageController {
 
         return ResponseEntity.ok("Upload image success:" + productEntity.getImage());
     }
+
+
 }
