@@ -48,7 +48,7 @@ public class TypeController {
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cannot find type with id = " + id, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -72,6 +72,10 @@ public class TypeController {
 
     @PostMapping("/admin/type/create")
     public Object createType(@RequestBody TypeDTO typeDTO) throws ParseException {
+        if (!productService.existByProductId(typeDTO.getProduct_id()))
+        {
+            return new ResponseEntity<>("Cannot find product with id = "+ typeDTO.getProduct_id(), HttpStatus.NOT_FOUND);
+        }
         TypeEntity type = new TypeEntity();
         type.setColor(typeDTO.getColor());
         type.setSize(typeDTO.getSize());
@@ -83,13 +87,14 @@ public class TypeController {
         type.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         type.setCreate_at(new Timestamp(System.currentTimeMillis()));
         typeService.save(type);
-        return "Create type success!";
+        TypeMapper mapper = new TypeMapper(type.getQuantity(), type.getPrice(), type.getSize(), type.getColor(), type.getSale(), type.getSold(), type.getProductEntity().getId());
+        return mapper;
     }
 
     @DeleteMapping("/admin/type/{id}")
     public ResponseEntity<?> deleteTypeById(@PathVariable long id)
     {
         typeService.delete(id);
-        return ResponseEntity.ok(LocalVariable.messageDeleteCatSuccess);
+        return ResponseEntity.ok("Delete type success!");
     }
 }

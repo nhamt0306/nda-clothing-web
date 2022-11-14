@@ -2,6 +2,7 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CartProductDTO;
+import com.example.clothingstore.mapper.CartProductMapper;
 import com.example.clothingstore.model.CartProductEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
@@ -60,10 +61,22 @@ public class CartController {
         return "Add to cart success!";
     }
 
-    @DeleteMapping("/user/cart/{id}")
-    public ResponseEntity<?> deleteProductById(@PathVariable long id)
+    @PostMapping("/user/cart/increase")
+    public Object increaseQuantityProductInCart(@RequestBody CartProductMapper cartProductMapper) throws ParseException {
+        cartProductService.increaseQuantity(cartProductMapper.getProductId(), userDetailService.getCurrentUser().getId(), cartProductMapper.getColor(), cartProductMapper.getSize());
+        return "Update product success!";
+    }
+
+    @PostMapping("/user/cart/decrease")
+    public Object decreaseQuantityProductInCart(@RequestBody CartProductMapper cartProductMapper) throws ParseException {
+        cartProductService.decreaseQuantity(cartProductMapper.getProductId(), userDetailService.getCurrentUser().getId(), cartProductMapper.getColor(), cartProductMapper.getSize());
+        return "Update product success!";
+    }
+
+    @DeleteMapping("/user/cart")
+    public ResponseEntity<?> deleteProductById(@RequestBody CartProductMapper cartProductMapper)
     {
-        cartProductService.delete(id);
+        cartProductService.deleteProductInCart(cartProductMapper.getProductId(), userDetailService.getCurrentUser().getId(), cartProductMapper.getColor(), cartProductMapper.getSize());
         return ResponseEntity.ok(LocalVariable.messageDeleteCatSuccess);
     }
 }

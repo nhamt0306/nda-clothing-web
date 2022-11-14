@@ -11,4 +11,6 @@ public interface CartProductService {
     void delete(Long id);
     Boolean existsByProduct(Long productId, String color, Long size, Long cartId);
     void deleteProductInCart(Long cartId, Long productId, String color, Long size);
+    CartProductEntity increaseQuantity(Long productId, Long cartId, String color, Long size);
+    CartProductEntity decreaseQuantity(Long productId, Long cartId, String color, Long size);
 }

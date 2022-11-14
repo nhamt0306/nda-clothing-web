@@ -48,4 +48,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductEntity> findProductByCat(Long catId) {
         return productRepository.findAllByCategoryEntityId(catId);
     }
+
+    @Override
+    public boolean existByProductId(Long id) {
+        return productRepository.existsById(id);
+    }
 }

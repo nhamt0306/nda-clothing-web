@@ -11,4 +11,5 @@ public interface ProductService {
     List<ProductEntity> findProductByName(String name);
     void delete(Long id);
     List<ProductEntity> findProductByCat(Long catId);
+    boolean existByProductId(Long id);
 }
