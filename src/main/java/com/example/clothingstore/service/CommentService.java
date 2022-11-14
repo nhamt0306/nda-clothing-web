@@ -10,4 +10,5 @@ public interface CommentService {
     CommentEntity findById(Long id);
     List<CommentEntity> findByProductId(Long id);
     void delete(Long id);
+    Boolean checkCommentIncludeByUser(Long userId, Long commentId);
 }

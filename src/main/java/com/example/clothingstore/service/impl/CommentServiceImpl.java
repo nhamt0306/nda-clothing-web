@@ -39,4 +39,9 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Long id) {
         commentRepository.deleteById(id);
     }
+
+    @Override
+    public Boolean checkCommentIncludeByUser(Long userId, Long commentId) {
+        return commentRepository.existsByUserIdAndId(userId, commentId);
+    }
 }
