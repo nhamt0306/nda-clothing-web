@@ -17,6 +17,9 @@ public class CartProductDTO {
         this.product_id = product_id;
     }
 
+    public CartProductDTO() {
+    }
+
     public CartProductDTO(Long quantity, Long price, String color, Long size, Long product_id, String proName, String proImage) {
         this.quantity = quantity;
         this.price = price;
