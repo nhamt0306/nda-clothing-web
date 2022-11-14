@@ -1,6 +1,7 @@
 package com.example.clothingstore.service;
 
 import com.example.clothingstore.model.ProductEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface ProductService {
     void delete(Long id);
     List<ProductEntity> findProductByCat(Long catId);
     boolean existByProductId(Long id);
+    ProductEntity uploadImage(long id, MultipartFile image);
 }

@@ -30,6 +30,15 @@ public class CategoryEntity extends BaseClassEntity{
         this.parentId = parentId;
     }
 
+
+    public List<ProductEntity> getProductEntities() {
+        return productEntities;
+    }
+
+    public void setProductEntities(List<ProductEntity> productEntities) {
+        this.productEntities = productEntities;
+    }
+
     public Long getId() {
         return id;
     }

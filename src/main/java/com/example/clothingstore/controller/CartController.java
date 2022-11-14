@@ -36,7 +36,7 @@ public class CartController {
         List<CartProductDTO> cartProductDTOS = new ArrayList<CartProductDTO>();
         for(CartProductEntity cartProductEntity: cartProductEntities)
         {
-            CartProductDTO cartProductDTO = new CartProductDTO(cartProductEntity.getQuantity(), cartProductEntity.getPrice(),cartProductEntity.getColor(), cartProductEntity.getSize(), cartProductEntity.getProductEntity().getId());
+            CartProductDTO cartProductDTO = new CartProductDTO(cartProductEntity.getQuantity(), cartProductEntity.getPrice(),cartProductEntity.getColor(), cartProductEntity.getSize(), cartProductEntity.getProductEntity().getId(), cartProductEntity.getProductEntity().getName(), cartProductEntity.getProductEntity().getImage());
             cartProductDTOS.add(cartProductDTO);
         };
         return ResponseEntity.ok(cartProductDTOS);

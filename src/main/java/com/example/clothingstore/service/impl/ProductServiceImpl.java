@@ -6,6 +6,7 @@ import com.example.clothingstore.repository.ProductRepository;
 import com.example.clothingstore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    CloudinaryService cloudinaryService;
 
     @Override
     public List<ProductEntity> getAllProduct() {
@@ -52,5 +55,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean existByProductId(Long id) {
         return productRepository.existsById(id);
+    }
+
+    @Override
+    public ProductEntity uploadImage(long id, MultipartFile image) {
+        ProductEntity productEntity = productRepository.findById(id).get();
+        String imageUrl = cloudinaryService.uploadFile(image,String.valueOf(id),
+                "BookStore"+ "/" + "Product");
+        if(!imageUrl.equals("-1")) {
+            productEntity.setImage(imageUrl);
+        }
+        else if(productEntity.getImage().equals("") || productEntity.getImage().equals("-1"))
+            productEntity.setImage("");
+
+        return productRepository.save(productEntity);
     }
 }

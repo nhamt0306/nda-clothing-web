@@ -1,5 +1,6 @@
 package com.example.clothingstore.service;
 
+import com.example.clothingstore.dto.ColorAndTypeDTO;
 import com.example.clothingstore.model.TypeEntity;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface TypeService {
     void delete(Long id);
     List<TypeEntity> getAllTypeByProduct(Long proId);
     TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId);
+    ColorAndTypeDTO getListColorAndSize(Long product);
 }
