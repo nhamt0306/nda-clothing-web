@@ -76,7 +76,7 @@ public class CartController {
     @DeleteMapping("/user/cart")
     public ResponseEntity<?> deleteProductById(@RequestBody CartProductMapper cartProductMapper)
     {
-        cartProductService.deleteProductInCart(cartProductMapper.getProductId(), userDetailService.getCurrentUser().getId(), cartProductMapper.getColor(), cartProductMapper.getSize());
+        cartProductService.deleteProductInCart(userDetailService.getCurrentUser().getId(), cartProductMapper.getProductId(), cartProductMapper.getColor(), cartProductMapper.getSize());
         return getAllProductByUser();
     }
 }
