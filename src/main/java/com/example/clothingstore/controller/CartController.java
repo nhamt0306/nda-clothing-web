@@ -64,13 +64,13 @@ public class CartController {
     @PostMapping("/user/cart/increase")
     public Object increaseQuantityProductInCart(@RequestBody CartProductMapper cartProductMapper) throws ParseException {
         cartProductService.increaseQuantity(cartProductMapper.getProductId(), userDetailService.getCurrentUser().getId(), cartProductMapper.getColor(), cartProductMapper.getSize());
-        return "Update product success!";
+        return getAllProductByUser();
     }
 
     @PostMapping("/user/cart/decrease")
     public Object decreaseQuantityProductInCart(@RequestBody CartProductMapper cartProductMapper) throws ParseException {
         cartProductService.decreaseQuantity(cartProductMapper.getProductId(), userDetailService.getCurrentUser().getId(), cartProductMapper.getColor(), cartProductMapper.getSize());
-        return "Update product success!";
+        return getAllProductByUser();
     }
 
     @DeleteMapping("/user/cart")
