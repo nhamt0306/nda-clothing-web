@@ -77,6 +77,6 @@ public class CartController {
     public ResponseEntity<?> deleteProductById(@RequestBody CartProductMapper cartProductMapper)
     {
         cartProductService.deleteProductInCart(cartProductMapper.getProductId(), userDetailService.getCurrentUser().getId(), cartProductMapper.getColor(), cartProductMapper.getSize());
-        return ResponseEntity.ok(LocalVariable.messageDeleteCatSuccess);
+        return getAllProductByUser();
     }
 }
