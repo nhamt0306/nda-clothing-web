@@ -58,7 +58,7 @@ public class CartController {
         cartProductEntity.setCartEntity(userDetailService.getCurrentUser().getCartEntity());
         cartProductEntity.setProductEntity(productService.findProductById(cartProductDTO.getProduct_id()));
         cartProductService.save(cartProductEntity);
-        return "Add to cart success!";
+        return getAllProductByUser();
     }
 
     @PostMapping("/user/cart/increase")
