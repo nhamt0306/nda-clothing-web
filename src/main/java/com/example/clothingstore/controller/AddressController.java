@@ -41,19 +41,19 @@ public class AddressController {
     @PostMapping("/user/address/change")
     public Object changAddress(@RequestBody AddressEntity address) throws ParseException {
         AddressEntity addressEntity = addressService.findAddressById(address.getId());
-        if (!address.getAddress().equals(null))
+        if (address.getAddress() != null)
         {
             addressEntity.setAddress(address.getAddress());
         }
-        else if (!address.getPhoneNumber().equals(null))
+        if (address.getPhoneNumber() != null)
         {
             addressEntity.setPhoneNumber(address.getPhoneNumber());
         }
-        else if (!address.getName().equals(null))
+        if (address.getName() != null)
         {
             addressEntity.setName(address.getName());
         }
-        else if (!address.getNote().equals(null))
+        if (address.getNote() != null)
         {
             addressEntity.setNote(address.getNote());
         }
