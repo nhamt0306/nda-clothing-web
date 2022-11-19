@@ -70,7 +70,7 @@ public class TypeController {
         }
     }
 
-    @GetMapping("/admin/type/cas/{id}")
+    @GetMapping("/type/cas/{id}")
     public ResponseEntity<?> getTypeAndColorByProductId(@PathVariable long id)
     {
         return new ResponseEntity<>(typeService.getListColorAndSize(id), HttpStatus.OK);

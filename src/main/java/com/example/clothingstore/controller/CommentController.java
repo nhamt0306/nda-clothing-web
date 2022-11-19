@@ -3,6 +3,7 @@ package com.example.clothingstore.controller;
 import com.example.clothingstore.dto.CommentDTO;
 import com.example.clothingstore.mapper.CommentMapper;
 import com.example.clothingstore.model.CommentEntity;
+import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.CommentServiceImpl;
@@ -39,7 +40,7 @@ public class CommentController {
         }
         return ResponseEntity.ok(commentMappers);
     }
-
+    // Tạo comment --> Tính lại avg Rating của product;
     @PostMapping("/user/comment/create")
     public Object createComment(@RequestBody CommentDTO commentDTO) throws ParseException {
         CommentEntity commentEntity1 = new CommentEntity();
@@ -50,6 +51,19 @@ public class CommentController {
         commentEntity1.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         commentEntity1.setCreate_at(new Timestamp(System.currentTimeMillis()));
         commentService.save(commentEntity1);
+        // Tính lại avgRating của Product;
+        Long totalRating = Long.valueOf(0);
+        Long totalComment = Long.valueOf(0);
+        for(CommentEntity commentEntity : commentService.findByProductId(commentDTO.getProductId()))
+        {
+            totalRating = totalRating + commentEntity.getRating();
+            totalComment = totalComment + 1;
+        }
+        Double avgRating = Double.valueOf(totalRating) / Double.valueOf(totalComment);
+        // Set vào Product;
+        ProductEntity productEntity = productService.findProductById(commentDTO.getProductId());
+        productEntity.setAvgRating(avgRating.longValue());
+        productService.save(productEntity);
         return "Create comment success!";
     }
 
