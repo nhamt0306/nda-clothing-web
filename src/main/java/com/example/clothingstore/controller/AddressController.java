@@ -35,7 +35,8 @@ public class AddressController {
             addressService.save(addressEntity);
         }
         address.setUserEntity(userDetailService.getCurrentUser());
-        return addressService.save(address);
+        addressService.save(address);
+        return getAllAdressByUser();
     }
 
     @PostMapping("/user/address/change")
@@ -59,7 +60,7 @@ public class AddressController {
         }
         address.setUserEntity(userDetailService.getCurrentUser());
         addressService.save(addressEntity);
-        return "Update address success!";
+        return getAllAdressByUser();
     }
 
     @DeleteMapping("/user/address/{id}")
