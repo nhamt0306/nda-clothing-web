@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")   //Để ghép AuthController với các controller khác
 @RequestMapping
@@ -30,6 +31,37 @@ public class ProductController {
     public ResponseEntity<?> getAllProduct()
     {
         List<ProductEntity> productEntityList = productService.getAllProduct();
+        List<ProductMapper> responseProductList = new ArrayList<>();
+        for (ProductEntity productEntity : productEntityList)
+        {
+            if (!productEntity.getTypeEntities().isEmpty())
+            {
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                responseProductList.add(productMapper);
+            }
+            else
+            {
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                responseProductList.add(productMapper);
+            }
+        }
+        return ResponseEntity.ok(responseProductList);
+    }
+
+    @GetMapping("/product")
+    public ResponseEntity<?> getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
+                                            @RequestParam(defaultValue = "10") Integer pageSize,
+                                            @RequestParam(defaultValue = "id") String sortBy,
+                                            @RequestParam(required = false) Long catId) {
+
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        if (catId == null) {
+            productEntityList = productService.getAllProductPaging(pageNo, pageSize, sortBy);
+        }
+        else {
+            productEntityList = productService.getAllProductByCatPaging(pageNo, pageSize, sortBy, catId);
+        }
+
         List<ProductMapper> responseProductList = new ArrayList<>();
         for (ProductEntity productEntity : productEntityList)
         {

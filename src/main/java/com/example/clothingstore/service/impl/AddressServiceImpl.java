@@ -36,4 +36,14 @@ public class AddressServiceImpl implements AddressService {
     public AddressEntity getAddressDefaultOfUser(Long id) {
         return addressRepository.getDefaultAddressForUser(id);
     }
+
+    @Override
+    public Boolean existAddressByUserId(Long id) {
+        return addressRepository.existsByUserEntityId(id);
+    }
+
+    @Override
+    public boolean existById(Long id) {
+        return addressRepository.existsById(id);
+    }
 }

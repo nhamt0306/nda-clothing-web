@@ -14,4 +14,6 @@ public interface ProductService {
     List<ProductEntity> findProductByCat(Long catId);
     boolean existByProductId(Long id);
     ProductEntity uploadImage(long id, MultipartFile image);
+    List<ProductEntity> getAllProductPaging(Integer pageNo, Integer pageSize, String sortBy);
+    List<ProductEntity> getAllProductByCatPaging(Integer pageNo, Integer pageSize, String sortBy, Long catId);
 }

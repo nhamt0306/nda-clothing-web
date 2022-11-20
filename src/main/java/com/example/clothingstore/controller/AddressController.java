@@ -41,26 +41,37 @@ public class AddressController {
 
     @PostMapping("/user/address/change")
     public Object changAddress(@RequestBody AddressEntity address) throws ParseException {
-        AddressEntity addressEntity = addressService.findAddressById(address.getId());
-        if (address.getAddress() != null)
+        if(addressService.existAddressByUserId(userDetailService.getCurrentUser().getId()))
         {
-            addressEntity.setAddress(address.getAddress());
+            if (!addressService.existById(address.getId()))
+            {
+                return "Address is not exist!";
+            }
+            AddressEntity addressEntity = addressService.findAddressById(address.getId());
+
+            if (address.getAddress() != null)
+            {
+                addressEntity.setAddress(address.getAddress());
+            }
+            if (address.getPhoneNumber() != null)
+            {
+                addressEntity.setPhoneNumber(address.getPhoneNumber());
+            }
+            if (address.getName() != null)
+            {
+                addressEntity.setName(address.getName());
+            }
+            if (address.getNote() != null)
+            {
+                addressEntity.setNote(address.getNote());
+            }
+            address.setUserEntity(userDetailService.getCurrentUser());
+            addressService.save(addressEntity);
+            return getAllAdressByUser();
         }
-        if (address.getPhoneNumber() != null)
-        {
-            addressEntity.setPhoneNumber(address.getPhoneNumber());
+        else {
+            return "This user doesn't have this address!";
         }
-        if (address.getName() != null)
-        {
-            addressEntity.setName(address.getName());
-        }
-        if (address.getNote() != null)
-        {
-            addressEntity.setNote(address.getNote());
-        }
-        address.setUserEntity(userDetailService.getCurrentUser());
-        addressService.save(addressEntity);
-        return getAllAdressByUser();
     }
 
     @DeleteMapping("/user/address/{id}")

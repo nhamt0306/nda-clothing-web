@@ -14,4 +14,6 @@ public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
     List<AddressEntity> getAllByUserEntityId(Long userId);
     @Query(value = "SELECT * FROM addresses where user_id = :UserID and add_default =true;",nativeQuery = true)
     AddressEntity getDefaultAddressForUser(@Param("UserID") Long UserID);
+    Boolean existsByUserEntityId(Long id);
+    boolean existsById(Long id);
 }

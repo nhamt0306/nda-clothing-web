@@ -10,4 +10,6 @@ public interface AddressService {
     void delete(Long id);
     List<AddressEntity> getAllByUserId(Long id);
     AddressEntity getAddressDefaultOfUser(Long id);
+    Boolean existAddressByUserId(Long id);
+    boolean existById(Long id);
 }

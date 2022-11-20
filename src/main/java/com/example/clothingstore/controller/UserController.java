@@ -2,6 +2,7 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.ChangePasswordDTO;
+import com.example.clothingstore.mapper.UserMapper;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.UserServiceImpl;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -26,21 +29,30 @@ public class UserController {
     //Get all user
     @GetMapping("admin/users/getAllUser")
     public ResponseEntity<?> getAllUser(){
-        return ResponseEntity.ok(userService.findAll());
+        List<UserEntity> userEntityList = userService.findAll();
+        List<UserMapper> userMappers = new ArrayList<>();
+        for (UserEntity user: userEntityList)
+        {
+            UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+            userMappers.add(userMapper);
+        }
+        return ResponseEntity.ok(userMappers);
     }
 
     //Get current user
     @GetMapping("/user/profile")
     public ResponseEntity<?> getCurUser(){
-        UserEntity userEntity = userDetailService.getCurrentUser();
-        UserEntity respone = new UserEntity(userEntity.getId(), userEntity.getUsername(), userEntity.getFullname(), userEntity.getPhone(), userEntity.getEmail(), userEntity.getPassword(), userEntity.getAddress(), userEntity.getGender(), userEntity.getDob(),userEntity.getStatus());
-        return ResponseEntity.ok(respone);
+        UserEntity user = userDetailService.getCurrentUser();
+        UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+        return ResponseEntity.ok(userMapper);
     }
 
     @GetMapping("admin/users/{id}")
     public ResponseEntity<?> getUserById(@PathVariable long id){
         try {
-            return ResponseEntity.ok(userService.findById(id));
+            UserEntity user = userService.findById(id).get();
+            UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+            return ResponseEntity.ok(userMapper);
         }
         catch (Exception e)
         {
@@ -50,7 +62,7 @@ public class UserController {
 
     @PostMapping("/user/profile/change")
     public Object changeProfile(@RequestBody UserEntity userEntity) throws ParseException {
-        UserEntity user = userService.findByUsername(userEntity.getUsername()).get();
+        UserEntity user = userDetailService.getCurrentUser();
         user.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         if (userEntity.getFullname() != null)
         {
@@ -81,9 +93,10 @@ public class UserController {
         UserEntity user = userDetailService.getCurrentUser();
         if (changePasswordDTO.getNewPassword().equals(changePasswordDTO.getRePassword()))
         {
-            if (passwordEncoder.encode(changePasswordDTO.getCurPassword()).equals(user.getPassword()))
+            if (passwordEncoder.matches(changePasswordDTO.getCurPassword(), user.getPassword()))
             {
                 user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+                userService.save(user);
             }
             else
             {
@@ -100,7 +113,7 @@ public class UserController {
 
     @PostMapping("admin/users/uprole")
     public ResponseEntity<?> upRoleUser(@RequestParam(value = "email", required = false) String email){
-        String username = userService.findByUsername(email).get().getUsername();
+        String username = userService.findByEmail(email).get().getUsername();
         if (userService.upRole(email)){
             return ResponseEntity.ok("Update Role User "+username+" Success");
         }
@@ -109,7 +122,7 @@ public class UserController {
 
     @PostMapping("admin/users/downrole")
     public ResponseEntity<?> downRoleUser(@RequestParam(value = "email", required = false) String email){
-        String username = userService.findByUsername(email).get().getUsername();
+        String username = userService.findByEmail(email).get().getUsername();
         if (userService.downRole(email)){
             return ResponseEntity.ok("Update Role User "+username+" Success");
         }
@@ -121,7 +134,7 @@ public class UserController {
     {
         if (userService.existsByEmail(email))
         {
-            String username = userService.findByUsername(email).get().getUsername();
+            String username = userService.findByEmail(email).get().getUsername();
             Long userId = userService.findByEmail(email).get().getId();
             userService.deleteById(userId);
             return ResponseEntity.ok("Delete "+username+" success!");
