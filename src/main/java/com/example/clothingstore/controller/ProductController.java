@@ -56,11 +56,14 @@ public class ProductController {
                                             @RequestParam(required = false) Long catId) {
 
         List<ProductEntity> productEntityList = new ArrayList<>();
+        List<ProductEntity> numberItemList = new ArrayList<>();
         if (catId == null) {
             productEntityList = productService.getAllProductPaging(pageNo-1, pageSize, sortBy);
+            numberItemList = productService.getAllProduct();
         }
         else {
             productEntityList = productService.getAllProductByCatPaging(pageNo-1, pageSize, sortBy, catId);
+            numberItemList = productService.findProductByCat(catId);
         }
 
         List<ProductMapper> responseProductList = new ArrayList<>();
@@ -77,7 +80,7 @@ public class ProductController {
                 responseProductList.add(productMapper);
             }
         }
-        ProductPagingResponse productPagingResponse = new ProductPagingResponse(responseProductList, responseProductList.size());
+        ProductPagingResponse productPagingResponse = new ProductPagingResponse(responseProductList, numberItemList.size());
         return productPagingResponse;
     }
 
