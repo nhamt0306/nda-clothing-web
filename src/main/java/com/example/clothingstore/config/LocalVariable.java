@@ -14,5 +14,5 @@ public class LocalVariable {
     public static final String cancelMessage = "CANCELED"; // Đã hủy
     public static final String doneMessage = "DONE"; // Hoàn tất
     public static final String pendingMessage = "PENDING"; // Đợi thanh toán
-    public static final String paidMessage = "PAID"; // Đã thanh toán
+    public static final String deliveringMessage = "DELIVERING"; // Đã thanh toán
 }

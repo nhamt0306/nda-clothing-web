@@ -51,4 +51,19 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderEntity> getAllOrderByUserId(Long userid) {
         return orderRepository.getAllByUserEntityId(userid);
     }
+
+    @Override
+    public List<OrderEntity> getAllByUserId(Long userid) {
+        return orderRepository.getAllByUserEntityId(userid);
+    }
+
+    @Override
+    public List<OrderEntity> getAllOrder() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public boolean existOrderByUser(Long userId) {
+        return orderRepository.existsByUserEntityId(userId);
+    }
 }
