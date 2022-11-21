@@ -3,6 +3,7 @@ package com.example.clothingstore.controller;
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.ProductDTO;
 import com.example.clothingstore.mapper.ProductMapper;
+import com.example.clothingstore.mapper.ProductPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.service.impl.CategoryServiceImpl;
@@ -49,17 +50,17 @@ public class ProductController {
     }
 
     @GetMapping("/product")
-    public ResponseEntity<?> getAllProducts(@RequestParam(defaultValue = "0") Integer pageNo,
+    public Object getAllProducts(@RequestParam(defaultValue = "1") Integer pageNo,
                                             @RequestParam(defaultValue = "10") Integer pageSize,
                                             @RequestParam(defaultValue = "id") String sortBy,
                                             @RequestParam(required = false) Long catId) {
 
         List<ProductEntity> productEntityList = new ArrayList<>();
         if (catId == null) {
-            productEntityList = productService.getAllProductPaging(pageNo, pageSize, sortBy);
+            productEntityList = productService.getAllProductPaging(pageNo-1, pageSize, sortBy);
         }
         else {
-            productEntityList = productService.getAllProductByCatPaging(pageNo, pageSize, sortBy, catId);
+            productEntityList = productService.getAllProductByCatPaging(pageNo-1, pageSize, sortBy, catId);
         }
 
         List<ProductMapper> responseProductList = new ArrayList<>();
@@ -76,7 +77,8 @@ public class ProductController {
                 responseProductList.add(productMapper);
             }
         }
-        return ResponseEntity.ok(responseProductList);
+        ProductPagingResponse productPagingResponse = new ProductPagingResponse(responseProductList, responseProductList.size());
+        return productPagingResponse;
     }
 
     @GetMapping("/product/{id}")
