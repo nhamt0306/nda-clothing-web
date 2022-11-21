@@ -51,7 +51,7 @@ public class ProductController {
 
     @GetMapping("/product")
     public Object getAllProducts(@RequestParam(defaultValue = "1") Integer pageNo,
-                                            @RequestParam(defaultValue = "10") Integer pageSize,
+                                            @RequestParam(defaultValue = "100") Integer pageSize,
                                             @RequestParam(defaultValue = "id") String sortBy,
                                             @RequestParam(required = false) Long catId) {
 
