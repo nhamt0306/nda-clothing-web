@@ -92,6 +92,10 @@ public class AddressController {
     @PostMapping("/user/address/setDefault/{id}")
     public ResponseEntity<?> setAddressDefault(@PathVariable long id)
     {
+        if (!addressService.existAddressByUserId(userDetailService.getCurrentUser().getId()))
+        {
+            return ResponseEntity.ok("Address is not exist!");
+        }
         List<AddressEntity> addressEntities = addressService.getAllByUserId(userDetailService.getCurrentUser().getId());
         for (AddressEntity address: addressEntities)
         {
