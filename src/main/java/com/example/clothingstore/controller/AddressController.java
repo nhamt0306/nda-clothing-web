@@ -92,19 +92,19 @@ public class AddressController {
     @PostMapping("/user/address/setDefault/{id}")
     public ResponseEntity<?> setAddressDefault(@PathVariable long id)
     {
-        if (!addressService.existAddressByUserId(userDetailService.getCurrentUser().getId()))
+        if (addressService.existAddressByUserId(userDetailService.getCurrentUser().getId()) && addressService.existById(id))
         {
-            return ResponseEntity.ok("Address is not exist!");
+            List<AddressEntity> addressEntities = addressService.getAllByUserId(userDetailService.getCurrentUser().getId());
+            for (AddressEntity address: addressEntities)
+            {
+                address.setAdd_default(false);
+                addressService.save(address);
+            }
+            AddressEntity addressDefault = addressService.findAddressById(id);
+            addressDefault.setAdd_default(true);
+            addressService.save(addressDefault);
+            return ResponseEntity.ok("Set address default success!");
         }
-        List<AddressEntity> addressEntities = addressService.getAllByUserId(userDetailService.getCurrentUser().getId());
-        for (AddressEntity address: addressEntities)
-        {
-            address.setAdd_default(false);
-            addressService.save(address);
-        }
-        AddressEntity addressDefault = addressService.findAddressById(id);
-        addressDefault.setAdd_default(true);
-        addressService.save(addressDefault);
-        return ResponseEntity.ok("Set address default success!");
+        return ResponseEntity.ok("Address is not exist!");
     }
 }
