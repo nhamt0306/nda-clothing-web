@@ -39,6 +39,10 @@ public class UserEntity extends BaseClassEntity{
     @JsonManagedReference
     private List<OrderEntity> orderEntities = new ArrayList<>();
 
+    // Relationship with table WishListEntity
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    private List<WishListEntity> wishListEntities =new ArrayList<>();
+
     // Relationship with table CartEntity
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cartId", referencedColumnName = "id")
