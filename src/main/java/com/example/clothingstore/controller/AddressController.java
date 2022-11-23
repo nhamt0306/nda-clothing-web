@@ -75,18 +75,17 @@ public class AddressController {
     }
 
     @DeleteMapping("/user/address/{id}")
-    public ResponseEntity<?> deleteAddressById(@PathVariable long id)
+    public Object deleteAddressById(@PathVariable long id)
     {
         try
         {
             addressService.delete(id);
-            return ResponseEntity.ok("Delete address success!");
+            return getAllAdressByUser();
         }
         catch (Exception e)
         {
             return ResponseEntity.ok("Cannot find address with id = "+ id);
         }
-
     }
 
     @PostMapping("/user/address/setDefault/{id}")

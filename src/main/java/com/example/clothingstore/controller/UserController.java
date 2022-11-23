@@ -100,15 +100,15 @@ public class UserController {
             }
             else
             {
-                return "Password is incorrect!";
+                return new ResponseEntity<>("Password incorrect", HttpStatus.BAD_REQUEST);
             }
         }
         else
         {
-            return "Re-password is incorrect!";
+            return new ResponseEntity<>("Confirm-password is incorrect!", HttpStatus.BAD_REQUEST);
         }
 
-        return "Change password success!";
+        return new ResponseEntity<>("Changed password successfully", HttpStatus.OK);
     }
 
     @PostMapping("admin/users/uprole")

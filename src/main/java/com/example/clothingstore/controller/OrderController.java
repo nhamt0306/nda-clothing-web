@@ -63,7 +63,7 @@ public class OrderController {
             TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(color, size, productEntity.getId());
             if (quantity > typeEntity.getQuantity())
             {
-                return "Dont enought quantity of "+ productEntity.getName();
+                return "Not enough quantity of "+ productEntity.getName();
             }
 //            // update type entity
 //            typeEntity.setSold(typeEntity.getSold() + quantity);
