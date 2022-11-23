@@ -39,6 +39,10 @@ public class ProductEntity extends BaseClassEntity {
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<TypeEntity> typeEntities =new ArrayList<>();
 
+    // Relationship with table WishListEntity
+    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
+    private List<WishListEntity> wishListEntities =new ArrayList<>();
+
     // Relationship with table categoryEntity
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
