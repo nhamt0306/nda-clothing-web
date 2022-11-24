@@ -4,10 +4,12 @@ import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CartProductDTO;
 import com.example.clothingstore.mapper.CartProductMapper;
 import com.example.clothingstore.model.CartProductEntity;
+import com.example.clothingstore.model.TypeEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.CartProductServiceImpl;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
+import com.example.clothingstore.service.impl.TypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,8 @@ public class CartController {
     UserDetailService userDetailService;
     @Autowired
     ProductServiceImpl productService;
+    @Autowired
+    TypeServiceImpl typeService;
 
     @GetMapping("/user/cart/getAll")
     public ResponseEntity<?> getAllProductByUser()
@@ -37,6 +41,8 @@ public class CartController {
         for(CartProductEntity cartProductEntity: cartProductEntities)
         {
             CartProductDTO cartProductDTO = new CartProductDTO(cartProductEntity.getQuantity(), cartProductEntity.getPrice(),cartProductEntity.getColor(), cartProductEntity.getSize(), cartProductEntity.getProductEntity().getId(), cartProductEntity.getProductEntity().getName(), cartProductEntity.getProductEntity().getImage());
+            TypeEntity type = typeService.getTypeByColorAndSizeAndProductId(cartProductEntity.getColor(), cartProductEntity.getSize(), cartProductEntity.getProductEntity().getId());
+            cartProductDTO.setAvailableQuantity(type.getQuantity());
             cartProductDTOS.add(cartProductDTO);
         };
         return ResponseEntity.ok(cartProductDTOS);

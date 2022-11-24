@@ -14,6 +14,7 @@ public class WishListEntity {
     private Long price;
     private String color;
     private Long size;
+    private Long catId;
 
     // Relationship with table ProductEntity
     @ManyToOne(fetch = FetchType.EAGER)
@@ -49,6 +50,14 @@ public class WishListEntity {
         this.size = size;
         this.productEntity = productEntity;
         this.userEntity = userEntity;
+    }
+
+    public Long getCatId() {
+        return catId;
+    }
+
+    public void setCatId(Long catId) {
+        this.catId = catId;
     }
 
     public Long getPrice() {

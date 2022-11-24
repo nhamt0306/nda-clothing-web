@@ -8,6 +8,7 @@ public class CartProductDTO {
     private Long product_id;
     private String proName;
     private String proImage;
+    private Long availableQuantity;
 
     public CartProductDTO(Long quantity, Long price, String color, Long size, Long product_id) {
         this.quantity = quantity;
@@ -28,6 +29,25 @@ public class CartProductDTO {
         this.product_id = product_id;
         this.proName = proName;
         this.proImage = proImage;
+    }
+
+    public CartProductDTO(Long quantity, Long price, String color, Long size, Long product_id, String proName, String proImage, Long availableQuantity) {
+        this.quantity = quantity;
+        this.price = price;
+        this.color = color;
+        this.size = size;
+        this.product_id = product_id;
+        this.proName = proName;
+        this.proImage = proImage;
+        this.availableQuantity = availableQuantity;
+    }
+
+    public Long getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(Long availableQuantity) {
+        this.availableQuantity = availableQuantity;
     }
 
     public String getProName() {

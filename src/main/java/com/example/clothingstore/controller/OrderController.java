@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -63,7 +64,7 @@ public class OrderController {
             TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(color, size, productEntity.getId());
             if (quantity > typeEntity.getQuantity())
             {
-                return "Not enough quantity of "+ productEntity.getName();
+                return "Dont enought quantity of "+ productEntity.getName();
             }
 //            // update type entity
 //            typeEntity.setSold(typeEntity.getSold() + quantity);
@@ -210,6 +211,16 @@ public class OrderController {
             return "update status order with done: success";
         }
         return "update status order with done: fail";
+    }
+
+    //url return payment vnpay
+    @GetMapping("/order/notification")
+    public Object returnResultPayment(HttpServletRequest request){
+        if (request.getParameter("vnp_ResponseCode").equals("24"))
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Payment failed!");
+        }
+        return acceptOrder(Long.valueOf(request.getParameter("vnp_TxnRef")));
     }
 
     @GetMapping("/get_deliver_fee")

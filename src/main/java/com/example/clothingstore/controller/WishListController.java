@@ -52,6 +52,8 @@ public class WishListController {
     @PostMapping("/user/wishlist/add")
     public Object addProductToWishList(@RequestBody WishListDTO wishListDTO) throws ParseException {
         WishListEntity wishListEntity = new WishListEntity(wishListDTO.getColor(), wishListDTO.getSize(), productService.findProductById(wishListDTO.getProductId()), userDetailService.getCurrentUser());
+        wishListEntity.setCatId(productService.findProductById(wishListDTO.getProductId()).getCategoryEntity().getId());
+        wishListEntity.setPrice(typeService.getTypeByColorAndSizeAndProductId(wishListDTO.getColor(), wishListDTO.getSize(), wishListDTO.getProductId()).getPrice());
         wishListService.save(wishListEntity);
         return getAllWishListByUser();
     }
