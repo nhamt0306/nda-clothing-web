@@ -1,8 +1,10 @@
 package com.example.clothingstore.service.impl;
 
 import com.example.clothingstore.model.CartProductEntity;
+import com.example.clothingstore.model.TypeEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.repository.CartProductRepository;
+import com.example.clothingstore.repository.TypeRepository;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.CartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,25 @@ public class CartProductServiceImpl implements CartProductService {
     CartProductRepository cartProductRepository;
     @Autowired
     UserDetailService userDetailService;
+    @Autowired
+    TypeServiceImpl typeService;
+
     @Override
     public CartProductEntity save(CartProductEntity cartProductEntity) {
         // Tim cart product tuong ung
         // kiem tra san pham co ton tai trong gio hang cua user do hay khong --> thieu check user
+        // Check if add quantity + current quantity > available quantity or not
+        TypeEntity type = typeService.getTypeByColorAndSizeAndProductId(cartProductEntity.getColor(), cartProductEntity.getSize(), cartProductEntity.getProductEntity().getId());
+
         if (existsByProduct(cartProductEntity.getProductEntity().getId(), cartProductEntity.getColor(), cartProductEntity.getSize(), cartProductEntity.getCartEntity().getId()))
         {
             CartProductEntity cartProduct = cartProductRepository.findByCartEntityIdAndProductEntityIdAndColorAndSize(cartProductEntity.getCartEntity().getId(), cartProductEntity.getProductEntity().getId(),cartProductEntity.getColor(), cartProductEntity.getSize());
-            cartProduct.setQuantity(cartProduct.getQuantity()+cartProductEntity.getQuantity());
+            if(cartProduct.getQuantity() + cartProductEntity.getQuantity() > type.getQuantity()) {
+                cartProduct.setQuantity(type.getQuantity());
+            }
+            else {
+                cartProduct.setQuantity(cartProduct.getQuantity()+cartProductEntity.getQuantity());
+            }
             return cartProductRepository.save(cartProduct);
         }
         return cartProductRepository.save(cartProductEntity);
@@ -52,7 +65,7 @@ public class CartProductServiceImpl implements CartProductService {
 
     @Override
     public CartProductEntity increaseQuantity(Long productId, Long cartId, String color, Long size) {
-        CartProductEntity cartProduct =cartProductRepository.findByCartEntityIdAndProductEntityIdAndColorAndSize(cartId, productId, color, size);
+        CartProductEntity cartProduct = cartProductRepository.findByCartEntityIdAndProductEntityIdAndColorAndSize(cartId, productId, color, size);
         cartProduct.setQuantity(cartProduct.getQuantity() + 1);
         return cartProductRepository.save(cartProduct);
     }
