@@ -44,7 +44,7 @@ public class WishListController {
         {
             ProductEntity productEntity = productService.findProductById(wishListEntity.getProductEntity().getId());
             TypeEntity type = typeService.getTypeByColorAndSizeAndProductId(wishListEntity.getColor(), wishListEntity.getSize(), productEntity.getId());
-            WishListMapper wishListMapper = new WishListMapper(wishListEntity.getId(), productEntity.getName(), type.getPrice(), productEntity.getImage(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+            WishListMapper wishListMapper = new WishListMapper(wishListEntity.getId(), productEntity.getName(), type.getPrice(), productEntity.getImage(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(), productEntity.getId());
             responseList.add(wishListMapper);
         }
         return ResponseEntity.ok(responseList);

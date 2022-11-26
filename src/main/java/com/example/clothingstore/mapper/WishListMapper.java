@@ -7,14 +7,24 @@ public class WishListMapper {
     private String image;
     private Long catId;
     private String catName;
+    private Long productId;
 
-    public WishListMapper(Long id, String name, Long price, String image, Long catId, String catName) {
+    public WishListMapper(Long id, String name, Long price, String image, Long catId, String catName, Long productId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
         this.catId = catId;
         this.catName = catName;
+        this.productId = productId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public Long getId() {
