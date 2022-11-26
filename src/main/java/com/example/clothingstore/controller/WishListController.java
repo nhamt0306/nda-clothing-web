@@ -12,6 +12,7 @@ import com.example.clothingstore.service.impl.ProductServiceImpl;
 import com.example.clothingstore.service.impl.TypeServiceImpl;
 import com.example.clothingstore.service.impl.WishListServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,19 +50,42 @@ public class WishListController {
         return ResponseEntity.ok(responseList);
     }
 
-    @PostMapping("/user/wishlist/add")
-    public Object addProductToWishList(@RequestBody WishListDTO wishListDTO) throws ParseException {
-        WishListEntity wishListEntity = new WishListEntity(wishListDTO.getColor(), wishListDTO.getSize(), productService.findProductById(wishListDTO.getProductId()), userDetailService.getCurrentUser());
-        wishListEntity.setCatId(productService.findProductById(wishListDTO.getProductId()).getCategoryEntity().getId());
-        wishListEntity.setPrice(typeService.getTypeByColorAndSizeAndProductId(wishListDTO.getColor(), wishListDTO.getSize(), wishListDTO.getProductId()).getPrice());
+    @PostMapping("/user/wishlist/toggle/{id}")
+    public Object toggleProductWishList(@PathVariable long id) throws ParseException {
+        if (!productService.existByProductId(id)) {
+            return new ResponseEntity<>("Product ID " + id + " not found", HttpStatus.BAD_REQUEST);
+        }
+        ProductEntity productEntity = productService.findProductById(id);
+        List<TypeEntity> typeEntityList = typeService.getAllTypeByProduct(id);
+
+        if (typeEntityList.isEmpty()) {
+            return new ResponseEntity<>("Product ID" + id + "has no types", HttpStatus.BAD_REQUEST);
+        }
+
+        // get first type in type list
+        TypeEntity typeEntity = typeEntityList.get(0);
+
+        // check if existed product in wishlist => delete from wishlist
+        List<WishListEntity> listByUser =  wishListService.findAllByUser(userDetailService.getCurrentUser().getId());
+        if (!listByUser.isEmpty()) {
+            for (WishListEntity w : listByUser) {
+                if (id == w.getProductEntity().getId()) {
+                    wishListService.delete(w.getId());
+                    return getAllWishListByUser();
+                }
+            }
+        }
+
+        WishListEntity wishListEntity = new WishListEntity(typeEntity.getPrice(), typeEntity.getColor(), typeEntity.getSize(), productEntity.getCategoryEntity().getId(), productEntity, userDetailService.getCurrentUser());
         wishListService.save(wishListEntity);
+
         return getAllWishListByUser();
     }
 
-    @PostMapping("/user/wishlist/remove/{id}")
-    public Object deleteProductWishListById(@PathVariable long id)
-    {
-        wishListService.delete(id);
-        return getAllWishListByUser();
-    }
+//    @PostMapping("/user/wishlist/remove/{id}")
+//    public Object deleteProductWishListById(@PathVariable long id)
+//    {
+//        wishListService.delete(id);
+//        return getAllWishListByUser();
+//    }
 }

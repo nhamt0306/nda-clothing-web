@@ -45,6 +45,15 @@ public class WishListEntity {
         this.userEntity = userEntity;
     }
 
+    public WishListEntity(Long price, String color, Long size, Long catId, ProductEntity productEntity, UserEntity userEntity) {
+        this.price = price;
+        this.color = color;
+        this.size = size;
+        this.catId = catId;
+        this.productEntity = productEntity;
+        this.userEntity = userEntity;
+    }
+
     public WishListEntity(String color, Long size, ProductEntity productEntity, UserEntity userEntity) {
         this.color = color;
         this.size = size;
