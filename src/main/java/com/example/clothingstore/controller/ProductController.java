@@ -54,7 +54,6 @@ public class ProductController {
                                             @RequestParam(defaultValue = "100") Integer pageSize,
                                             @RequestParam(defaultValue = "id") String sortBy,
                                             @RequestParam(required = false) Long catId) {
-
         Integer maxPageSize;
         Integer maxPageNo;
         List<ProductEntity> productEntityList = new ArrayList<>();
@@ -63,12 +62,12 @@ public class ProductController {
             maxPageSize = productService.getAllProduct().size();
             if (pageSize > maxPageSize)
             {
-                pageSize = maxPageSize;
+                pageSize = 12;
             }
             maxPageNo = maxPageSize / pageSize;
-            if (pageNo > maxPageNo)
+            if (pageNo > maxPageNo +1)
             {
-                pageNo = maxPageNo;
+                pageNo = maxPageNo +1;
             }
             productEntityList = productService.getAllProductPaging(pageNo-1, pageSize, sortBy);
             numberItemList = productService.getAllProduct();
@@ -77,12 +76,12 @@ public class ProductController {
             maxPageSize = productService.findProductByCat(catId).size();
             if (pageSize > maxPageSize)
             {
-                pageSize = maxPageSize;
+                pageSize = 12;
             }
             maxPageNo = maxPageSize / pageSize;
-            if (pageNo > maxPageNo)
+            if (pageNo > maxPageNo +1)
             {
-                pageNo = maxPageNo;
+                pageNo = maxPageNo +1;
             }
             productEntityList = productService.getAllProductByCatPaging(pageNo-1, pageSize, sortBy, catId);
             numberItemList = productService.findProductByCat(catId);
