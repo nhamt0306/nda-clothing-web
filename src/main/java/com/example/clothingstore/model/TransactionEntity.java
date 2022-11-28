@@ -15,6 +15,7 @@ public class TransactionEntity extends BaseClassEntity {
     private Long quantity;
     private String color;
     private Long size;
+    private Boolean isCommented = false;
 
     //  Relationship with table Product
     @ManyToOne(fetch = FetchType.EAGER)
@@ -55,6 +56,14 @@ public class TransactionEntity extends BaseClassEntity {
         this.quantity = quantity;
         this.color = color;
         this.size = size;
+    }
+
+    public Boolean getCommented() {
+        return isCommented;
+    }
+
+    public void setCommented(Boolean commented) {
+        isCommented = commented;
     }
 
     public Long getId() {

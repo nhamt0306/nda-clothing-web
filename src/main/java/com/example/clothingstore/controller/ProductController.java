@@ -55,13 +55,35 @@ public class ProductController {
                                             @RequestParam(defaultValue = "id") String sortBy,
                                             @RequestParam(required = false) Long catId) {
 
+        Integer maxPageSize;
+        Integer maxPageNo;
         List<ProductEntity> productEntityList = new ArrayList<>();
         List<ProductEntity> numberItemList = new ArrayList<>();
         if (catId == null) {
+            maxPageSize = productService.getAllProduct().size();
+            if (pageSize > maxPageSize)
+            {
+                pageSize = maxPageSize;
+            }
+            maxPageNo = maxPageSize / pageSize;
+            if (pageNo > maxPageNo)
+            {
+                pageNo = maxPageNo;
+            }
             productEntityList = productService.getAllProductPaging(pageNo-1, pageSize, sortBy);
             numberItemList = productService.getAllProduct();
         }
         else {
+            maxPageSize = productService.findProductByCat(catId).size();
+            if (pageSize > maxPageSize)
+            {
+                pageSize = maxPageSize;
+            }
+            maxPageNo = maxPageSize / pageSize;
+            if (pageNo > maxPageNo)
+            {
+                pageNo = maxPageNo;
+            }
             productEntityList = productService.getAllProductByCatPaging(pageNo-1, pageSize, sortBy, catId);
             numberItemList = productService.findProductByCat(catId);
         }
@@ -88,12 +110,18 @@ public class ProductController {
     public ResponseEntity<?> getProductById(@PathVariable long id){
         try {
             ProductEntity productEntity = productService.findProductById(id);
-            ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
-            return ResponseEntity.ok(productMapper);
+            if (!productEntity.getTypeEntities().isEmpty())
+            {
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                return ResponseEntity.ok(productMapper);
+            }
+            else {
+                return new ResponseEntity<>("Type of product is invalid!", HttpStatus.BAD_REQUEST);
+            }
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>("Cannot find product with id = " + id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cannot find product with id = " + id, HttpStatus.BAD_REQUEST);
         }
     }
 

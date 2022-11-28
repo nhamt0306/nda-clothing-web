@@ -22,6 +22,10 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Query(value = "select * from orders order by create_at desc",nativeQuery = true)
     List<OrderEntity> getAllOrderByDate();
 
+    @Query(value = "select * from orders order by create_at desc",nativeQuery = true)
+    List<OrderEntity> getAllBy();
+
+
 
     boolean existsByUserEntityId(Long userid);
 }

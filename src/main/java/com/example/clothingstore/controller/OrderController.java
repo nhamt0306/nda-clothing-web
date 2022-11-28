@@ -62,6 +62,10 @@ public class OrderController {
             ProductEntity productEntity = productService.findProductById(Long.parseLong(transaction.get("product_id")));
             TransactionEntity transactionEntity = new TransactionEntity(unitPrice, quantity, color, size, productEntity);
             TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(color, size, productEntity.getId());
+            if (typeEntity == null)
+            {
+                return new ResponseEntity<>("Type of product is not exist!", HttpStatus.BAD_REQUEST);
+            }
             if (quantity > typeEntity.getQuantity())
             {
                 return "Dont enought quantity of "+ productEntity.getName();

@@ -20,4 +20,9 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionEntity> getAllByOrderId(Long orderId) {
         return transactionRepository.findAllByOrderEntityId(orderId);
     }
+
+    @Override
+    public List<TransactionEntity> getTransactionByColorAndSizeAndProductId(String color, Long size, Long productId) {
+        return transactionRepository.findAllByColorAndSizeAndProductEntityId(color, size, productId);
+    }
 }
