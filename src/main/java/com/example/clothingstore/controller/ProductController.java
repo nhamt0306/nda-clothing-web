@@ -143,6 +143,26 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/product/search/{keyword}")
+    public ResponseEntity<?> searchProduct(@PathVariable String keyword){
+        try {
+            List<ProductMapper> responseProductList = new ArrayList<>();
+            for (ProductEntity productEntity : productService.searchProduct(keyword))
+            {
+                if (!productEntity.getTypeEntities().isEmpty())
+                {
+                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                    responseProductList.add(productMapper);
+                }
+            }
+            return ResponseEntity.ok(responseProductList);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("Cannot find product", HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @PostMapping("/admin/product/create")
     public Object createProduct(@RequestBody ProductDTO productDTO) throws ParseException {

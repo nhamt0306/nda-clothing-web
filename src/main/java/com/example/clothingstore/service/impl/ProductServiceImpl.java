@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductEntity> findProductByName(String name) {
-        return productRepository.findAllByNameContaining(name);
+        return productRepository.findByNameContaining(name);
     }
 
     @Override
@@ -99,5 +99,20 @@ public class ProductServiceImpl implements ProductService {
         } else {
             return new ArrayList<ProductEntity>();
         }
+    }
+
+    @Override
+    public List<ProductEntity> searchProduct(String keyword) {
+        return productRepository.findByNameContaining(keyword);
+    }
+
+    @Override
+    public List<ProductEntity> searchByCategoryName(String keyword) {
+        return productRepository.findByCategoryEntityNameContaining(keyword);
+    }
+
+    @Override
+    public List<ProductEntity> searchByDescription(String keyword) {
+        return productRepository.findByDescriptionContaining(keyword);
     }
 }

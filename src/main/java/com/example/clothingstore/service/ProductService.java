@@ -16,4 +16,7 @@ public interface ProductService {
     ProductEntity uploadImage(long id, MultipartFile image);
     List<ProductEntity> getAllProductPaging(Integer pageNo, Integer pageSize, String sortBy);
     List<ProductEntity> getAllProductByCatPaging(Integer pageNo, Integer pageSize, String sortBy, Long catId);
+    List<ProductEntity> searchProduct(String keyword);
+    List<ProductEntity> searchByCategoryName(String keyword);
+    List<ProductEntity> searchByDescription(String keyword);
 }
