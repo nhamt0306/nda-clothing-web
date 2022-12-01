@@ -14,9 +14,32 @@ public class OrderMapper {
     private String ordStatus;
     private String ordAddress;
     private String ordPhone;
+
+    private String ordName;
     @JsonFormat(timezone = "Asia/Jakarta", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp ordDate;
     private List<TransactionMapper> transactionMapper;
+
+    public String getOrdName() {
+        return ordName;
+    }
+
+    public void setOrdName(String ordName) {
+        this.ordName = ordName;
+    }
+
+    public OrderMapper(Long id, Long ordTotalPrice, String ordNote, Long ordShippingFee, String ordPayment, String ordStatus, String ordAddress, String ordPhone, Timestamp ordDate, String ordName) {
+        this.id = id;
+        this.ordTotalPrice = ordTotalPrice;
+        this.ordNote = ordNote;
+        this.ordShippingFee = ordShippingFee;
+        this.ordPayment = ordPayment;
+        this.ordStatus = ordStatus;
+        this.ordAddress = ordAddress;
+        this.ordPhone = ordPhone;
+        this.ordDate = ordDate;
+        this.ordName = ordName;
+    }
 
     public OrderMapper(Long id, Long ordTotalPrice, String ordNote, Long ordShippingFee, String ordPayment, String ordStatus, String ordAddress, String ordPhone, Timestamp ordDate) {
         this.id = id;

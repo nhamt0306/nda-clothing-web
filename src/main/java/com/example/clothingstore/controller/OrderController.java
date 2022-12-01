@@ -155,7 +155,9 @@ public class OrderController {
             List<OrderMapper> orderMappers = new ArrayList<>();
             for (OrderEntity orderEntity : orderEntityList)
             {
-                OrderMapper orderMapper = new OrderMapper(orderEntity.getId(), orderEntity.getTotalPrice(), orderEntity.getNote(), orderEntity.getShippingFee(), orderEntity.getPayment(), orderEntity.getStatus(), orderEntity.getAddress(), orderEntity.getPhone(), orderEntity.getCreate_at());
+                OrderMapper orderMapper = new OrderMapper(orderEntity.getId(), orderEntity.getTotalPrice(),
+                        orderEntity.getNote(), orderEntity.getShippingFee(), orderEntity.getPayment(), orderEntity.getStatus(),
+                        orderEntity.getAddress(), orderEntity.getPhone(), orderEntity.getCreate_at(), userDetailService.getCurrentUser().getFullname());
                 // get transaction of ~ order
                 List<TransactionMapper> transactionMappers = new ArrayList<>();
                 for(TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId()))

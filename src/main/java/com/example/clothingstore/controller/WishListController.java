@@ -56,7 +56,7 @@ public class WishListController {
             return new ResponseEntity<>("Product ID " + id + " not found", HttpStatus.BAD_REQUEST);
         }
         ProductEntity productEntity = productService.findProductById(id);
-        List<TypeEntity> typeEntityList = typeService.getAllTypeByProduct(id);
+            List<TypeEntity> typeEntityList = typeService.getAllTypeByProduct(id);
 
         if (typeEntityList.isEmpty()) {
             return new ResponseEntity<>("Product ID" + id + "has no types", HttpStatus.BAD_REQUEST);
