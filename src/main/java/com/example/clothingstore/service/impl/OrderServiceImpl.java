@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderEntity> getAllPaging(Integer pageNo, Integer pageSize, String sortBy, String status) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         Page<OrderEntity> pagedResult = orderRepository.findAll(paging);
 
         if(pagedResult.hasContent()) {
