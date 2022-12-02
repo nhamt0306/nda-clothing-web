@@ -22,7 +22,7 @@ public class UploadImageController {
     ImageProductServiceImpl imageProductService;
 
     @PostMapping("/admin/product/{id}/image")
-    public ResponseEntity<?> uploadCommentImg(@PathVariable long id,
+    public ResponseEntity<?> uploadProductImg(@PathVariable long id,
                                               @RequestParam(value = "image", required = false) MultipartFile image) {
         if(!image.getContentType().equals("image/png") && !image.getContentType().equals("image/jpeg")) {
             return new ResponseEntity<>("File khong hop le!", HttpStatus.BAD_REQUEST);
@@ -42,6 +42,9 @@ public class UploadImageController {
             }
             imageProductService.uploadImage(id, multipartFile);
         }
+        // Lấy ra sản phẩm --> Đặt ảnh đầu tiên truyền vào làm ảnh đại diện sản phẩm website
+        uploadProductImg(id, imageList.get(0));
+
         return ResponseEntity.ok("Upload image success!");
     }
 
@@ -49,6 +52,7 @@ public class UploadImageController {
     public ResponseEntity<?> getAllImageDetailByProduct(@PathVariable long id) {
         List<ImageProductEntity> imageProductEntities = imageProductService.getAllImageByProduct(id);
         List<ImageProductDTO> imageProductDTOS = new ArrayList<>();
+
         for (ImageProductEntity imageProductEntity : imageProductEntities)
         {
             ImageProductDTO imageProductDTO = new ImageProductDTO(imageProductEntity.getId(), imageProductEntity.getImage(), imageProductEntity.getProductEntity().getId());

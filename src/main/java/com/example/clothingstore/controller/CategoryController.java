@@ -3,7 +3,11 @@ package com.example.clothingstore.controller;
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CategoryDTO;
 import com.example.clothingstore.mapper.CategoryMapper;
+import com.example.clothingstore.mapper.CategoryPagingResponse;
+import com.example.clothingstore.mapper.ProductMapper;
+import com.example.clothingstore.mapper.ProductPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
+import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.service.CategorySerivce;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +36,37 @@ public class CategoryController {
             categoryMappers.add(categoryMapper);
         }
         return ResponseEntity.ok(categoryMappers);
+    }
+    // category paging
+    @GetMapping("/category")
+    public Object getAllProducts(@RequestParam(defaultValue = "1") Integer pageNo,
+                                 @RequestParam(defaultValue = "100") Integer pageSize,
+                                 @RequestParam(defaultValue = "id") String sortBy) {
+        Integer maxPageSize;
+        Integer maxPageNo;
+        List<CategoryEntity> categoryEntityList = new ArrayList<>();
+
+        maxPageSize = categorySerivce.findAllCategoryActive().size();
+        if (pageSize > maxPageSize)
+        {
+            pageSize = 12;
+        }
+        maxPageNo = maxPageSize / pageSize;
+        if (pageNo > maxPageNo +1)
+        {
+            pageNo = maxPageNo +1;
+        }
+        categoryEntityList = categorySerivce.getAllCatPaging(pageNo-1, pageSize, sortBy, "Active");
+
+        List<CategoryMapper> categoryMappers = new ArrayList<>();
+        for (CategoryEntity categoryEntity : categoryEntityList)
+        {
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            categoryMappers.add(categoryMapper);
+        }
+
+        CategoryPagingResponse categoryPagingResponse = new CategoryPagingResponse(categoryMappers, maxPageSize);
+        return categoryPagingResponse;
     }
 
     @GetMapping("/category/getAllActive")

@@ -2,12 +2,18 @@ package com.example.clothingstore.service.impl;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.model.CategoryEntity;
+import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.repository.CategoryRepository;
 import com.example.clothingstore.service.CategorySerivce;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,4 +61,18 @@ public class CategoryServiceImpl implements CategorySerivce {
         categoryEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         categoryRepository.save(categoryEntity);
     }
+
+    @Override
+    public List<CategoryEntity> getAllCatPaging(Integer pageNo, Integer pageSize, String sortBy, String status) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Page<CategoryEntity> pagedResult = categoryRepository.getAllByStatus(status, paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<CategoryEntity>();
+        }
+    }
+
+
 }

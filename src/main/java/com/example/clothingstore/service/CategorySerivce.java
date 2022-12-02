@@ -1,6 +1,7 @@
 package com.example.clothingstore.service;
 
 import com.example.clothingstore.model.CategoryEntity;
+import com.example.clothingstore.model.ProductEntity;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface CategorySerivce {
     List<CategoryEntity> findByCatParentId(Long id);
     List<CategoryEntity> findAllCategoryActive();
     void deleteCategoryById(Long id);
-
+    List<CategoryEntity> getAllCatPaging(Integer pageNo, Integer pageSize, String sortBy, String status);
 }
