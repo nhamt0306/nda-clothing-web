@@ -2,14 +2,17 @@ package com.example.clothingstore.service.impl;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.model.OrderEntity;
+import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.repository.OrderRepository;
 import com.example.clothingstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -65,5 +68,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean existOrderByUser(Long userId) {
         return orderRepository.existsByUserEntityId(userId);
+    }
+
+    @Override
+    public List<OrderEntity> getAllPaging(Integer pageNo, Integer pageSize, String sortBy, String status) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Page<OrderEntity> pagedResult = orderRepository.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<OrderEntity>();
+        }
     }
 }

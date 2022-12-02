@@ -1,8 +1,7 @@
 package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
-import com.example.clothingstore.mapper.OrderMapper;
-import com.example.clothingstore.mapper.TransactionMapper;
+import com.example.clothingstore.mapper.*;
 import com.example.clothingstore.model.*;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.*;
@@ -118,6 +117,7 @@ public class OrderController {
             for (OrderEntity orderEntity : orderEntityList)
             {
                 OrderMapper orderMapper = new OrderMapper(orderEntity.getId(), orderEntity.getTotalPrice(), orderEntity.getNote(), orderEntity.getShippingFee(), orderEntity.getPayment(), orderEntity.getStatus(), orderEntity.getAddress(), orderEntity.getPhone(), orderEntity.getCreate_at());
+                orderMapper.setOrdName(orderEntity.getName());
                 // get transaction of ~ order
                 List<TransactionMapper> transactionMappers = new ArrayList<>();
                 for(TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId()))
@@ -147,6 +147,48 @@ public class OrderController {
             return new ResponseEntity<>(LocalVariable.messageCannotFindCat , HttpStatus.NOT_FOUND);
         }
     }
+
+    // category paging
+    @GetMapping("/admin/order")
+    public Object getAllOrder(@RequestParam(defaultValue = "1") Integer pageNo,
+                                 @RequestParam(defaultValue = "100") Integer pageSize,
+                                 @RequestParam(defaultValue = "id") String sortBy) {
+        Integer maxPageSize;
+        Integer maxPageNo;
+        List<OrderEntity> orderEntityList = new ArrayList<>();
+
+        maxPageSize = orderService.getAllOrder().size();
+        if (pageSize > maxPageSize)
+        {
+            pageSize = 12;
+        }
+        maxPageNo = maxPageSize / pageSize;
+        if (pageNo > maxPageNo +1)
+        {
+            pageNo = maxPageNo +1;
+        }
+        orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, "Active");
+
+        List<OrderMapper> orderMappers = new ArrayList<>();
+        for (OrderEntity orderEntity : orderEntityList)
+        {
+            OrderMapper orderMapper = new OrderMapper(orderEntity.getId(), orderEntity.getTotalPrice(), orderEntity.getNote(), orderEntity.getShippingFee(), orderEntity.getPayment(), orderEntity.getStatus(), orderEntity.getAddress(), orderEntity.getPhone(), orderEntity.getCreate_at());
+            orderMapper.setOrdName(orderEntity.getName());
+            // get transaction of ~ order
+            List<TransactionMapper> transactionMappers = new ArrayList<>();
+            for(TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId()))
+            {
+                TransactionMapper transactionMapper = new TransactionMapper(transactionEntity.getId(), transactionEntity.getUnitPrice(), transactionEntity.getQuantity(), transactionEntity.getProductEntity().getId(), transactionEntity.getProductEntity().getImage(), transactionEntity.getProductEntity().getName(), transactionEntity.getColor(), transactionEntity.getSize());
+                transactionMappers.add(transactionMapper);
+            }
+            orderMapper.setTransactionMapper(transactionMappers);
+            orderMappers.add(orderMapper);
+        }
+
+        OrderPagingResponse orderPagingResponse = new OrderPagingResponse(orderMappers, maxPageSize);
+        return orderPagingResponse;
+    }
+
 
     @GetMapping("/admin/orders/getAll")
     public ResponseEntity<?> getOrderByAdmin(){

@@ -39,7 +39,7 @@ public class CategoryController {
     }
     // category paging
     @GetMapping("/category")
-    public Object getAllProducts(@RequestParam(defaultValue = "1") Integer pageNo,
+    public Object getAllCategory(@RequestParam(defaultValue = "1") Integer pageNo,
                                  @RequestParam(defaultValue = "100") Integer pageSize,
                                  @RequestParam(defaultValue = "id") String sortBy) {
         Integer maxPageSize;

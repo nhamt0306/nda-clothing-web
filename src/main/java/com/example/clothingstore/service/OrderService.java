@@ -1,6 +1,7 @@
 package com.example.clothingstore.service;
 
 import com.example.clothingstore.model.OrderEntity;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface OrderService {
     List<OrderEntity> getAllByUserId(Long userid);
     List<OrderEntity> getAllOrder();
     boolean existOrderByUser(Long userId);
+
+    List<OrderEntity> getAllPaging(Integer pageNo, Integer pageSize, String sortBy, String status);
 }
