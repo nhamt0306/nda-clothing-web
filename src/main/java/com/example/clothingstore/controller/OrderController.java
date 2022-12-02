@@ -252,9 +252,12 @@ public class OrderController {
     @PostMapping("/admin/order/accept/{id}")
     public Object acceptOrder(@PathVariable long id) {
         OrderEntity orderEntity = orderService.findOrderById(id);
-        if (orderEntity.getStatus().equals(LocalVariable.deliveringMessage))
+        if (orderEntity.getStatus().equals(LocalVariable.deliveringMessage)) // Nếu tình trạng là đang đợi thì mới được hủy
         {
-            return "This order has been confirmed!";
+            orderEntity.setStatus(LocalVariable.doneMessage);
+            orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+            orderService.addNewOrder(orderEntity);
+            return "update status order with done: success";
         }
         //update product quantity
         List<TransactionEntity> transactionEntities = orderDetailService.getAllByOrderId(orderEntity.getId());
@@ -278,13 +281,6 @@ public class OrderController {
             return "update status order with done: success";
         }
 
-        if (orderEntity.getStatus().equals(LocalVariable.deliveringMessage)) // Nếu tình trạng là đang đợi thì mới được hủy
-        {
-            orderEntity.setStatus(LocalVariable.doneMessage);
-            orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
-            orderService.addNewOrder(orderEntity);
-            return "update status order with done: success";
-        }
         return "update status order with done: fail";
     }
 
