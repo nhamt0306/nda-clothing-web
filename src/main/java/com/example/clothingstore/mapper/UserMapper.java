@@ -16,6 +16,7 @@ public class UserMapper {
     @JsonFormat(pattern="yyyy-MM-dd")
     private Timestamp dob;
     private String status = "Active";
+    private String avatar;
 
     public UserMapper(Long id, String fullname, String username, String password, String phone, String email, String address, String gender, Timestamp dob, String status) {
         this.id = id;
@@ -48,6 +49,14 @@ public class UserMapper {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public void setUsername(String username) {

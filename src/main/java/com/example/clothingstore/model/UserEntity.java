@@ -28,7 +28,7 @@ public class UserEntity extends BaseClassEntity{
     @JsonFormat(pattern="yyyy-MM-dd")
     private Timestamp dob;
     private String status = "Active";
-
+    private String avatar;
     // Relationship with table AddressEntity
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -96,6 +96,14 @@ public class UserEntity extends BaseClassEntity{
         this.email = email;
         this.phone = phonenumber;
         this.password = encode;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public CartEntity getCartEntity() {

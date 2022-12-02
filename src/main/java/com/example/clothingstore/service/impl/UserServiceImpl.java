@@ -4,9 +4,11 @@ import com.example.clothingstore.model.RoleEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.repository.RoleRepository;
 import com.example.clothingstore.repository.UserRepository;
+import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,6 +21,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    CloudinaryService cloudinaryService;
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {
@@ -105,5 +109,19 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public UserEntity uploadAvatar(MultipartFile image, Long id) {
+        UserEntity user = userRepository.findById(id).get();
+        String imageUrl = cloudinaryService.uploadFile(image,String.valueOf(user.getId()),
+                "ClothingStore"+ "/" + "Avatar");
+        if(!imageUrl.equals("-1")) {
+            user.setAvatar(imageUrl);
+        }
+        else if(user.getAvatar().equals("") || user.getAvatar().equals("-1"))
+            user.setAvatar("");
+
+        return userRepository.save(user);
     }
 }

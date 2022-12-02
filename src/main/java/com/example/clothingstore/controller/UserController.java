@@ -34,6 +34,7 @@ public class UserController {
         for (UserEntity user: userEntityList)
         {
             UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+            userMapper.setAvatar(user.getAvatar());
             userMappers.add(userMapper);
         }
         return ResponseEntity.ok(userMappers);
@@ -44,6 +45,7 @@ public class UserController {
     public ResponseEntity<?> getCurUser(){
         UserEntity user = userDetailService.getCurrentUser();
         UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+        userMapper.setAvatar(user.getAvatar());
         return ResponseEntity.ok(userMapper);
     }
 
@@ -52,6 +54,7 @@ public class UserController {
         try {
             UserEntity user = userService.findById(id).get();
             UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+            userMapper.setAvatar(user.getAvatar());
             return ResponseEntity.ok(userMapper);
         }
         catch (Exception e)

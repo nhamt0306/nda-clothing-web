@@ -3,8 +3,11 @@ package com.example.clothingstore.controller;
 import com.example.clothingstore.dto.ImageProductDTO;
 import com.example.clothingstore.model.ImageProductEntity;
 import com.example.clothingstore.model.ProductEntity;
+import com.example.clothingstore.model.UserEntity;
+import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.ImageProductServiceImpl;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
+import com.example.clothingstore.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,10 @@ public class UploadImageController {
     ProductServiceImpl productService;
     @Autowired
     ImageProductServiceImpl imageProductService;
+    @Autowired
+    UserServiceImpl userService;
+    @Autowired
+    UserDetailService userDetailService;
 
     @PostMapping("/admin/product/{id}/image")
     public ResponseEntity<?> uploadProductImg(@PathVariable long id,
@@ -72,5 +79,17 @@ public class UploadImageController {
         {
             return new ResponseEntity<>("Cannot find image with id = "+ id, HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    @PostMapping("/user/profile/avatar")
+    public ResponseEntity<?> uploadAvatarImg(@RequestParam(value = "image", required = false) MultipartFile image) {
+        UserEntity user = userDetailService.getCurrentUser();
+        if(!image.getContentType().equals("image/png") && !image.getContentType().equals("image/jpeg")) {
+            return new ResponseEntity<>("File khong hop le!", HttpStatus.BAD_REQUEST);
+        }
+
+        userService.uploadAvatar(image, user.getId());
+        return ResponseEntity.ok("upload avatar success!");
     }
 }
