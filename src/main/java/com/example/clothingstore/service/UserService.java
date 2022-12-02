@@ -19,5 +19,6 @@ public interface UserService {
     Boolean upRole(String email);
     Boolean downRole(String email);
     UserEntity uploadAvatar(MultipartFile image, Long id);
+    UserEntity changeUserPasswordByEmail(String email, String newPassword);
 
 }

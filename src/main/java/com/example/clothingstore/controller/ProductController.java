@@ -171,10 +171,6 @@ public class ProductController {
             return "Tên danh mục không hợp lê!";
         }
         productEntity.setName(productDTO.getName());
-        if (productDTO.getImage().equals(null))
-        {
-            return "Hình ảnh không hợp lê!";
-        }
         productEntity.setAvgRating(Long.valueOf(5));
         productEntity.setImage(productDTO.getImage());
         productEntity.setDescription(productDTO.getDescription());
