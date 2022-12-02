@@ -18,8 +18,6 @@ import java.util.Optional;
 public class UserDetailService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    UserServiceImpl userService;
 
     @Override
     @Transactional
@@ -44,7 +42,7 @@ public class UserDetailService implements UserDetailsService {
         }
         //kiem tra neu userName ton tai trong DB thi gan user = ham tim kiem trong DB theo userName do
         if(userRepository.existsByUsername(userName)){
-            user = userService.findByUsername(userName);
+            user = userRepository.findByUsername(userName);
         } else {
             //Neu chua ton tai thi tra ve 1 the hien cua lop User thong qua Optional.of
             user = Optional.of(new UserEntity());
