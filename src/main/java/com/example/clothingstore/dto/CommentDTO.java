@@ -7,12 +7,23 @@ public class CommentDTO {
     private Long userId;
     private Long productId;
 
-    public CommentDTO(Long id, String comContent, Long comRating, Long userId, Long productId) {
+    private Long transactionId;
+
+    public CommentDTO(Long id, String comContent, Long comRating, Long userId, Long productId, Long transactionId) {
         this.id = id;
         this.comContent = comContent;
         this.comRating = comRating;
         this.userId = userId;
         this.productId = productId;
+        this.transactionId = transactionId;
+    }
+
+    public Long getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(Long transactionId) {
+        this.transactionId = transactionId;
     }
 
     public Long getId() {

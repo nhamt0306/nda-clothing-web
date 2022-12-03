@@ -1,15 +1,20 @@
 package com.example.clothingstore.controller;
 
+import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CommentDTO;
 import com.example.clothingstore.mapper.CommentMapper;
 import com.example.clothingstore.model.CommentEntity;
 import com.example.clothingstore.model.ProductEntity;
+import com.example.clothingstore.model.TransactionEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
+import com.example.clothingstore.service.TransactionService;
 import com.example.clothingstore.service.impl.CommentServiceImpl;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
+import com.example.clothingstore.service.impl.TransactionServiceImpl;
 import com.example.clothingstore.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +34,9 @@ public class CommentController {
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    TransactionServiceImpl transactionService;
+
     @GetMapping("/comment/product/{id}")
     public ResponseEntity<?> getAllCommentByProduct(@PathVariable long id){
         List<CommentMapper> commentMappers = new ArrayList<>();
@@ -43,6 +51,15 @@ public class CommentController {
     // Tạo comment --> Tính lại avg Rating của product;
     @PostMapping("/user/comment/create")
     public Object createComment(@RequestBody CommentDTO commentDTO) throws ParseException {
+        // set isComment to true
+        TransactionEntity transactionEntity = transactionService.getById(commentDTO.getTransactionId());
+
+        if (transactionEntity.getCommented() == true) {
+            return new ResponseEntity<>("Transaction has already been commented", HttpStatus.CONFLICT);
+        }
+
+        transactionEntity.setCommented(true);
+
         CommentEntity commentEntity1 = new CommentEntity();
         commentEntity1.setContent(commentDTO.getComContent());
         commentEntity1.setRating(commentDTO.getComRating());
