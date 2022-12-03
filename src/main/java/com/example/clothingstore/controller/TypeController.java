@@ -104,24 +104,22 @@ public class TypeController {
 //        return mapper;
 //    }
 
-    @PostMapping("/admin/type/create")
-    public Object createType(@RequestBody Object req) throws ParseException {
+    @PostMapping("/admin/type/create/{id}")
+    public Object createType(@RequestBody Object req, @PathVariable long id) throws ParseException {
         List<Map<String, String>> typeListReq =(List<Map<String, String>>) req;
         List<TypeMapper> typeMappers = new ArrayList<>();
         for (Map<String, String> typeDTO:typeListReq)
         {
-            String productId = typeDTO.get("product_id");
-            Long product_Id = Long.parseLong(productId);
-            if (!productService.existByProductId(product_Id))
+            if (!productService.existByProductId(id))
             {
-                return new ResponseEntity<>("Cannot find product with id = "+ typeDTO.get("product_id"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Cannot find product with id = "+ id, HttpStatus.NOT_FOUND);
             }
             TypeEntity type = new TypeEntity();
             type.setColor(typeDTO.get("color"));
             type.setSize(Long.parseLong(typeDTO.get("size")));
             type.setQuantity(Long.parseLong(typeDTO.get("quantity")));
             type.setPrice(Long.parseLong(typeDTO.get("price")));
-            type.setProductEntity(productService.findProductById(Long.parseLong(typeDTO.get("product_id"))));
+            type.setProductEntity(productService.findProductById(id));
             type.setSale(0L);
             type.setSold(0L);
             type.setUpdate_at(new Timestamp(System.currentTimeMillis()));
