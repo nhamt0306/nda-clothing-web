@@ -257,7 +257,7 @@ public class OrderController {
             orderEntity.setStatus(LocalVariable.doneMessage);
             orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             orderService.addNewOrder(orderEntity);
-            return "update status order with done: success";
+            return new ResponseEntity<>("Order complete" , HttpStatus.OK);
         }
         //update product quantity
         List<TransactionEntity> transactionEntities = orderDetailService.getAllByOrderId(orderEntity.getId());
@@ -266,7 +266,7 @@ public class OrderController {
             TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(transactionEntity.getColor(), transactionEntity.getSize(), transactionEntity.getProductEntity().getId());
             if (transactionEntity.getQuantity() > typeEntity.getQuantity())
             {
-                return "Dont enought quantity of "+ transactionEntity.getProductEntity().getName();
+                return new ResponseEntity<>("Not enough products" , HttpStatus.CONFLICT);
             }
             typeEntity.setSold(typeEntity.getSold() + transactionEntity.getQuantity());
             typeEntity.setQuantity(typeEntity.getQuantity() - transactionEntity.getQuantity());
@@ -278,10 +278,10 @@ public class OrderController {
             orderEntity.setStatus(LocalVariable.deliveringMessage);
             orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             orderService.addNewOrder(orderEntity);
-            return "update status order with done: success";
+            return new ResponseEntity<>("Order is being delivered" , HttpStatus.OK);
         }
 
-        return "update status order with done: fail";
+        return new ResponseEntity<>("Accept order failed" , HttpStatus.BAD_REQUEST);
     }
 
     //url return payment vnpay
