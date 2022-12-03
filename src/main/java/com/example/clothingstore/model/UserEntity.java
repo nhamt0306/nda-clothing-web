@@ -29,6 +29,7 @@ public class UserEntity extends BaseClassEntity{
     private Timestamp dob;
     private String status = "Active";
     private String avatar;
+    private String otp;
     // Relationship with table AddressEntity
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -96,6 +97,14 @@ public class UserEntity extends BaseClassEntity{
         this.email = email;
         this.phone = phonenumber;
         this.password = encode;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 
     public String getAvatar() {

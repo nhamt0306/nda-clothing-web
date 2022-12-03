@@ -1,5 +1,6 @@
 package com.example.clothingstore.service.impl;
 
+import com.example.clothingstore.dto.ResourceNotFoundException;
 import com.example.clothingstore.model.RoleEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.repository.RoleRepository;
@@ -7,6 +8,7 @@ import com.example.clothingstore.repository.UserRepository;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +25,8 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     @Autowired
     CloudinaryService cloudinaryService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {
@@ -123,5 +127,15 @@ public class UserServiceImpl implements UserService {
             user.setAvatar("");
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserEntity changeUserPasswordByEmail(String email, String newPassword) {
+        UserEntity userChangePassword = userRepository.findByEmail(email)
+                .map(user -> {
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                    return userRepository.save(user);
+                }).orElseThrow(() -> new ResourceNotFoundException("Cannot found user with email = " + email));
+        return userChangePassword;
     }
 }
