@@ -169,7 +169,6 @@ public class OrderController {
             pageNo = maxPageNo +1;
         }
         orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, status);
-
         List<OrderMapper> orderMappers = new ArrayList<>();
         for (OrderEntity orderEntity : orderEntityList)
         {
