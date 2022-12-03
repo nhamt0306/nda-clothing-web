@@ -1,16 +1,39 @@
 package com.example.clothingstore.mapper;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Timestamp;
+
 public class CommentMapper {
     private Long id;
     private String comContent;
     private Long comRating;
     private String userFullName;
+    @JsonFormat(timezone="Asia/Jakarta", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp create_at;
+
 
     public CommentMapper(Long id, String comContent, Long comRating, String userFullName) {
         this.id = id;
         this.comContent = comContent;
         this.comRating = comRating;
         this.userFullName = userFullName;
+    }
+
+    public CommentMapper(Long id, String comContent, Long comRating, String userFullName, Timestamp create_at) {
+        this.id = id;
+        this.comContent = comContent;
+        this.comRating = comRating;
+        this.userFullName = userFullName;
+        this.create_at = create_at;
+    }
+
+    public Timestamp getCreate_at() {
+        return create_at;
+    }
+
+    public void setCreate_at(Timestamp create_at) {
+        this.create_at = create_at;
     }
 
     public Long getId() {

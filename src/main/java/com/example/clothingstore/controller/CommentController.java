@@ -43,7 +43,7 @@ public class CommentController {
         for(CommentEntity commentEntity : commentService.findByProductId(id))
         {
             UserEntity user= userService.findById(commentEntity.getUserId()).get();
-            CommentMapper commentMapper = new CommentMapper(commentEntity.getId(), commentEntity.getContent(), commentEntity.getRating(), user.getFullname());
+            CommentMapper commentMapper = new CommentMapper(commentEntity.getId(), commentEntity.getContent(), commentEntity.getRating(), user.getFullname(), commentEntity.getCreate_at());
             commentMappers.add(commentMapper);
         }
         return ResponseEntity.ok(commentMappers);
