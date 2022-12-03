@@ -33,9 +33,11 @@ public class UserController {
         List<UserMapper> userMappers = new ArrayList<>();
         for (UserEntity user: userEntityList)
         {
-            UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
-            userMapper.setAvatar(user.getAvatar());
-            userMappers.add(userMapper);
+            if (!user.getId().equals(userDetailService.getCurrentUser().getId())) {
+                UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+                userMapper.setAvatar(user.getAvatar());
+                userMappers.add(userMapper);
+            }
         }
         return ResponseEntity.ok(userMappers);
     }
