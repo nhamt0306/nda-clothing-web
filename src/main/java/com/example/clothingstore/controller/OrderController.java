@@ -152,7 +152,8 @@ public class OrderController {
     @GetMapping("/admin/order")
     public Object getAllOrder(@RequestParam(defaultValue = "1") Integer pageNo,
                                  @RequestParam(defaultValue = "100") Integer pageSize,
-                                 @RequestParam(defaultValue = "id") String sortBy) {
+                                 @RequestParam(defaultValue = "id") String sortBy,
+                              @RequestParam(defaultValue = "Active") String status) {
         Integer maxPageSize;
         Integer maxPageNo;
         List<OrderEntity> orderEntityList = new ArrayList<>();
@@ -167,7 +168,7 @@ public class OrderController {
         {
             pageNo = maxPageNo +1;
         }
-        orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, "Active");
+        orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, status);
 
         List<OrderMapper> orderMappers = new ArrayList<>();
         for (OrderEntity orderEntity : orderEntityList)

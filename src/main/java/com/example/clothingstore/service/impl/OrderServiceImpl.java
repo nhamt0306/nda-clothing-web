@@ -73,12 +73,23 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderEntity> getAllPaging(Integer pageNo, Integer pageSize, String sortBy, String status) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
-        Page<OrderEntity> pagedResult = orderRepository.findAll(paging);
-
-        if(pagedResult.hasContent()) {
-            return pagedResult.getContent();
-        } else {
-            return new ArrayList<OrderEntity>();
+        if (status.equals("Active"))
+        {
+            Page<OrderEntity> pagedResult = orderRepository.findAll(paging);
+            if(pagedResult.hasContent()) {
+                return pagedResult.getContent();
+            } else {
+                return new ArrayList<OrderEntity>();
+            }
+        }
+        else
+        {
+            Page<OrderEntity> pagedResult = orderRepository.findAllByStatus(status,paging);
+            if(pagedResult.hasContent()) {
+                return pagedResult.getContent();
+            } else {
+                return new ArrayList<OrderEntity>();
+            }
         }
     }
 }
