@@ -9,6 +9,7 @@ public class TransactionMapper {
     private Long size;
     private String productImage;
     private String productName;
+    private Boolean isCommented;
 
     public TransactionMapper(Long id, Long tranUnitPrice, Long tranQuantity, Long productId, String productImage, String productName, String color, Long size) {
         this.id = id;
@@ -19,6 +20,26 @@ public class TransactionMapper {
         this.productName = productName;
         this.color = color;
         this.size = size;
+    }
+
+    public TransactionMapper(Long id, Long tranUnitPrice, Long tranQuantity, Long productId, String color, Long size, String productImage, String productName, Boolean isCommented) {
+        this.id = id;
+        this.tranUnitPrice = tranUnitPrice;
+        this.tranQuantity = tranQuantity;
+        this.productId = productId;
+        this.color = color;
+        this.size = size;
+        this.productImage = productImage;
+        this.productName = productName;
+        this.isCommented = isCommented;
+    }
+
+    public Boolean getCommented() {
+        return isCommented;
+    }
+
+    public void setCommented(Boolean commented) {
+        isCommented = commented;
     }
 
     public Long getId() {

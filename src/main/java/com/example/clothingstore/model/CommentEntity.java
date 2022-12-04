@@ -39,6 +39,7 @@ public class CommentEntity extends BaseClassEntity{
         this.userId = userId;
     }
 
+
     public Long getUserId() {
         return userId;
     }
