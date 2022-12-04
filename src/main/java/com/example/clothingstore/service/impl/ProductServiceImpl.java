@@ -115,4 +115,16 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductEntity> searchByDescription(String keyword) {
         return productRepository.findByDescriptionContaining(keyword);
     }
+
+    @Override
+    public List<ProductEntity> getAllProductByKeyword(Integer pageNo, Integer pageSize, String sortBy, String keyword) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Page<ProductEntity> pagedResult = productRepository.findAllByNameContaining(keyword, paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<ProductEntity>();
+        }
+    }
 }

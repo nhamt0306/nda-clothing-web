@@ -142,19 +142,47 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/search/{keyword}")
-    public ResponseEntity<?> searchProduct(@PathVariable String keyword){
+    @GetMapping("/product/search")
+    public Object searchProduct(@RequestParam(defaultValue = "1") Integer pageNo,
+                                @RequestParam(defaultValue = "100") Integer pageSize,
+                                @RequestParam(defaultValue = "id") String sortBy,
+                                @RequestParam(required = false) String keyword){
         try {
+            Integer maxPageSize;
+            Integer maxPageNo;
+            List<ProductEntity> productEntityList = new ArrayList<>();
+            List<ProductEntity> numberItemList = new ArrayList<>();
+            if (keyword != null) {
+                maxPageSize = productService.getAllProduct().size();
+                if (pageSize > maxPageSize)
+                {
+                    pageSize = 12;
+                }
+                maxPageNo = maxPageSize / pageSize;
+                if (pageNo > maxPageNo +1)
+                {
+                    pageNo = maxPageNo +1;
+                }
+                productEntityList = productService.getAllProductByKeyword(pageNo-1, pageSize, sortBy, keyword);
+                numberItemList = productService.findProductByName(keyword);
+            }
+
             List<ProductMapper> responseProductList = new ArrayList<>();
-            for (ProductEntity productEntity : productService.searchProduct(keyword))
+            for (ProductEntity productEntity : productEntityList)
             {
                 if (!productEntity.getTypeEntities().isEmpty())
                 {
                     ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
                     responseProductList.add(productMapper);
                 }
+                else
+                {
+                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                    responseProductList.add(productMapper);
+                }
             }
-            return ResponseEntity.ok(responseProductList);
+            ProductPagingResponse productPagingResponse = new ProductPagingResponse(responseProductList, numberItemList.size());
+            return productPagingResponse;
         }
         catch (Exception e)
         {

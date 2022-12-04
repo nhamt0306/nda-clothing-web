@@ -22,4 +22,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     List<ProductEntity> searchProduct(@Param("keyword") String keyword);
 
     List<ProductEntity> findByDescriptionContaining(String name);
+
+    Page<ProductEntity> findAllByNameContaining(String keyword, Pageable pageable);
 }

@@ -19,4 +19,5 @@ public interface ProductService {
     List<ProductEntity> searchProduct(String keyword);
     List<ProductEntity> searchByCategoryName(String keyword);
     List<ProductEntity> searchByDescription(String keyword);
+    List<ProductEntity> getAllProductByKeyword(Integer pageNo, Integer pageSize, String sortBy, String keyword);
 }
