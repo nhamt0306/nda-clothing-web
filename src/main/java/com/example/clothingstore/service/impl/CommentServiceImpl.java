@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentEntity> findByProductId(Long id) {
-        return commentRepository.findAllByProductEntityId(id);
+        return commentRepository.getAllByProductIdOrderByCreate_atDesc(id);
     }
 
     @Override

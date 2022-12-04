@@ -146,4 +146,33 @@ public class UserController {
         }
         return ResponseEntity.ok("Username unavailable!");
     }
+
+    @PostMapping("admin/users/ban")
+    public ResponseEntity<?> banUser(@RequestParam(value = "email", required = false) String email)
+    {
+        if (userService.existsByEmail(email))
+        {
+            UserEntity user = userService.findByEmail(email).get();
+            user.setStatus("Disable");
+            userService.save(user);
+            return ResponseEntity.ok("Ban "+user.getFullname()+" success!");
+        }
+        return ResponseEntity.ok("Username unavailable!");
+    }
+
+    @PostMapping("admin/users/unban")
+    public ResponseEntity<?> unbanUser(@RequestParam(value = "email", required = false) String email)
+    {
+        if (userService.existsByEmail(email))
+        {
+            UserEntity user = userService.findByEmail(email).get();
+            if(user.getStatus().equals("Disable"))
+            {
+                user.setStatus("Active");
+                userService.save(user);
+            }
+            return ResponseEntity.ok("Unban "+user.getFullname()+" success!");
+        }
+        return ResponseEntity.ok("Username unavailable!");
+    }
 }
