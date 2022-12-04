@@ -46,10 +46,10 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody SignUpForm signUpForm){
         if (userService.existsByUsername(signUpForm.getUsername())){
-            return new ResponseEntity<>(new ResponseMessage("Tên tài khoản đã tồn tại! Vui lòng thử lại", "false"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("Tên tài khoản đã tồn tại! Vui lòng thử lại", "false"), HttpStatus.CONFLICT);
         }
         if (userService.existsByEmail(signUpForm.getEmail())){
-            return new ResponseEntity<>(new ResponseMessage("Email đã tồn tại! Vui lòng thử lại","false"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseMessage("Email đã tồn tại! Vui lòng thử lại","false"), HttpStatus.CONFLICT);
         }
 
 
