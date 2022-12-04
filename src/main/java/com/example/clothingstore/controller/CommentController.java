@@ -57,7 +57,6 @@ public class CommentController {
         if (transactionEntity.getCommented() == true) {
             return new ResponseEntity<>("Transaction has already been commented", HttpStatus.CONFLICT);
         }
-
         transactionEntity.setCommented(true);
 
         CommentEntity commentEntity1 = new CommentEntity();
