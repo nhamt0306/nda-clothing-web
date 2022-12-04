@@ -123,6 +123,7 @@ public class OrderController {
                 for(TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId()))
                 {
                     TransactionMapper transactionMapper = new TransactionMapper(transactionEntity.getId(), transactionEntity.getUnitPrice(), transactionEntity.getQuantity(), transactionEntity.getProductEntity().getId(), transactionEntity.getProductEntity().getImage(), transactionEntity.getProductEntity().getName(), transactionEntity.getColor(), transactionEntity.getSize());
+                    transactionMapper.setCommented(transactionEntity.getCommented());
                     transactionMappers.add(transactionMapper);
                 }
                 orderMapper.setTransactionMapper(transactionMappers);
@@ -179,6 +180,7 @@ public class OrderController {
             for(TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId()))
             {
                 TransactionMapper transactionMapper = new TransactionMapper(transactionEntity.getId(), transactionEntity.getUnitPrice(), transactionEntity.getQuantity(), transactionEntity.getProductEntity().getId(), transactionEntity.getProductEntity().getImage(), transactionEntity.getProductEntity().getName(), transactionEntity.getColor(), transactionEntity.getSize());
+                transactionMapper.setCommented(transactionEntity.getCommented());
                 transactionMappers.add(transactionMapper);
             }
             orderMapper.setTransactionMapper(transactionMappers);
@@ -205,6 +207,7 @@ public class OrderController {
                 for(TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId()))
                 {
                     TransactionMapper transactionMapper = new TransactionMapper(transactionEntity.getId(), transactionEntity.getUnitPrice(), transactionEntity.getQuantity(), transactionEntity.getProductEntity().getId(), transactionEntity.getProductEntity().getImage(), transactionEntity.getProductEntity().getName(), transactionEntity.getColor(), transactionEntity.getSize());
+                    transactionMapper.setCommented(transactionEntity.getCommented());
                     transactionMappers.add(transactionMapper);
                 }
                 orderMapper.setTransactionMapper(transactionMappers);

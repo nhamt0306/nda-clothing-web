@@ -46,11 +46,11 @@ public class OrderCreator {
         }
         // map value for orderEntity and check if user want to add new address
         if (orderInformation.get("address") != null) {
-            orderEntity = new OrderEntity(totalcost, orderInformation.get("note") == null ? "" : orderInformation.get("note"), Long.parseLong(orderInformation.get("shipping_fee") == null ? "25000" : orderInformation.get("shipping_fee")), orderInformation.get("payment") == null ? "COD" : orderInformation.get("payment"), ordStatus , user.getFullname() ,user.getAddress(), user.getPhone());
+            orderEntity = new OrderEntity(totalcost, orderInformation.get("note") == null ? "" : orderInformation.get("note"), Long.parseLong(orderInformation.get("shipping_fee") == null ? "25000" : orderInformation.get("shipping_fee")), orderInformation.get("payment") == null ? "VNPAY" : orderInformation.get("payment"), ordStatus , user.getFullname() ,user.getAddress(), user.getPhone());
         } else
         {
             AddressEntity address = addressService.getAddressDefaultOfUser(user.getId());
-            orderEntity = new OrderEntity(totalcost, orderInformation.get("note") == null ? address.getNote() : orderInformation.get("note"), Long.valueOf(25000) ,ordStatus , "COD", address.getName(), address.getAddress(), address.getPhoneNumber());
+            orderEntity = new OrderEntity(totalcost, orderInformation.get("note") == null ? address.getNote() : orderInformation.get("note"), Long.valueOf(25000) ,ordStatus , "VNPay", address.getName(), address.getAddress(), address.getPhoneNumber());
             if (totalcost > Long.valueOf(250000L))
             {
                 orderEntity.setShippingFee(Long.valueOf(0L));
@@ -66,7 +66,7 @@ public class OrderCreator {
         transactionEntities.forEach(i -> i.setOrderEntity(orderEntity));
         // insert order and details to DB
         orderService.addNewOrder(orderEntity);
-        // delete cartProduct from DB
+        // delete cartProd uct from DB
         for (TransactionEntity transactionEntity: transactionEntities)
         {
             transactionEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));
