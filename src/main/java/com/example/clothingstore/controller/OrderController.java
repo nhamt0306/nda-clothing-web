@@ -288,7 +288,7 @@ public class OrderController {
     }
 
     //url return payment vnpay
-    @GetMapping("/order/notification")
+    @GetMapping("/profile?tab=orders")
     public Object returnResultPayment(HttpServletRequest request){
         if (request.getParameter("vnp_ResponseCode").equals("24"))
         {
