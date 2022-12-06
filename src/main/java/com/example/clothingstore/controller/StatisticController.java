@@ -66,6 +66,7 @@ public class StatisticController {
                 chartList.add(statisticMapper);
             }
         }
+        Collections.reverse(chartList);
         return chartList;
     }
 
