@@ -44,7 +44,7 @@ public class UploadImageController {
                                               @RequestParam(value = "image", required = false) List<MultipartFile> imageList) {
         for (MultipartFile multipartFile : imageList)
         {
-            if(!multipartFile.getContentType().equals("image/png") && !multipartFile.getContentType().equals("image/jpeg")) {
+            if(!multipartFile.getContentType().equals("image/png") && !multipartFile.getContentType().equals("image/jpeg") && !multipartFile.getContentType().equals("image/jpg")) {
                 return new ResponseEntity<>("File khong hop le!", HttpStatus.BAD_REQUEST);
             }
             imageProductService.uploadImage(id, multipartFile);
@@ -85,7 +85,7 @@ public class UploadImageController {
     @PostMapping("/user/profile/avatar")
     public ResponseEntity<?> uploadAvatarImg(@RequestParam(value = "image", required = false) MultipartFile image) {
         UserEntity user = userDetailService.getCurrentUser();
-        if(!image.getContentType().equals("image/png") && !image.getContentType().equals("image/jpeg")) {
+        if(!image.getContentType().equals("image/png") && !image.getContentType().equals("image/jpeg") && !image.getContentType().equals("image/jpg")) {
             return new ResponseEntity<>("File khong hop le!", HttpStatus.BAD_REQUEST);
         }
 
