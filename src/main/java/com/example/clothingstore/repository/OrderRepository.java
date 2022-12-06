@@ -43,5 +43,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     // Statistic by day
     @Query(value = "SELECT sum(total_price) FROM clothing_store.orders where status = 'DONE' and year(update_at) = :Year and month(update_at) = :Month and day(update_at) = :Day", nativeQuery = true)
-    String getTotalPriceByDate(@Param("Year") int Year, @Param("Month") int Month, @Param("Day") int Day);
+    Integer getTotalPriceByDate(@Param("Year") int Year, @Param("Month") int Month, @Param("Day") int Day);
 }

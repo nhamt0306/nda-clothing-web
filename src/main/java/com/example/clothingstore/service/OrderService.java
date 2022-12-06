@@ -26,5 +26,5 @@ public interface OrderService {
     String getAllOrderByDay();
     String getAllOrderByMonth();
     String getAllOrderByYear();
-    String getAllOrderByDate(int Year, int Month, int day);
+    Integer getAllOrderByDate(int Year, int Month, int day);
 }

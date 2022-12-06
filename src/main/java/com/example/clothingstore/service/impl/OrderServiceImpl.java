@@ -109,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String getAllOrderByDate(int Year, int Month, int day) {
+    public Integer getAllOrderByDate(int Year, int Month, int day) {
         return orderRepository.getTotalPriceByDate(Year, Month, day);
     }
 }
