@@ -44,6 +44,7 @@ public class CommentController {
         {
             UserEntity user= userService.findById(commentEntity.getUserId()).get();
             CommentMapper commentMapper = new CommentMapper(commentEntity.getId(), commentEntity.getContent(), commentEntity.getRating(), user.getFullname(), commentEntity.getCreate_at());
+            commentMapper.setAvatar(user.getAvatar());
             commentMappers.add(commentMapper);
         }
         return ResponseEntity.ok(commentMappers);

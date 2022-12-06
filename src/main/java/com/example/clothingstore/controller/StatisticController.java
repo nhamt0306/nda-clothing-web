@@ -70,4 +70,5 @@ public class StatisticController {
         }
         return monthly;
     }
+
 }

@@ -9,6 +9,7 @@ public class CommentMapper {
     private String comContent;
     private Long comRating;
     private String userFullName;
+    private String avatar;
     @JsonFormat(timezone="Asia/Jakarta", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp create_at;
 
@@ -26,6 +27,14 @@ public class CommentMapper {
         this.comRating = comRating;
         this.userFullName = userFullName;
         this.create_at = create_at;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Timestamp getCreate_at() {
