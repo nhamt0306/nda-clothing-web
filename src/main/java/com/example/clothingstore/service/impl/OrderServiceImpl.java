@@ -92,4 +92,24 @@ public class OrderServiceImpl implements OrderService {
             }
         }
     }
+
+    @Override
+    public String getAllOrderByDay() {
+        return orderRepository.getTotalPriceCurrentDate();
+    }
+
+    @Override
+    public String getAllOrderByMonth() {
+        return orderRepository.getTotalPriceCurrentMonth();
+    }
+
+    @Override
+    public String getAllOrderByYear() {
+        return orderRepository.getTotalPriceCurrentYear();
+    }
+
+    @Override
+    public String getAllOrderByDate(int Year, int Month, int day) {
+        return orderRepository.getTotalPriceByDate(Year, Month, day);
+    }
 }

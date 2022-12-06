@@ -23,4 +23,8 @@ public interface OrderService {
     boolean existOrderByUser(Long userId);
 
     List<OrderEntity> getAllPaging(Integer pageNo, Integer pageSize, String sortBy, String status);
+    String getAllOrderByDay();
+    String getAllOrderByMonth();
+    String getAllOrderByYear();
+    String getAllOrderByDate(int Year, int Month, int day);
 }

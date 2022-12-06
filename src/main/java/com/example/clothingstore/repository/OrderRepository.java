@@ -28,4 +28,20 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     boolean existsByUserEntityId(Long userid);
     Page<OrderEntity> findAllByStatus(String status, Pageable pageable);
     Page<OrderEntity> findAll(Pageable pageable);
+
+    // Statistic by month
+    @Query(value = "SELECT sum(total_price) FROM clothing_store.orders where status = 'DONE' and year(update_at) = YEAR(CURDATE())", nativeQuery = true)
+    String getTotalPriceCurrentYear();
+
+    // Statistic by month
+    @Query(value = "SELECT sum(total_price) FROM clothing_store.orders where status = 'DONE' and year(update_at) = YEAR(CURDATE()) and month(update_at) = MONTH(CURDATE())", nativeQuery = true)
+    String getTotalPriceCurrentMonth();
+
+    // Statistic by day
+    @Query(value = "SELECT sum(total_price) FROM clothing_store.orders where status = 'DONE' and year(update_at) = YEAR(CURDATE()) and month(update_at) = MONTH(CURDATE()) and day(update_at) = DAY(CURDATE())", nativeQuery = true)
+    String getTotalPriceCurrentDate();
+
+    // Statistic by day
+    @Query(value = "SELECT sum(total_price) FROM clothing_store.orders where status = 'DONE' and year(update_at) = :Year and month(update_at) = :Month and day(update_at) = :Day", nativeQuery = true)
+    String getTotalPriceByDate(@Param("Year") int Year, @Param("Month") int Month, @Param("Day") int Day);
 }

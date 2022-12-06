@@ -287,15 +287,19 @@ public class OrderController {
         return new ResponseEntity<>("Accept order failed" , HttpStatus.BAD_REQUEST);
     }
 
-    //url return payment vnpay
-    @GetMapping("/profile?tab=orders")
-    public Object returnResultPayment(HttpServletRequest request){
-        if (request.getParameter("vnp_ResponseCode").equals("24"))
-        {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Payment failed!");
-        }
-        return acceptOrder(Long.valueOf(request.getParameter("vnp_TxnRef")));
-    }
+//    //url return payment vnpay
+//    @GetMapping("/profile?tab=orders")
+//    public Object returnResultPayment(HttpServletRequest request){
+//        if (request.getParameter("vnp_ResponseCode").equals("24"))
+//        {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cancel Payment Success!");
+//        }
+//        OrderEntity orderEntity = orderService.findOrderById(Long.valueOf(request.getParameter("vnp_TxnRef")));
+//        orderEntity.setStatus(LocalVariable.deliveringMessage);
+//        orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+//        orderService.addNewOrder(orderEntity);
+//        return new ResponseEntity<>("Order is being delivered" , HttpStatus.OK);
+//    }
 
     @GetMapping("/get_deliver_fee")
     public Object getShippingFee(@RequestParam String f, @RequestParam String t, @RequestParam String w) {

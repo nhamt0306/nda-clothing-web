@@ -62,7 +62,7 @@ public class VNPayController {
 
     @PostMapping("/user/order/payment/vnpay")
     public ResponseEntity<?> createPaymentVnpay(@RequestBody List<Object> req) throws UnsupportedEncodingException, NoSuchAlgorithmException, ParseException {
-        OrderEntity orderEntity = OrderCreator.createOrder(userDetailService, productService, typeService, addressService, orderDetailService, orderService, cartProductService, req, LocalVariable.deliveringMessage);
+        OrderEntity orderEntity = OrderCreator.createOrder(userDetailService, productService, typeService, addressService, orderDetailService, orderService, cartProductService, req, LocalVariable.pendingMessage);
 
         PaymentDTO paymentDTO = new PaymentDTO();
         paymentDTO.setOrderId(orderEntity.getId());

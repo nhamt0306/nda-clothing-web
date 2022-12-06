@@ -1,7 +1,11 @@
 package com.example.clothingstore.service.impl;
 
+import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.config.PaymentConfig;
 import com.example.clothingstore.dto.PaymentDTO;
+import com.example.clothingstore.model.OrderEntity;
+import com.example.clothingstore.model.TransactionEntity;
+import com.example.clothingstore.model.TypeEntity;
 import com.example.clothingstore.repository.ProductRepository;
 import com.example.clothingstore.repository.TypeRepository;
 import com.example.clothingstore.repository.UserRepository;
@@ -10,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -54,6 +60,53 @@ public class PaymentServiceImpl {
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         return vnp_Params;
     }
+
+    public Object cancelOrder(@PathVariable long id) {
+        OrderEntity orderEntity = orderService.findOrderById(id);
+        if (orderEntity.getStatus().equals(LocalVariable.pendingMessage)) // Nếu tình trạng là đang đợi thì mới được hủy
+        {
+            orderEntity.setStatus(LocalVariable.cancelMessage);
+            orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+            orderService.addNewOrder(orderEntity);
+            return "cancel order success";
+        }
+        return "cancel order fail";
+    }
+
+    public Object acceptOrder(@PathVariable long id) {
+        OrderEntity orderEntity = orderService.findOrderById(id);
+        if (orderEntity.getStatus().equals(LocalVariable.deliveringMessage)) // Nếu tình trạng là đang đợi thì mới được hủy
+        {
+            orderEntity.setStatus(LocalVariable.doneMessage);
+            orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+            orderService.addNewOrder(orderEntity);
+            return new ResponseEntity<>("Order complete" , HttpStatus.OK);
+        }
+        //update product quantity
+        List<TransactionEntity> transactionEntities = orderDetailService.getAllByOrderId(orderEntity.getId());
+        for (TransactionEntity transactionEntity : transactionEntities)
+        {
+            TypeEntity typeEntity = typeRepository.getTypeEntityByColorAndSizeAndProductEntityId(transactionEntity.getColor(), transactionEntity.getSize(), transactionEntity.getProductEntity().getId());
+            if (transactionEntity.getQuantity() > typeEntity.getQuantity())
+            {
+                return new ResponseEntity<>("Not enough products" , HttpStatus.CONFLICT);
+            }
+            typeEntity.setSold(typeEntity.getSold() + transactionEntity.getQuantity());
+            typeEntity.setQuantity(typeEntity.getQuantity() - transactionEntity.getQuantity());
+            typeRepository.save(typeEntity);
+        }
+
+        if (orderEntity.getStatus().equals(LocalVariable.pendingMessage))
+        {
+            orderEntity.setStatus(LocalVariable.deliveringMessage.toString());
+            orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+            orderService.addNewOrder(orderEntity);
+            return new ResponseEntity<>("Order is being delivered" , HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("Accept order failed" , HttpStatus.BAD_REQUEST);
+    }
+
 
     public String returnPaymentUrl(Map<String, String> vnp_Params) throws UnsupportedEncodingException {
         List fieldNames = new ArrayList(vnp_Params.keySet());
