@@ -92,6 +92,6 @@ public class AuthenticationController {
         // Lấy ra thông tin người dùng hiện tại trên hệ thống
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         // Trả về kết quả.
-        return ResponseEntity.ok(new JwtResponse(token, userPrinciple.getName(), userPrinciple.getId(), userPrinciple.getAuthorities()));
+        return ResponseEntity.ok(new JwtResponse(token, userPrinciple.getName(), userPrinciple.getId(), userPrinciple.getAuthorities(), userPrinciple.getAvatar()));
     }
 }

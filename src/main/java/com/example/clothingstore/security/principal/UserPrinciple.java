@@ -18,6 +18,7 @@ public class UserPrinciple implements UserDetails {
     private String username;
     private String email;
     private String phonenumber;
+    private String avatar;
     @JsonIgnore
     private String password;
     private String address;
@@ -29,7 +30,7 @@ public class UserPrinciple implements UserDetails {
     public UserPrinciple() {
     }
 
-    public UserPrinciple(Long id, String name, String username, String email, String phonenumber, String password, String address, String gender, Timestamp dob, String status, Collection<? extends GrantedAuthority> roles) {
+    public UserPrinciple(Long id, String name, String username, String email, String phonenumber, String password, String address, String gender, Timestamp dob, String status, Collection<? extends GrantedAuthority> roles, String avatar) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -41,6 +42,47 @@ public class UserPrinciple implements UserDetails {
         this.dob = dob;
         this.status = status;
         this.roles = roles;
+        this.avatar =avatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Timestamp getDob() {
+        return dob;
+    }
+
+    public void setDob(Timestamp dob) {
+        this.dob = dob;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getId() {
@@ -105,7 +147,8 @@ public class UserPrinciple implements UserDetails {
                 user.getGender(),
                 user.getDob(),
                 user.getStatus(),
-                authorities
+                authorities,
+                user.getAvatar()
         );
     };
 
