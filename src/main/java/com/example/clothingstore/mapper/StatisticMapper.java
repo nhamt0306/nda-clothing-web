@@ -1,27 +1,27 @@
 package com.example.clothingstore.mapper;
 
 public class StatisticMapper {
-    private String date;
-    private Integer profit;
+    private String time;
+    private Integer amount;
 
-    public StatisticMapper(String date, Integer profit) {
-        this.date = date;
-        this.profit = profit;
+    public StatisticMapper(String time, Integer amount) {
+        this.time = time;
+        this.amount = amount;
     }
 
-    public String getDate() {
-        return date;
+    public String getTime() {
+        return time;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public Integer getProfit() {
-        return profit;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setProfit(Integer profit) {
-        this.profit = profit;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }

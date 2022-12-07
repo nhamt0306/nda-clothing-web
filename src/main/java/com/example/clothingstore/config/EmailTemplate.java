@@ -141,7 +141,7 @@ public class EmailTemplate {
                 "                                            Hãy sử dụng OTP này để xác thực Gmail: \n" +
                 "                                        </p>\n" +
                 "                                        <a \n" +
-                "                                            style=\"background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;\">" + otp +
+                "                                            style=\"background:#000;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;\">" + otp +
                 "                                            </a>\n" +
                 "                                    </td>\n" +
                 "                                </tr>\n" +
@@ -155,7 +155,7 @@ public class EmailTemplate {
                 "                    </tr>\n" +
                 "                    <tr>\n" +
                 "                        <td style=\"text-align:center;\">\n" +
-                "                            <p style=\"font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;\">&copy; <strong>Book Store - Nhã, Nhựt, Khoa - Made with love</strong></p>\n" +
+                "                            <p style=\"font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;\">&copy; <strong>ADNCloth - 2022</strong></p>\n" +
                 "                        </td>\n" +
                 "                    </tr>\n" +
                 "                    <tr>\n" +
