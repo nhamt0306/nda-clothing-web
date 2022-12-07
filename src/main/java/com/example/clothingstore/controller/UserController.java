@@ -42,6 +42,7 @@ public class UserController {
         return ResponseEntity.ok(userMappers);
     }
 
+
     //Get current user
     @GetMapping("/user/profile")
     public ResponseEntity<?> getCurUser(){
