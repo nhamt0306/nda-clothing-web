@@ -52,7 +52,7 @@ public class EmailTemplate {
                 "                                        <span\n" +
                 "                                            style=\"display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;\"></span>\n" +
                 "                                        <p style=\"color:#455056; font-size:15px;line-height:24px; margin:0;\">\n" +
-                "                                            Bạn đã yêu cầu thay đổi mật khẩu cho " + username + "\n" + "<br>" +
+                "                                            Lưu ý: OTP sẽ hết hạn sau 5 phút!" + "\n" + "<br>" +
                 "                                            Hãy sử dụng OTP này để xác thực: \n" +
                 "                                        </p>\n" +
                 "                                        <a \n" +
@@ -70,7 +70,7 @@ public class EmailTemplate {
                 "                    </tr>\n" +
                 "                    <tr>\n" +
                 "                        <td style=\"text-align:center;\">\n" +
-                "                            <p style=\"font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;\">&copy; <strong>Book Store - Nhã, Nhựt, Khoa - Made with love</strong></p>\n" +
+                "                            <p style=\"font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;\">&copy; <strong>ADN Cloth Store - Made with love</strong></p>\n" +
                 "                        </td>\n" +
                 "                    </tr>\n" +
                 "                    <tr>\n" +
