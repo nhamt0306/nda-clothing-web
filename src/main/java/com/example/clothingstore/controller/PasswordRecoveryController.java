@@ -28,9 +28,13 @@ public class PasswordRecoveryController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping(path = "/getOtp")
-    public OtpSendMailResponseDTO sendOtpRecoveryCodeToUserEmail(@RequestBody EmailRecoveryDTO email) {
+    public Object sendOtpRecoveryCodeToUserEmail(@RequestBody EmailRecoveryDTO email) {
         if(email.getEmail() == null) {
             throw new BadRequest("change password by address for user fail! need ?email= param");
+        }
+        if (userService.findByEmail(email.getEmail()).isEmpty())
+        {
+            return new ResponseEntity<>("Email không tồn tại!", HttpStatus.BAD_REQUEST);
         }
         UserEntity user = userService.findByEmail(email.getEmail()).get(); //Kiem tra user voi email khoi phuc
         String otpCode = LocalVariable.GetOTP();
