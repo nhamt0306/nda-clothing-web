@@ -8,6 +8,7 @@ import com.example.clothingstore.service.UserService;
 import com.example.clothingstore.service.impl.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +59,12 @@ public class PasswordRecoveryController {
     @PostMapping(path = "/checkOtp")
     public Object changePasswordByOTP(@RequestBody RecoveryOTP recoveryOTP)
     {
+        if (userService.findByEmail(recoveryOTP.getEmail()).isEmpty())
+        {
+            return new ResponseEntity<>("Email không tồn tại!", HttpStatus.BAD_REQUEST);
+        }
         UserEntity user = userService.findByEmail(recoveryOTP.getEmail()).get();
+
         if (recoveryOTP.getOtp().equals(user.getOtp()))
         {
             if (recoveryOTP.getNewPassword().equals(recoveryOTP.getRePassword()))
@@ -67,13 +73,15 @@ public class PasswordRecoveryController {
                 userService.save(user);
             }
             else {
-                return "Repassword is incorrect!";
+                return "Mật khẩu nhập lại không chính xác";
             }
         }
         else {
-            return "OTP is incorrect!";
+            return new ResponseEntity<>("OTP sai! Vui lòng kiểm tra lại.", HttpStatus.BAD_REQUEST);
         }
-        return "Chang password success!";
+        user.setOtp(null);
+        userService.save(user);
+        return new ResponseEntity<>("Thay đổi mật khẩu thành công", HttpStatus.OK);
     }
 
 

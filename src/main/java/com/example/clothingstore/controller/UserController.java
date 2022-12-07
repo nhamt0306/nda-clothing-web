@@ -46,7 +46,7 @@ public class UserController {
     @GetMapping("/user/profile")
     public ResponseEntity<?> getCurUser(){
         UserEntity user = userDetailService.getCurrentUser();
-        UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), user.getPassword(), user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
+        UserMapper userMapper = new UserMapper(user.getId(), user.getFullname(), user.getUsername(), null, user.getPhone(), user.getEmail(), user.getAddress(), user.getGender(), user.getDob(), user.getStatus());
         userMapper.setAvatar(user.getAvatar());
         return ResponseEntity.ok(userMapper);
     }
