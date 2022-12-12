@@ -13,5 +13,5 @@ public interface CategorySerivce {
     List<CategoryEntity> findByCatParentId(Long id);
     List<CategoryEntity> findAllCategoryActive();
     void deleteCategoryById(Long id);
-    List<CategoryEntity> getAllCatPaging(Integer pageNo, Integer pageSize, String sortBy, String status);
+    List<CategoryEntity> getAllCatPaging(Integer pageNo, Integer pageSize);
 }

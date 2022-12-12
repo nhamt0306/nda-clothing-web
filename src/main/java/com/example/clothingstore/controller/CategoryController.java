@@ -9,6 +9,7 @@ import com.example.clothingstore.mapper.ProductPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.service.CategorySerivce;
+import com.example.clothingstore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class CategoryController {
     @Autowired
     CategorySerivce categorySerivce;
 
+    @Autowired
+    ProductService productService;
+
     @GetMapping("/category/getAll")
     public ResponseEntity<?> getAllCategory()
     {
@@ -32,11 +36,19 @@ public class CategoryController {
         List<CategoryMapper> categoryMappers = new ArrayList<>();
         for (CategoryEntity categoryEntity : categoryEntityList)
         {
-            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            // get all product by category
+            List<ProductEntity> productEntity = productService.findProductByCat(categoryEntity.getId());
+
+            int productQuantity = productEntity.size();
+            String status = categoryEntity.getStatus();
+
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName(),
+                    Long.valueOf(productQuantity), status);
             categoryMappers.add(categoryMapper);
         }
         return ResponseEntity.ok(categoryMappers);
     }
+
     // category paging
     @GetMapping("/category")
     public Object getAllCategory(@RequestParam(defaultValue = "1") Integer pageNo,
@@ -56,12 +68,19 @@ public class CategoryController {
         {
             pageNo = maxPageNo +1;
         }
-        categoryEntityList = categorySerivce.getAllCatPaging(pageNo-1, pageSize, sortBy, "Active");
+        categoryEntityList = categorySerivce.getAllCatPaging(pageNo-1, pageSize);
 
         List<CategoryMapper> categoryMappers = new ArrayList<>();
         for (CategoryEntity categoryEntity : categoryEntityList)
         {
-            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            // get all product by category
+            List<ProductEntity> productEntity = productService.findProductByCat(categoryEntity.getId());
+
+            int productQuantity = productEntity.size();
+            String status = categoryEntity.getStatus();
+
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName(),
+                    Long.valueOf(productQuantity), status);
             categoryMappers.add(categoryMapper);
         }
 

@@ -2,9 +2,7 @@ package com.example.clothingstore.service.impl;
 
 import com.example.clothingstore.model.CartProductEntity;
 import com.example.clothingstore.model.TypeEntity;
-import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.repository.CartProductRepository;
-import com.example.clothingstore.repository.TypeRepository;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.CartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +77,13 @@ public class CartProductServiceImpl implements CartProductService {
             return null;
         }
         cartProduct.setQuantity(cartProduct.getQuantity() - 1);
+        return cartProductRepository.save(cartProduct);
+    }
+
+    @Override
+    public CartProductEntity setQuantity(Long productId, Long cartId, String color, Long size, Long quantity) {
+        CartProductEntity cartProduct = cartProductRepository.findByCartEntityIdAndProductEntityIdAndColorAndSize(cartId, productId, color, size);
+        cartProduct.setQuantity(quantity);
         return cartProductRepository.save(cartProduct);
     }
 }

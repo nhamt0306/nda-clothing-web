@@ -67,7 +67,14 @@ public class OrderController {
             }
             if (quantity > typeEntity.getQuantity())
             {
-                return "Dont enought quantity of "+ productEntity.getName();
+                // if out of products -> delete from cart, else set quantity equals current quantity
+                if (typeEntity.getQuantity() == 0) {
+                    cartProductService.deleteProductInCart(user.getId(), typeEntity.getProductEntity().getId(), typeEntity.getColor(), typeEntity.getSize());
+                }
+                else {
+                    cartProductService.setQuantity(typeEntity.getProductEntity().getId(), user.getId(), typeEntity.getColor(), typeEntity.getSize(), typeEntity.getQuantity());
+                }
+                return new ResponseEntity<>("Không đủ số lượng sản phẩm", HttpStatus.CONFLICT);
             }
 //            // update type entity
 //            typeEntity.setSold(typeEntity.getSold() + quantity);
