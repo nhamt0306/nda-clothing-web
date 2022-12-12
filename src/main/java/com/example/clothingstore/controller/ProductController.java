@@ -111,7 +111,20 @@ public class ProductController {
             ProductEntity productEntity = productService.findProductById(id);
             if (!productEntity.getTypeEntities().isEmpty())
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(),
+                        productEntity.getName(),
+                        productEntity.getDescription(),
+                        productEntity.getImage(),
+                        productEntity.getAvgRating(),
+                        productEntity.getTypeEntities().get(0).getPrice(),
+                        productEntity.getTypeEntities().get(0).getSize(),
+                        productEntity.getTypeEntities().get(0).getColor(),
+                        productEntity.getTypeEntities().get(0).getSale(),
+                        productEntity.getTypeEntities().get(0).getSold(),
+                        productEntity.getTypeEntities().get(0).getQuantity(),
+                        productEntity.getCategoryEntity().getId(),
+                        productEntity.getCategoryEntity().getName(),
+                        productEntity.getStatus());
                 return ResponseEntity.ok(productMapper);
             }
             else {

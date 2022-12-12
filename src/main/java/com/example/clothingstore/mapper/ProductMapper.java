@@ -15,6 +15,9 @@ public class ProductMapper {
     private Long categoryId;
     private String categoryName;
 
+    private String status;
+
+
     public ProductMapper(Long id, String name, String description, String image, Long avgRating, Long price, Long size, String color, Long sale, Long sold, Long quantity, Long categoryId, String categoryName) {
         this.id = id;
         this.name = name;
@@ -29,6 +32,31 @@ public class ProductMapper {
         this.quantity = quantity;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+    }
+
+    public ProductMapper(Long id, String name, String description, String image, Long avgRating, Long price, Long size, String color, Long sale, Long sold, Long quantity, Long categoryId, String categoryName, String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.avgRating = avgRating;
+        this.price = price;
+        this.size = size;
+        this.color = color;
+        this.sale = sale;
+        this.sold = sold;
+        this.quantity = quantity;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getId() {
