@@ -76,7 +76,10 @@ public class CartProductServiceImpl implements CartProductService {
             cartProductRepository.deleteProductInCart(cartId, productId, color, size);
             return null;
         }
-        cartProduct.setQuantity(cartProduct.getQuantity() - 1);
+        if (cartProduct.getQuantity() > 0) {
+            cartProduct.setQuantity(cartProduct.getQuantity() - 1);
+        }
+
         return cartProductRepository.save(cartProduct);
     }
 
