@@ -6,6 +6,8 @@ import com.example.clothingstore.mapper.ProductMapper;
 import com.example.clothingstore.mapper.ProductPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
+import com.example.clothingstore.model.UserEntity;
+import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.CategoryServiceImpl;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ProductController {
     ProductServiceImpl productService;
     @Autowired
     CategoryServiceImpl categoryService;
+
+    @Autowired
+    UserDetailService userDetailService;
 
     @GetMapping("/product/getAll")
     public ResponseEntity<?> getAllProduct()
@@ -239,5 +244,32 @@ public class ProductController {
     {
         productService.delete(id);
         return ResponseEntity.ok(LocalVariable.messageDeleteCatSuccess);
+    }
+
+    @PutMapping("/admin/product/{id}")
+    public Object updateProduct(@PathVariable long id, @RequestBody ProductDTO productDTO) throws ParseException {
+        if(!productService.existByProductId(id)) {
+            return new ResponseEntity<>("Không tìm được sản phẩm", HttpStatus.NOT_FOUND);
+        }
+
+        ProductEntity productEntity = productService.findProductById(id);
+        productEntity.setName(productDTO.getName());
+        productEntity.setDescription(productDTO.getDescription());
+
+        CategoryEntity categoryEntity = categoryService.findCategoryById(productDTO.getCategory_id());
+        if (categoryEntity == null){
+            return new ResponseEntity<>("Danh mục không tồn tại", HttpStatus.NOT_FOUND);
+        }
+        productEntity.setCategoryEntity(categoryEntity);
+        productEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+        productEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));
+        productService.save(productEntity);
+
+        return ResponseEntity.ok(
+                new ProductDTO(productEntity.getName(),
+                        productEntity.getDescription(),
+                        productEntity.getImage(),
+                        productEntity.getCategoryEntity().getId())
+        );
     }
 }
