@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductEntity findProductById(Long id) {
-        return productRepository.findById(id).get();
+        return productRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -46,7 +46,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
         ProductEntity productEntity = productRepository.findById(id).get();
-        productEntity.setStatus(LocalVariable.disableStatus);
+        if (productEntity.getStatus().equals(LocalVariable.activeStatus)) {
+            productEntity.setStatus(LocalVariable.disableStatus);
+        }
+        else {
+            productEntity.setStatus(LocalVariable.activeStatus);
+        }
         productEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         productEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));
         productRepository.save(productEntity);

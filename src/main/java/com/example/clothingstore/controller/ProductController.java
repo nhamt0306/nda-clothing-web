@@ -42,12 +42,40 @@ public class ProductController {
         {
             if (!productEntity.getTypeEntities().isEmpty())
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                ProductMapper productMapper = new ProductMapper(
+                        productEntity.getId(),
+                        productEntity.getName(),
+                        productEntity.getDescription(),
+                        productEntity.getImage(),
+                        productEntity.getAvgRating(),
+                        productEntity.getTypeEntities().get(0).getPrice(),
+                        productEntity.getTypeEntities().get(0).getSize(),
+                        productEntity.getTypeEntities().get(0).getColor(),
+                        productEntity.getTypeEntities().get(0).getSale(),
+                        productEntity.getTypeEntities().get(0).getSold(),
+                        productEntity.getTypeEntities().get(0).getQuantity(),
+                        productEntity.getCategoryEntity().getId(),
+                        productEntity.getCategoryEntity().getName()
+                );
                 responseProductList.add(productMapper);
             }
             else
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                ProductMapper productMapper = new ProductMapper(
+                        productEntity.getId(),
+                        productEntity.getName(),
+                        productEntity.getDescription(),
+                        productEntity.getImage(),
+                        productEntity.getAvgRating(),
+                        Long.valueOf(0L),
+                        Long.valueOf(0L),
+                        "Đang cập nhật",
+                        Long.valueOf(0L),
+                        Long.valueOf(0L),
+                        Long.valueOf(0L),
+                        productEntity.getCategoryEntity().getId(),
+                        productEntity.getCategoryEntity().getName()
+                );
                 responseProductList.add(productMapper);
             }
         }
@@ -97,12 +125,12 @@ public class ProductController {
         {
             if (!productEntity.getTypeEntities().isEmpty())
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(), productEntity.getStatus());
                 responseProductList.add(productMapper);
             }
             else
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(), productEntity.getStatus());
                 responseProductList.add(productMapper);
             }
         }
