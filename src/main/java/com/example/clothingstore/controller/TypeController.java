@@ -63,7 +63,7 @@ public class TypeController {
     @GetMapping("/type/product/{id}")
     public ResponseEntity<?> getTypeByProductId(@PathVariable long id){
         try {
-            List<TypeEntity> typeEntityList = typeService.getAllTypeByProduct(id);
+            List<TypeEntity> typeEntityList = typeService.getAllActiveTypeByProduct(id);
             List<TypeMapper> responseList = new ArrayList<>();
             for (TypeEntity type : typeEntityList)
             {

@@ -49,6 +49,11 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
+    public List<TypeEntity> getAllActiveTypeByProduct(Long proId) {
+        return typeRepository.getAllByProductEntityIdAndStatus(proId, LocalVariable.activeStatus);
+    }
+
+    @Override
     public TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId) {
         return typeRepository.getTypeEntityByColorAndSizeAndProductEntityId(color, size, productId);
     }

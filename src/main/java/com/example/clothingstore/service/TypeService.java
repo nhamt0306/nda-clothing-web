@@ -11,6 +11,9 @@ public interface TypeService {
     TypeEntity findTypeById(Long id);
     void delete(Long id);
     List<TypeEntity> getAllTypeByProduct(Long proId);
+
+    List<TypeEntity> getAllActiveTypeByProduct(Long proId);
+
     TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId);
     ColorAndTypeDTO getListColorAndSize(Long product);
 }

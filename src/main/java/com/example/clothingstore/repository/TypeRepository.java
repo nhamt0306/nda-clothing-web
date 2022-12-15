@@ -14,4 +14,7 @@ public interface TypeRepository extends JpaRepository<TypeEntity, Long> {
     List<TypeEntity> getAllByProductEntityId(Long productId);
     List<TypeEntity> getAllByStatus(String status);
     TypeEntity getTypeEntityByColorAndSizeAndProductEntityId(String color, Long size, Long productId);
+
+    List<TypeEntity> getAllByProductEntityIdAndStatus(Long productId, String status);
+
 }
