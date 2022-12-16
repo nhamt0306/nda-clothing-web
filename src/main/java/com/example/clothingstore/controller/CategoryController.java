@@ -103,12 +103,13 @@ public class CategoryController {
 
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable long id){
-        try {
-            return ResponseEntity.ok(categorySerivce.findCategoryById(id));
-        }
-        catch (Exception e)
-        {
+        CategoryEntity categoryEntity = categorySerivce.findCategoryById(id);
+        if (categoryEntity == null) {
             return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+        }
+        else {
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            return ResponseEntity.ok(categoryMapper);
         }
     }
 
@@ -145,5 +146,19 @@ public class CategoryController {
     {
         categorySerivce.deleteCategoryById(id);
         return ResponseEntity.ok(LocalVariable.messageDeleteCatSuccess);
+    }
+
+    @PutMapping("/admin/category/{id}")
+    public Object updateCategory(@PathVariable long id, @RequestBody CategoryDTO categoryDTO) throws ParseException {
+        CategoryEntity categoryEntity = categorySerivce.findCategoryById(id);
+        if (categoryEntity == null) {
+            return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+        }
+
+        categoryEntity.setName(categoryDTO.getName());
+        categoryEntity.setParentId(categoryDTO.getParend_id());
+        categorySerivce.save(categoryEntity);
+        CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+        return categoryMapper;
     }
 }
