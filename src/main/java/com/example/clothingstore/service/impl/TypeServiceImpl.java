@@ -65,13 +65,13 @@ public class TypeServiceImpl implements TypeService {
         List<Long> sizeList = new ArrayList<>();
         for (TypeEntity type : typeEntities)
         {
-            if (!colorList.contains(type.getColor()))
-            {
-                colorList.add(type.getColor());
-            }
-            if (!sizeList.contains(type.getSize()))
-            {
-                sizeList.add(type.getSize());
+            if (type.getStatus().equals(LocalVariable.activeStatus)) {
+                if (!colorList.contains(type.getColor())) {
+                    colorList.add(type.getColor());
+                }
+                if (!sizeList.contains(type.getSize())) {
+                    sizeList.add(type.getSize());
+                }
             }
         }
         ColorAndTypeDTO colorAndTypeDTO = new ColorAndTypeDTO(productId, colorList, sizeList);

@@ -42,6 +42,12 @@ public class OrderCreator {
 //            typeEntity.setQuantity(typeEntity.getQuantity() - quantity);
 
             totalcost += unitPrice*quantity;
+
+            // check if type disabled -> bad request
+            if (typeEntity.getStatus().equals(LocalVariable.disableStatus)) {
+                return null;
+            }
+
             transactionEntities.add(transactionEntity);
         }
         // map value for orderEntity and check if user want to add new address

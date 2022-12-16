@@ -81,6 +81,13 @@ public class OrderController {
 //            typeEntity.setQuantity(typeEntity.getQuantity() - quantity);
 
             totalcost += unitPrice*quantity;
+
+            // check if type disabled -> bad request
+            if (typeEntity.getStatus().equals(LocalVariable.disableStatus)) {
+                cartProductService.deleteProductInCart(user.getId(), typeEntity.getProductEntity().getId(), typeEntity.getColor(), typeEntity.getSize());
+                return new ResponseEntity<>("Sản phẩm đã được cập nhật", HttpStatus.CONFLICT);
+            }
+
             transactionEntities.add(transactionEntity);
         }
         // map value for orderEntity and check if user want to add new address
