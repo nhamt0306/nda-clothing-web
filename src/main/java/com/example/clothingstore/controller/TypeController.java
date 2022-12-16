@@ -182,21 +182,6 @@ public class TypeController {
                 TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(color, Long.parseLong(size), productId);
                 typeEntity.setStatus(LocalVariable.disableStatus);
 
-                // if disabled type is in PENDING -> set to CANCELED
-                List<TransactionEntity> transactionEntity = transactionService.getTransactionByColorAndSizeAndProductId(typeEntity.getColor(),
-                        typeEntity.getSize(),
-                        typeEntity.getProductEntity().getId());
-                for (TransactionEntity transactionEntity1: transactionEntity)
-                {
-                    OrderEntity orderEntity = orderService.findOrderById(transactionEntity1.getOrderEntity().getId());
-                    if (orderEntity.getStatus().equals(LocalVariable.pendingMessage)) // Nếu tình trạng là đang đợi thì mới được hủy
-                    {
-                        orderEntity.setStatus(LocalVariable.cancelMessage);
-                        orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
-                        orderService.addNewOrder(orderEntity);
-                    }
-                }
-
                 typeService.save(typeEntity);
             }
         }
