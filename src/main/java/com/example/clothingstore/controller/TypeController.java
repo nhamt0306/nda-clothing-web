@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +63,7 @@ public class TypeController {
     @GetMapping("/type/product/{id}")
     public ResponseEntity<?> getTypeByProductId(@PathVariable long id){
         try {
-            List<TypeEntity> typeEntityList = typeService.getAllTypeByProduct(id);
+            List<TypeEntity> typeEntityList = typeService.getAllActiveTypeByProduct(id);
             List<TypeMapper> responseList = new ArrayList<>();
             for (TypeEntity type : typeEntityList)
             {
@@ -82,6 +83,7 @@ public class TypeController {
     {
         return new ResponseEntity<>(typeService.getListColorAndSize(id), HttpStatus.OK);
     }
+
 
 //    @PostMapping("/admin/type/create")
 //    public Object createType(@RequestBody TypeDTO typeDTO) throws ParseException {
@@ -149,5 +151,77 @@ public class TypeController {
 
         typeService.delete(id);
         return ResponseEntity.ok("Delete type success!");
+    }
+
+    @PutMapping("/admin/type/{productId}")
+    public Object updateType(@PathVariable long productId, @RequestBody Object req) throws ParseException {
+        // check if product not exists
+        if (!productService.existByProductId(productId)){
+            return new ResponseEntity<>("Cannot find product with id = " + productId, HttpStatus.NOT_FOUND);
+        }
+
+        List<Map<String, String>> typeListReq = (List<Map<String, String>>) req;
+        List<TypeMapper> typeMappers = new ArrayList<>();
+
+        // get all type of products
+        List<TypeEntity> typeEntityList = typeService.getAllTypeByProduct(productId);
+        for (TypeEntity type : typeEntityList) {
+            String color = type.getColor();
+            String size = type.getSize().toString();
+            String quantity = type.getQuantity().toString();
+            String price = type.getPrice().toString();
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("color", color);
+            map.put("size", size);
+            map.put("quantity", quantity);
+            map.put("price", price);
+
+            // disable type if not exist in list
+            if (!typeListReq.contains(map)) {
+                TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(color, Long.parseLong(size), productId);
+                typeEntity.setStatus(LocalVariable.disableStatus);
+
+                typeService.save(typeEntity);
+            }
+        }
+
+        for (Map<String, String> typeDTO : typeListReq)
+        {
+            TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(typeDTO.get("color"), Long.parseLong(typeDTO.get("size")), productId);
+            // if type exists
+            if (typeEntity != null) {
+                if (!typeEntity.getStatus().equals(LocalVariable.activeStatus)) {
+                    typeEntity.setStatus(LocalVariable.activeStatus);
+                }
+                typeEntity.setQuantity(Long.parseLong(typeDTO.get("quantity")));
+                typeEntity.setPrice(Long.parseLong(typeDTO.get("price")));
+            }
+
+            if (typeEntity == null) {
+                typeEntity = new TypeEntity();
+                typeEntity.setColor(typeDTO.get("color"));
+                typeEntity.setSize(Long.parseLong(typeDTO.get("size")));
+                typeEntity.setQuantity(Long.parseLong(typeDTO.get("quantity")));
+                typeEntity.setPrice(Long.parseLong(typeDTO.get("price")));
+                typeEntity.setProductEntity(productService.findProductById(productId));
+                typeEntity.setSale(0L);
+                typeEntity.setSold(0L);
+                typeEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+                typeEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));
+            }
+
+            typeService.save(typeEntity);
+
+            TypeMapper mapper = new TypeMapper(typeEntity.getQuantity(),
+                    typeEntity.getPrice(),
+                    typeEntity.getSize(),
+                    typeEntity.getColor(),
+                    typeEntity.getSale(),
+                    typeEntity.getSold(),
+                    typeEntity.getProductEntity().getId());
+            typeMappers.add(mapper);
+        }
+        return typeMappers;
     }
 }

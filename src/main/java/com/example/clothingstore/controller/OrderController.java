@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -67,13 +68,27 @@ public class OrderController {
             }
             if (quantity > typeEntity.getQuantity())
             {
-                return "Dont enought quantity of "+ productEntity.getName();
+                // if out of products -> delete from cart, else set quantity equals current quantity
+                if (typeEntity.getQuantity() == 0) {
+                    cartProductService.deleteProductInCart(user.getId(), typeEntity.getProductEntity().getId(), typeEntity.getColor(), typeEntity.getSize());
+                }
+                else {
+                    cartProductService.setQuantity(typeEntity.getProductEntity().getId(), user.getId(), typeEntity.getColor(), typeEntity.getSize(), typeEntity.getQuantity());
+                }
+                return new ResponseEntity<>("Không đủ số lượng sản phẩm", HttpStatus.CONFLICT);
             }
 //            // update type entity
 //            typeEntity.setSold(typeEntity.getSold() + quantity);
 //            typeEntity.setQuantity(typeEntity.getQuantity() - quantity);
 
             totalcost += unitPrice*quantity;
+
+            // check if type disabled -> bad request
+            if (typeEntity.getStatus().equals(LocalVariable.disableStatus)) {
+                cartProductService.deleteProductInCart(user.getId(), typeEntity.getProductEntity().getId(), typeEntity.getColor(), typeEntity.getSize());
+                return new ResponseEntity<>("Sản phẩm đã được cập nhật", HttpStatus.CONFLICT);
+            }
+
             transactionEntities.add(transactionEntity);
         }
         // map value for orderEntity and check if user want to add new address
@@ -255,13 +270,14 @@ public class OrderController {
     @PostMapping("/admin/order/accept/{id}")
     public Object acceptOrder(@PathVariable long id) {
         OrderEntity orderEntity = orderService.findOrderById(id);
-        if (orderEntity.getStatus().equals(LocalVariable.deliveringMessage)) // Nếu tình trạng là đang đợi thì mới được hủy
+        if (orderEntity.getStatus().equals(LocalVariable.deliveringMessage))
         {
             orderEntity.setStatus(LocalVariable.doneMessage);
             orderEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             orderService.addNewOrder(orderEntity);
             return new ResponseEntity<>("Order complete" , HttpStatus.OK);
         }
+
         //update product quantity
         List<TransactionEntity> transactionEntities = orderDetailService.getAllByOrderId(orderEntity.getId());
         for (TransactionEntity transactionEntity : transactionEntities)
@@ -269,8 +285,16 @@ public class OrderController {
             TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(transactionEntity.getColor(), transactionEntity.getSize(), transactionEntity.getProductEntity().getId());
             if (transactionEntity.getQuantity() > typeEntity.getQuantity())
             {
-                return new ResponseEntity<>("Not enough products" , HttpStatus.CONFLICT);
+                return new ResponseEntity<>("Không đủ sản phẩm" + transactionEntity.getProductEntity().getName(), HttpStatus.CONFLICT);
             }
+
+            // check if product is disabled or type is disabled
+            ProductEntity productEntity = productService.findProductById(transactionEntity.getProductEntity().getId());
+            if (productEntity.getStatus().equals(LocalVariable.disableStatus) ||
+            typeEntity.getStatus().equals(LocalVariable.disableStatus)) {
+                return new ResponseEntity<>("Sản phẩm/loại sản phẩm của " + transactionEntity.getProductEntity().getName() + " đã bị ẩn", HttpStatus.CONFLICT);
+            }
+
             typeEntity.setSold(typeEntity.getSold() + transactionEntity.getQuantity());
             typeEntity.setQuantity(typeEntity.getQuantity() - transactionEntity.getQuantity());
             typeService.save(typeEntity);

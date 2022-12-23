@@ -20,4 +20,10 @@ public class LocalVariable {
     public static final String doneMessage = "DONE"; // Hoàn tất
     public static final String pendingMessage = "PENDING"; // Đợi thanh toán
     public static final String deliveringMessage = "DELIVERING"; // Đã thanh toán
+
+    public static final String ADMIN = "Admin";
+
+    public static final String USER = "User";
+
+
 }

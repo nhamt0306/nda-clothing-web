@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategorySerivce {
 
     @Override
     public CategoryEntity findCategoryById(Long id) {
-        return categoryRepository.findById(id).get();
+        return categoryRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -57,15 +57,20 @@ public class CategoryServiceImpl implements CategorySerivce {
     @Override
     public void deleteCategoryById(Long id) {
         CategoryEntity categoryEntity = categoryRepository.findById(id).get();
-        categoryEntity.setStatus(LocalVariable.disableStatus);
+        if (categoryEntity.getStatus().equals(LocalVariable.activeStatus)) {
+            categoryEntity.setStatus(LocalVariable.disableStatus);
+        }
+        else {
+            categoryEntity.setStatus(LocalVariable.activeStatus);
+        }
         categoryEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         categoryRepository.save(categoryEntity);
     }
 
     @Override
-    public List<CategoryEntity> getAllCatPaging(Integer pageNo, Integer pageSize, String sortBy, String status) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        Page<CategoryEntity> pagedResult = categoryRepository.getAllByStatus(status, paging);
+    public List<CategoryEntity> getAllCatPaging(Integer pageNo, Integer pageSize) {
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        Page<CategoryEntity> pagedResult = categoryRepository.findAll(paging);
 
         if(pagedResult.hasContent()) {
             return pagedResult.getContent();

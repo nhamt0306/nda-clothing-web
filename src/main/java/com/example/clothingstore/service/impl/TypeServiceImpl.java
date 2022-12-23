@@ -49,6 +49,11 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
+    public List<TypeEntity> getAllActiveTypeByProduct(Long proId) {
+        return typeRepository.getAllByProductEntityIdAndStatus(proId, LocalVariable.activeStatus);
+    }
+
+    @Override
     public TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId) {
         return typeRepository.getTypeEntityByColorAndSizeAndProductEntityId(color, size, productId);
     }
@@ -60,13 +65,13 @@ public class TypeServiceImpl implements TypeService {
         List<Long> sizeList = new ArrayList<>();
         for (TypeEntity type : typeEntities)
         {
-            if (!colorList.contains(type.getColor()))
-            {
-                colorList.add(type.getColor());
-            }
-            if (!sizeList.contains(type.getSize()))
-            {
-                sizeList.add(type.getSize());
+            if (type.getStatus().equals(LocalVariable.activeStatus)) {
+                if (!colorList.contains(type.getColor())) {
+                    colorList.add(type.getColor());
+                }
+                if (!sizeList.contains(type.getSize())) {
+                    sizeList.add(type.getSize());
+                }
             }
         }
         ColorAndTypeDTO colorAndTypeDTO = new ColorAndTypeDTO(productId, colorList, sizeList);

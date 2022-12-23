@@ -1,5 +1,7 @@
 package com.example.clothingstore.model;
 
+import net.minidev.json.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

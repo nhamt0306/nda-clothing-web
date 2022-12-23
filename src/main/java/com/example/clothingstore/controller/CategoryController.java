@@ -9,6 +9,7 @@ import com.example.clothingstore.mapper.ProductPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.service.CategorySerivce;
+import com.example.clothingstore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class CategoryController {
     @Autowired
     CategorySerivce categorySerivce;
 
+    @Autowired
+    ProductService productService;
+
     @GetMapping("/category/getAll")
     public ResponseEntity<?> getAllCategory()
     {
@@ -32,11 +36,19 @@ public class CategoryController {
         List<CategoryMapper> categoryMappers = new ArrayList<>();
         for (CategoryEntity categoryEntity : categoryEntityList)
         {
-            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            // get all product by category
+            List<ProductEntity> productEntity = productService.findProductByCat(categoryEntity.getId());
+
+            int productQuantity = productEntity.size();
+            String status = categoryEntity.getStatus();
+
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName(),
+                    Long.valueOf(productQuantity), status);
             categoryMappers.add(categoryMapper);
         }
         return ResponseEntity.ok(categoryMappers);
     }
+
     // category paging
     @GetMapping("/category")
     public Object getAllCategory(@RequestParam(defaultValue = "1") Integer pageNo,
@@ -56,12 +68,19 @@ public class CategoryController {
         {
             pageNo = maxPageNo +1;
         }
-        categoryEntityList = categorySerivce.getAllCatPaging(pageNo-1, pageSize, sortBy, "Active");
+        categoryEntityList = categorySerivce.getAllCatPaging(pageNo-1, pageSize);
 
         List<CategoryMapper> categoryMappers = new ArrayList<>();
         for (CategoryEntity categoryEntity : categoryEntityList)
         {
-            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            // get all product by category
+            List<ProductEntity> productEntity = productService.findProductByCat(categoryEntity.getId());
+
+            int productQuantity = productEntity.size();
+            String status = categoryEntity.getStatus();
+
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName(),
+                    Long.valueOf(productQuantity), status);
             categoryMappers.add(categoryMapper);
         }
 
@@ -84,12 +103,13 @@ public class CategoryController {
 
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable long id){
-        try {
-            return ResponseEntity.ok(categorySerivce.findCategoryById(id));
-        }
-        catch (Exception e)
-        {
+        CategoryEntity categoryEntity = categorySerivce.findCategoryById(id);
+        if (categoryEntity == null) {
             return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+        }
+        else {
+            CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+            return ResponseEntity.ok(categoryMapper);
         }
     }
 
@@ -126,5 +146,19 @@ public class CategoryController {
     {
         categorySerivce.deleteCategoryById(id);
         return ResponseEntity.ok(LocalVariable.messageDeleteCatSuccess);
+    }
+
+    @PutMapping("/admin/category/{id}")
+    public Object updateCategory(@PathVariable long id, @RequestBody CategoryDTO categoryDTO) throws ParseException {
+        CategoryEntity categoryEntity = categorySerivce.findCategoryById(id);
+        if (categoryEntity == null) {
+            return new ResponseEntity<>(LocalVariable.messageCannotFindCat + id, HttpStatus.NOT_FOUND);
+        }
+
+        categoryEntity.setName(categoryDTO.getName());
+        categoryEntity.setParentId(categoryDTO.getParend_id());
+        categorySerivce.save(categoryEntity);
+        CategoryMapper categoryMapper = new CategoryMapper(categoryEntity.getId(), categoryEntity.getName());
+        return categoryMapper;
     }
 }
