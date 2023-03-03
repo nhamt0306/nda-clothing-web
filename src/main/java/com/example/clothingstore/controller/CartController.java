@@ -1,8 +1,7 @@
 package com.example.clothingstore.controller;
 
-import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CartProductDTO;
-import com.example.clothingstore.mapper.CartProductMapper;
+import com.example.clothingstore.config.mapper.CartProductMapper;
 import com.example.clothingstore.model.CartProductEntity;
 import com.example.clothingstore.model.TypeEntity;
 import com.example.clothingstore.model.UserEntity;

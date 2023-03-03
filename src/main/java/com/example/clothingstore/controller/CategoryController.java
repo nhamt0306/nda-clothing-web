@@ -2,10 +2,8 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CategoryDTO;
-import com.example.clothingstore.mapper.CategoryMapper;
-import com.example.clothingstore.mapper.CategoryPagingResponse;
-import com.example.clothingstore.mapper.ProductMapper;
-import com.example.clothingstore.mapper.ProductPagingResponse;
+import com.example.clothingstore.config.mapper.CategoryMapper;
+import com.example.clothingstore.config.mapper.CategoryPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.service.CategorySerivce;

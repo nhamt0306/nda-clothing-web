@@ -18,7 +18,7 @@ public class CommuneEntity {
     public CommuneEntity() {
     }
 
-    public CommuneEntity(Long id, String commune, DistrictEntity districtEntity) {
+    public CommuneEntity(Long id, String commune) {
         this.id = id;
         this.commune = commune;
     }

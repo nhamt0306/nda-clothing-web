@@ -1,6 +1,6 @@
 package com.example.clothingstore.controller;
 
-import com.example.clothingstore.mapper.TransactionMapper;
+import com.example.clothingstore.config.mapper.TransactionMapper;
 import com.example.clothingstore.model.TransactionEntity;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
 import com.example.clothingstore.service.impl.TransactionServiceImpl;

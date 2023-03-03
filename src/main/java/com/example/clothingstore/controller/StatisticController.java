@@ -1,7 +1,7 @@
 package com.example.clothingstore.controller;
 
 
-import com.example.clothingstore.mapper.StatisticMapper;
+import com.example.clothingstore.config.mapper.StatisticMapper;
 import com.example.clothingstore.service.impl.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

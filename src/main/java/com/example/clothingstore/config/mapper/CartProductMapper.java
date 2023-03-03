@@ -1,4 +1,4 @@
-package com.example.clothingstore.mapper;
+package com.example.clothingstore.config.mapper;
 
 public class CartProductMapper {
     private Long productId;

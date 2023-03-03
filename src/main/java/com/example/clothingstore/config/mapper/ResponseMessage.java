@@ -1,4 +1,4 @@
-package com.example.clothingstore.mapper;
+package com.example.clothingstore.config.mapper;
 
 public class ResponseMessage {
     private String message;

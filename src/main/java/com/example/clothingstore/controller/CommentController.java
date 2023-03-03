@@ -1,14 +1,12 @@
 package com.example.clothingstore.controller;
 
-import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.CommentDTO;
-import com.example.clothingstore.mapper.CommentMapper;
+import com.example.clothingstore.config.mapper.CommentMapper;
 import com.example.clothingstore.model.CommentEntity;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.model.TransactionEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
-import com.example.clothingstore.service.TransactionService;
 import com.example.clothingstore.service.impl.CommentServiceImpl;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
 import com.example.clothingstore.service.impl.TransactionServiceImpl;

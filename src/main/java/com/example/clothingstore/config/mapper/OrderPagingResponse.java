@@ -1,4 +1,4 @@
-package com.example.clothingstore.mapper;
+package com.example.clothingstore.config.mapper;
 
 import java.util.ArrayList;
 import java.util.List;

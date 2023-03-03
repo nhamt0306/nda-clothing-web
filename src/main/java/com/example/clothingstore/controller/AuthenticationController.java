@@ -1,9 +1,9 @@
 package com.example.clothingstore.controller;
 
-import com.example.clothingstore.mapper.JwtResponse;
-import com.example.clothingstore.mapper.ResponseMessage;
-import com.example.clothingstore.mapper.SignInForm;
-import com.example.clothingstore.mapper.SignUpForm;
+import com.example.clothingstore.config.mapper.JwtResponse;
+import com.example.clothingstore.config.mapper.ResponseMessage;
+import com.example.clothingstore.config.mapper.SignInForm;
+import com.example.clothingstore.config.mapper.SignUpForm;
 import com.example.clothingstore.model.CartEntity;
 import com.example.clothingstore.model.RoleEntity;
 import com.example.clothingstore.model.RoleName;

@@ -1,7 +1,9 @@
 package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
-import com.example.clothingstore.mapper.*;
+import com.example.clothingstore.config.mapper.OrderMapper;
+import com.example.clothingstore.config.mapper.OrderPagingResponse;
+import com.example.clothingstore.config.mapper.TransactionMapper;
 import com.example.clothingstore.model.*;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.*;
@@ -10,10 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;

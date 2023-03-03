@@ -2,7 +2,7 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.ChangePasswordDTO;
-import com.example.clothingstore.mapper.UserMapper;
+import com.example.clothingstore.config.mapper.UserMapper;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.UserServiceImpl;

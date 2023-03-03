@@ -2,11 +2,10 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.dto.ProductDTO;
-import com.example.clothingstore.mapper.ProductMapper;
-import com.example.clothingstore.mapper.ProductPagingResponse;
+import com.example.clothingstore.config.mapper.ProductMapper;
+import com.example.clothingstore.config.mapper.ProductPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ProductEntity;
-import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.CategoryServiceImpl;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
@@ -19,7 +18,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "*")   //Để ghép AuthController với các controller khác
 @RequestMapping

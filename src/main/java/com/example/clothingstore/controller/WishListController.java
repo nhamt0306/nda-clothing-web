@@ -1,13 +1,8 @@
 package com.example.clothingstore.controller;
 
-import com.example.clothingstore.dto.CartProductDTO;
-import com.example.clothingstore.dto.WishListDTO;
-import com.example.clothingstore.mapper.CartProductMapper;
-import com.example.clothingstore.mapper.TypeMapper;
-import com.example.clothingstore.mapper.WishListMapper;
+import com.example.clothingstore.config.mapper.WishListMapper;
 import com.example.clothingstore.model.*;
 import com.example.clothingstore.security.principal.UserDetailService;
-import com.example.clothingstore.service.WishListService;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
 import com.example.clothingstore.service.impl.TypeServiceImpl;
 import com.example.clothingstore.service.impl.WishListServiceImpl;
@@ -16,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
