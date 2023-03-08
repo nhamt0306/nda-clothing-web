@@ -208,7 +208,7 @@ public class OrderController {
 
     // category paging
     @GetMapping("/user/order/get-by-status")
-    public Object getAllOrderByStatus(@RequestParam(defaultValue = "1") Integer pageNo,
+    public ResponseEntity<?> getAllOrderByStatus(@RequestParam(defaultValue = "1") Integer pageNo,
                               @RequestParam(defaultValue = "100") Integer pageSize,
                               @RequestParam(defaultValue = "id") String sortBy,
                               @RequestParam(defaultValue = "Active") String status) {
@@ -226,7 +226,12 @@ public class OrderController {
         {
             pageNo = maxPageNo +1;
         }
-        orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, status);
+        if (status.equals("Active"))
+        {
+            return getOrderByUserId(userDetailService.getCurrentUser().getId());
+        }else {
+            orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, status);
+        }
         List<OrderMapper> orderMappers = new ArrayList<>();
         for (OrderEntity orderEntity : orderEntityList)
         {
@@ -246,7 +251,7 @@ public class OrderController {
         }
 
         OrderPagingResponse orderPagingResponse = new OrderPagingResponse(orderMappers, maxPageSize);
-        return orderPagingResponse;
+        return ResponseEntity.ok(orderPagingResponse);
     }
 
 
