@@ -206,6 +206,49 @@ public class OrderController {
         return orderPagingResponse;
     }
 
+    // category paging
+    @GetMapping("/user/order/get-by-status")
+    public Object getAllOrderByStatus(@RequestParam(defaultValue = "1") Integer pageNo,
+                              @RequestParam(defaultValue = "100") Integer pageSize,
+                              @RequestParam(defaultValue = "id") String sortBy,
+                              @RequestParam(defaultValue = "Active") String status) {
+        Integer maxPageSize;
+        Integer maxPageNo;
+        List<OrderEntity> orderEntityList = new ArrayList<>();
+
+        maxPageSize = orderService.getAllOrder().size();
+        if (pageSize > maxPageSize)
+        {
+            pageSize = 12;
+        }
+        maxPageNo = maxPageSize / pageSize;
+        if (pageNo > maxPageNo +1)
+        {
+            pageNo = maxPageNo +1;
+        }
+        orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, status);
+        List<OrderMapper> orderMappers = new ArrayList<>();
+        for (OrderEntity orderEntity : orderEntityList)
+        {
+            if (orderEntity.getUserEntity().getId() == userDetailService.getCurrentUser().getId()) {
+                OrderMapper orderMapper = new OrderMapper(orderEntity.getId(), orderEntity.getTotalPrice(), orderEntity.getNote(), orderEntity.getShippingFee(), orderEntity.getPayment(), orderEntity.getStatus(), orderEntity.getAddress(), orderEntity.getPhone(), orderEntity.getCreate_at());
+                orderMapper.setOrdName(orderEntity.getName());
+                // get transaction of ~ order
+                List<TransactionMapper> transactionMappers = new ArrayList<>();
+                for (TransactionEntity transactionEntity : orderDetailService.getAllByOrderId(orderEntity.getId())) {
+                    TransactionMapper transactionMapper = new TransactionMapper(transactionEntity.getId(), transactionEntity.getUnitPrice(), transactionEntity.getQuantity(), transactionEntity.getProductEntity().getId(), transactionEntity.getProductEntity().getImage(), transactionEntity.getProductEntity().getName(), transactionEntity.getColor(), transactionEntity.getSize());
+                    transactionMapper.setCommented(transactionEntity.getCommented());
+                    transactionMappers.add(transactionMapper);
+                }
+                orderMapper.setTransactionMapper(transactionMappers);
+                orderMappers.add(orderMapper);
+            }
+        }
+
+        OrderPagingResponse orderPagingResponse = new OrderPagingResponse(orderMappers, maxPageSize);
+        return orderPagingResponse;
+    }
+
 
     @GetMapping("/admin/orders/getAll")
     public ResponseEntity<?> getOrderByAdmin(){
