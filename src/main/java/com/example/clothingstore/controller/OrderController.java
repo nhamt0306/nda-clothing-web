@@ -228,7 +228,7 @@ public class OrderController {
         }
         if (status.equals("Active"))
         {
-            return getOrderByUserId(userDetailService.getCurrentUser().getId());
+            orderEntityList = orderService.getAllOrderByUserId(userDetailService.getCurrentUser().getId());
         }else {
             orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, status);
         }
