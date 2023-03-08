@@ -1,10 +1,10 @@
 package com.example.clothingstore.controller;
 
-import com.example.clothingstore.config.mapper.CommuneMapper;
-import com.example.clothingstore.config.mapper.DistrictMapper;
+import com.example.clothingstore.config.mapper.LocationMapper;
 import com.example.clothingstore.dto.ErrorResponse;
 import com.example.clothingstore.model.CommuneEntity;
 import com.example.clothingstore.model.DistrictEntity;
+import com.example.clothingstore.model.ProvinceEntity;
 import com.example.clothingstore.service.CommuneService;
 import com.example.clothingstore.service.DistrictService;
 import com.example.clothingstore.service.ProvinceService;
@@ -30,7 +30,14 @@ public class LocationController {
     @GetMapping("/location/provinces")
     public Object getAllProvince()
     {
-        return provinceService.getAllProvince();
+        List<ProvinceEntity> provinceEntities = provinceService.getAllProvince();
+
+        List<LocationMapper> provinceMappers = new ArrayList<>();
+        for (ProvinceEntity provinceEntity : provinceEntities) {
+            LocationMapper locationMapper = new LocationMapper(provinceEntity.getId(), provinceEntity.getProvince());
+            provinceMappers.add(locationMapper);
+        }
+        return ResponseEntity.ok(provinceMappers);
     }
 
     @GetMapping("/location/districts/{province_id}")
@@ -49,10 +56,10 @@ public class LocationController {
 
         }
 
-        List<DistrictMapper> districtMappers = new ArrayList<>();
+        List<LocationMapper> districtMappers = new ArrayList<>();
 
         for (DistrictEntity districtEntity : districtEntities) {
-            DistrictMapper districtMapper = new DistrictMapper(districtEntity.getId(), districtEntity.getDistrict());
+            LocationMapper districtMapper = new LocationMapper(districtEntity.getId(), districtEntity.getDistrict());
             districtMappers.add(districtMapper);
         }
 
@@ -74,10 +81,10 @@ public class LocationController {
                     HttpStatus.NOT_FOUND);
         }
 
-        List<CommuneMapper> communeMappers = new ArrayList<>();
+        List<LocationMapper> communeMappers = new ArrayList<>();
 
         for (CommuneEntity communeEntity : communeEntities) {
-            CommuneMapper communeMapper = new CommuneMapper(communeEntity.getId(), communeEntity.getCommune());
+            LocationMapper communeMapper = new LocationMapper(communeEntity.getId(), communeEntity.getCommune());
             communeMappers.add(communeMapper);
         }
 
