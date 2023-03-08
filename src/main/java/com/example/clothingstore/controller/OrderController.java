@@ -216,7 +216,7 @@ public class OrderController {
         Integer maxPageNo;
         List<OrderEntity> orderEntityList = new ArrayList<>();
 
-        maxPageSize = orderService.getAllOrder().size();
+        maxPageSize = orderService.getAllOrderByUserId(userDetailService.getCurrentUser().getId()).size();
         if (pageSize > maxPageSize)
         {
             pageSize = 12;
