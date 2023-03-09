@@ -228,7 +228,7 @@ public class OrderController {
         }
         if (status.equals("Active"))
         {
-            orderEntityList = orderService.getAllOrderByUserId(userDetailService.getCurrentUser().getId());
+            return getOrderByUserId(userDetailService.getCurrentUser().getId());
         }else {
             orderEntityList = orderService.getAllPaging(pageNo-1, pageSize, sortBy, status);
         }
@@ -251,7 +251,7 @@ public class OrderController {
         }
 
         OrderPagingResponse orderPagingResponse = new OrderPagingResponse(orderMappers, maxPageSize);
-        return ResponseEntity.ok(orderPagingResponse);
+        return ResponseEntity.ok(orderMappers);
     }
 
 

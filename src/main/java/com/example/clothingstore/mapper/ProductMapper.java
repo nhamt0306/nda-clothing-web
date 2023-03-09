@@ -14,6 +14,7 @@ public class ProductMapper {
     private Long quantity;
     private Long categoryId;
     private String categoryName;
+    private Long countComment;
 
     private String status;
 
@@ -34,6 +35,41 @@ public class ProductMapper {
         this.categoryName = categoryName;
     }
 
+    public ProductMapper(Long id, String name, String description, String image, Long avgRating, Long price, Long size, String color, Long sale, Long sold, Long quantity, Long categoryId, String categoryName, Long countComment) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.avgRating = avgRating;
+        this.price = price;
+        this.size = size;
+        this.color = color;
+        this.sale = sale;
+        this.sold = sold;
+        this.quantity = quantity;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.countComment = countComment;
+    }
+
+    public ProductMapper(Long id, String name, String description, String image, Long avgRating, Long price, Long size, String color, Long sale, Long sold, Long quantity, Long categoryId, String categoryName, Long countComment, String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.avgRating = avgRating;
+        this.price = price;
+        this.size = size;
+        this.color = color;
+        this.sale = sale;
+        this.sold = sold;
+        this.quantity = quantity;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.countComment = countComment;
+        this.status = status;
+    }
+
     public ProductMapper(Long id, String name, String description, String image, Long avgRating, Long price, Long size, String color, Long sale, Long sold, Long quantity, Long categoryId, String categoryName, String status) {
         this.id = id;
         this.name = name;
@@ -49,6 +85,14 @@ public class ProductMapper {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.status = status;
+    }
+
+    public Long getCountComment() {
+        return countComment;
+    }
+
+    public void setCountComment(Long countComment) {
+        this.countComment = countComment;
     }
 
     public String getStatus() {
