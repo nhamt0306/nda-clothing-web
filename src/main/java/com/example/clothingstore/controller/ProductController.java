@@ -131,12 +131,17 @@ public class ProductController {
         {
             if (!productEntity.getTypeEntities().isEmpty())
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(), productEntity.getStatus());
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(),
+                        productEntity.getCategoryEntity().getName(),
+                        commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
+                        productEntity.getStatus());
                 responseProductList.add(productMapper);
             }
             else
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(), productEntity.getStatus());
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(),
+                        commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
+                        productEntity.getStatus());
                 responseProductList.add(productMapper);
             }
         }
@@ -163,7 +168,7 @@ public class ProductController {
                         productEntity.getTypeEntities().get(0).getQuantity(),
                         productEntity.getCategoryEntity().getId(),
                         productEntity.getCategoryEntity().getName(),
-                        commentService.countCommentByProductId(productEntity.getId()),
+                        commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
                         productEntity.getStatus());
                 return ResponseEntity.ok(productMapper);
             }
@@ -184,7 +189,7 @@ public class ProductController {
             List<ProductMapper> responseProductList = new ArrayList<>();
             for (ProductEntity productEntity : productEntityList)
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(), commentService.countCommentByProductId(productEntity.getId()));
                 responseProductList.add(productMapper);
             }
             return ResponseEntity.ok(responseProductList);
@@ -225,12 +230,13 @@ public class ProductController {
             {
                 if (!productEntity.getTypeEntities().isEmpty())
                 {
-                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(),                         commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()));
                     responseProductList.add(productMapper);
                 }
                 else
                 {
-                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName());
+                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(),                         commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId())
+                            );
                     responseProductList.add(productMapper);
                 }
             }
