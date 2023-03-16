@@ -44,4 +44,9 @@ public class CommentServiceImpl implements CommentService {
     public Boolean checkCommentIncludeByUser(Long userId, Long commentId) {
         return commentRepository.existsByUserIdAndId(userId, commentId);
     }
+
+    @Override
+    public Long countCommentByProductId(Long product_id) {
+        return commentRepository.countProductCommentById(product_id);
+    }
 }

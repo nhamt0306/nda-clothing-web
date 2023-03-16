@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Khởi tạo đối tượng và build user
 public class UserPrinciple implements UserDetails {
     //Khai báo
     private Long id;

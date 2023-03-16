@@ -15,4 +15,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
     @Query(value = "select * from clothing_store.comments where product_id = :ProductId order by create_at desc",nativeQuery = true)
     List<CommentEntity> getAllByProductIdOrderByCreate_atDesc(@Param("ProductId") Long ProductId);
+    @Query(value = "Select Count(*) from clothing_store.comments where product_id = :ProductId",nativeQuery = true)
+    Long countProductCommentById(@Param("ProductId") Long ProductId);
 }

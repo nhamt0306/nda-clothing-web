@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+//Xuất thông báo lỗi nếu token không hợp lệ
 @Component
 public class JwtEntryPoint implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class); //Log để xem thông tin
