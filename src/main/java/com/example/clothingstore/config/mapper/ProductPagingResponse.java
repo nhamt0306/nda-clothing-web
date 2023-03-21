@@ -5,9 +5,9 @@ import java.util.List;
 
 public class ProductPagingResponse {
     List<ProductMapper> list = new ArrayList<>();
-    int numberItem;
+    long numberItem;
 
-    public ProductPagingResponse(List<ProductMapper> list, int numberItem) {
+    public ProductPagingResponse(List<ProductMapper> list, long numberItem) {
         this.list = list;
         this.numberItem = numberItem;
     }
@@ -20,7 +20,7 @@ public class ProductPagingResponse {
         this.list = list;
     }
 
-    public int getNumberItem() {
+    public long getNumberItem() {
         return numberItem;
     }
 

@@ -24,4 +24,12 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     List<ProductEntity> findByDescriptionContaining(String name);
 
     Page<ProductEntity> findAllByNameContaining(String keyword, Pageable pageable);
+
+    @Query(value = "SELECT pro FROM ProductEntity pro " +
+            "WHERE (?1 is null or pro.name LIKE %?1%) " +
+            "AND (?2 is null or pro.categoryEntity.id = ?2) " +
+            "AND (?3 is null or pro.avgRating >= ?3) " +
+            "AND pro.status = 'Active'")
+    Page<ProductEntity> findAllByFiltering(String keyword, Long catId, Integer rating, Pageable pageable);
+
 }

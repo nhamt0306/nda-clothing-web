@@ -20,6 +20,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepository productRepository;
+
     @Autowired
     CloudinaryService cloudinaryService;
 
@@ -104,6 +105,23 @@ public class ProductServiceImpl implements ProductService {
         } else {
             return new ArrayList<ProductEntity>();
         }
+    }
+
+    @Override
+    public Page<ProductEntity> getAllProductByFiltering(
+        Integer pageNo,
+        Integer pageSize,
+        String sortBy,
+        Long catId,
+        Integer rating,
+        String keyword
+    ) {
+        Page<ProductEntity> productEntities;
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        productEntities = productRepository.findAllByFiltering(keyword, catId, rating, paging);
+
+        return productEntities;
     }
 
     @Override

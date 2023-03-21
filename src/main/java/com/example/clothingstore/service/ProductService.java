@@ -1,6 +1,7 @@
 package com.example.clothingstore.service;
 
 import com.example.clothingstore.model.ProductEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -14,6 +15,14 @@ public interface ProductService {
     List<ProductEntity> findProductByCat(Long catId);
     boolean existByProductId(Long id);
     ProductEntity uploadImage(long id, MultipartFile image);
+    Page<ProductEntity> getAllProductByFiltering(
+            Integer pageNo,
+            Integer pageSize,
+            String sortBy,
+            Long catId,
+            Integer rating,
+            String keyword
+    );
     List<ProductEntity> getAllProductPaging(Integer pageNo, Integer pageSize, String sortBy);
     List<ProductEntity> getAllProductByCatPaging(Integer pageNo, Integer pageSize, String sortBy, Long catId);
     List<ProductEntity> searchProduct(String keyword);

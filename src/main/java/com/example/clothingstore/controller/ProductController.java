@@ -11,6 +11,7 @@ import com.example.clothingstore.service.impl.CategoryServiceImpl;
 import com.example.clothingstore.service.impl.CommentServiceImpl;
 import com.example.clothingstore.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import java.util.List;
 public class ProductController {
     @Autowired
     ProductServiceImpl productService;
+
     @Autowired
     CategoryServiceImpl categoryService;
 
@@ -88,40 +90,29 @@ public class ProductController {
 
     @GetMapping("/product")
     public Object getAllProducts(@RequestParam(defaultValue = "1") Integer pageNo,
-                                            @RequestParam(defaultValue = "100") Integer pageSize,
+                                            @RequestParam(defaultValue = "8") Integer pageSize,
                                             @RequestParam(defaultValue = "id") String sortBy,
-                                            @RequestParam(required = false) Long catId) {
-        Integer maxPageSize;
-        Integer maxPageNo;
-        List<ProductEntity> productEntityList = new ArrayList<>();
-        List<ProductEntity> numberItemList = new ArrayList<>();
-        if (catId == null) {
-            maxPageSize = productService.getAllProduct().size();
-            if (pageSize > maxPageSize)
-            {
-                pageSize = 12;
-            }
-            maxPageNo = maxPageSize / pageSize;
-            if (pageNo > maxPageNo +1)
-            {
-                pageNo = maxPageNo +1;
-            }
-            productEntityList = productService.getAllProductPaging(pageNo-1, pageSize, sortBy);
-            numberItemList = productService.getAllProduct();
+                                            @RequestParam(defaultValue = "") Long catId,
+                                            @RequestParam(defaultValue = "") Integer rating,
+                                            @RequestParam(defaultValue = "") String keyword) {
+        Page<ProductEntity> productEntityList;
+        ProductPagingResponse productPagingResponse;
+
+        if (pageNo < 1 || pageSize < 1) {
+            productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+            return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
         }
-        else {
-            maxPageSize = productService.findProductByCat(catId).size();
-            if (pageSize > maxPageSize)
-            {
-                pageSize = 12;
-            }
-            maxPageNo = maxPageSize / pageSize;
-            if (pageNo > maxPageNo +1)
-            {
-                pageNo = maxPageNo +1;
-            }
-            productEntityList = productService.getAllProductByCatPaging(pageNo-1, pageSize, sortBy, catId);
-            numberItemList = productService.findProductByCat(catId);
+
+        productEntityList = productService.getAllProductByFiltering(pageNo - 1, pageSize, sortBy, catId, rating, keyword);
+
+        if (productEntityList.getTotalElements() == 0) {
+            productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+            return new ResponseEntity<>(productPagingResponse, HttpStatus.NOT_FOUND);
+        }
+
+        if (pageNo > productEntityList.getTotalPages()) {
+            productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+            return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
         }
 
         List<ProductMapper> responseProductList = new ArrayList<>();
@@ -129,21 +120,47 @@ public class ProductController {
         {
             if (!productEntity.getTypeEntities().isEmpty())
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), productEntity.getTypeEntities().get(0).getPrice(), productEntity.getTypeEntities().get(0).getSize(), productEntity.getTypeEntities().get(0).getColor(), productEntity.getTypeEntities().get(0).getSale(), productEntity.getTypeEntities().get(0).getSold(), productEntity.getTypeEntities().get(0).getQuantity(), productEntity.getCategoryEntity().getId(),
+                ProductMapper productMapper = new ProductMapper(
+                        productEntity.getId(),
+                        productEntity.getName(),
+                        productEntity.getDescription(),
+                        productEntity.getImage(),
+                        productEntity.getAvgRating(),
+                        productEntity.getTypeEntities().get(0).getPrice(),
+                        productEntity.getTypeEntities().get(0).getSize(),
+                        productEntity.getTypeEntities().get(0).getColor(),
+                        productEntity.getTypeEntities().get(0).getSale(),
+                        productEntity.getTypeEntities().get(0).getSold(),
+                        productEntity.getTypeEntities().get(0).getQuantity(),
+                        productEntity.getCategoryEntity().getId(),
                         productEntity.getCategoryEntity().getName(),
                         commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
-                        productEntity.getStatus());
+                        productEntity.getStatus()
+                );
                 responseProductList.add(productMapper);
             }
             else
             {
-                ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(),
+                ProductMapper productMapper = new ProductMapper(
+                        productEntity.getId(),
+                        productEntity.getName(),
+                        productEntity.getDescription(),
+                        productEntity.getImage(),
+                        productEntity.getAvgRating(),
+                        Long.valueOf(0L), Long.valueOf(0L),
+                        "Đang cập nhật",
+                        Long.valueOf(0L),
+                        Long.valueOf(0L),
+                        Long.valueOf(0L),
+                        productEntity.getCategoryEntity().getId(),
+                        productEntity.getCategoryEntity().getName(),
                         commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
-                        productEntity.getStatus());
+                        productEntity.getStatus()
+                );
                 responseProductList.add(productMapper);
             }
         }
-        ProductPagingResponse productPagingResponse = new ProductPagingResponse(responseProductList, numberItemList.size());
+        productPagingResponse = new ProductPagingResponse(responseProductList, productEntityList.getTotalElements());
         return productPagingResponse;
     }
 
@@ -233,8 +250,7 @@ public class ProductController {
                 }
                 else
                 {
-                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(),                         commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId())
-                            );
+                    ProductMapper productMapper = new ProductMapper(productEntity.getId(), productEntity.getName(), productEntity.getDescription(), productEntity.getImage(), productEntity.getAvgRating(), Long.valueOf(0L), Long.valueOf(0L), "Đang cập nhật", Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(0L), productEntity.getCategoryEntity().getId(), productEntity.getCategoryEntity().getName(),                         commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()));
                     responseProductList.add(productMapper);
                 }
             }
