@@ -87,6 +87,7 @@ public class ProductMapper {
         this.status = status;
     }
 
+
     public Long getCountComment() {
         return countComment;
     }

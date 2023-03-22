@@ -8,6 +8,8 @@ public class TypeMapper {
     private Long sale;
     private Long sold;
     private Long productId;
+    private Long importQuantity;
+    private Long importPrice;
 
     public TypeMapper(Long quantity, Long price, Long size, String color, Long sale, Long sold) {
         this.quantity = quantity;
@@ -26,6 +28,34 @@ public class TypeMapper {
         this.sale = sale;
         this.sold = sold;
         this.productId = productId;
+    }
+
+    public TypeMapper(Long quantity, Long price, Long size, String color, Long sale, Long sold, Long productId, Long importQuantity, Long importPrice) {
+        this.quantity = quantity;
+        this.price = price;
+        this.size = size;
+        this.color = color;
+        this.sale = sale;
+        this.sold = sold;
+        this.productId = productId;
+        this.importQuantity = importQuantity;
+        this.importPrice = importPrice;
+    }
+
+    public Long getImportPrice() {
+        return importPrice;
+    }
+
+    public void setImportPrice(Long importPrice) {
+        this.importPrice = importPrice;
+    }
+
+    public Long getImportQuantity() {
+        return importQuantity;
+    }
+
+    public void setImportQuantity(Long importQuantity) {
+        this.importQuantity = importQuantity;
     }
 
     public Long getProductId() {
