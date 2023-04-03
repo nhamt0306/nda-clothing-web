@@ -14,6 +14,7 @@ public class CommentEntity extends BaseClassEntity{
     private String content;
     private Long rating;
     private Long userId;
+    private String image;
 
     // Relationship with table ProductEntity
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,6 +40,13 @@ public class CommentEntity extends BaseClassEntity{
         this.userId = userId;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public Long getUserId() {
         return userId;

@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductEntity uploadImage(long id, MultipartFile image) {
         ProductEntity productEntity = productRepository.findById(id).get();
         String imageUrl = cloudinaryService.uploadFile(image,String.valueOf(id),
-                "BookStore"+ "/" + "Product");
+                "ClothingStore"+ "/" + "Product");
         if(!imageUrl.equals("-1")) {
             productEntity.setImage(imageUrl);
         }

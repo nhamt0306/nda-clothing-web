@@ -7,14 +7,12 @@ import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.model.TransactionEntity;
 import com.example.clothingstore.model.UserEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
-import com.example.clothingstore.service.impl.CommentServiceImpl;
-import com.example.clothingstore.service.impl.ProductServiceImpl;
-import com.example.clothingstore.service.impl.TransactionServiceImpl;
-import com.example.clothingstore.service.impl.UserServiceImpl;
+import com.example.clothingstore.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -31,6 +29,8 @@ public class CommentController {
     ProductServiceImpl productService;
     @Autowired
     UserServiceImpl userService;
+    @Autowired
+    CloudinaryService cloudinaryService;
 
     @Autowired
     TransactionServiceImpl transactionService;
@@ -43,13 +43,14 @@ public class CommentController {
             UserEntity user= userService.findById(commentEntity.getUserId()).get();
             CommentMapper commentMapper = new CommentMapper(commentEntity.getId(), commentEntity.getContent(), commentEntity.getRating(), user.getFullname(), commentEntity.getCreate_at());
             commentMapper.setAvatar(user.getAvatar());
+            commentMapper.setComImage(commentEntity.getImage());
             commentMappers.add(commentMapper);
         }
         return ResponseEntity.ok(commentMappers);
     }
     // Tạo comment --> Tính lại avg Rating của product;
     @PostMapping("/user/comment/create")
-    public Object createComment(@RequestBody CommentDTO commentDTO) throws ParseException {
+    public Object createComment(@ModelAttribute CommentDTO commentDTO) throws ParseException {
         // set isComment to true
         TransactionEntity transactionEntity = transactionService.getById(commentDTO.getTransactionId());
 
@@ -57,7 +58,9 @@ public class CommentController {
             return new ResponseEntity<>("Transaction has already been commented", HttpStatus.CONFLICT);
         }
         transactionEntity.setCommented(true);
-
+        if(!commentDTO.getImage().getContentType().equals("image/png") && !commentDTO.getImage().getContentType().equals("image/jpeg") && !commentDTO.getImage().getContentType().equals("image/jpg")) {
+            return new ResponseEntity<>("File khong hop le!", HttpStatus.BAD_REQUEST);
+        }
         CommentEntity commentEntity1 = new CommentEntity();
         commentEntity1.setContent(commentDTO.getComContent());
         commentEntity1.setRating(commentDTO.getComRating());
@@ -65,6 +68,15 @@ public class CommentController {
         commentEntity1.setProductEntity(productService.findProductById(commentDTO.getProductId()));
         commentEntity1.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         commentEntity1.setCreate_at(new Timestamp(System.currentTimeMillis()));
+        // upload image:
+        String imageUrl = cloudinaryService.uploadFile(commentDTO.getImage(),String.valueOf(commentDTO.getId()),
+                "ClothingStore"+ "/" + "Comment");
+        if(!imageUrl.equals("-1")) {
+            commentEntity1.setImage(imageUrl);
+        }
+        else if(commentEntity1.getImage().equals("") || commentEntity1.getImage().equals("-1"))
+            commentEntity1.setImage("");
+
         commentService.save(commentEntity1);
         // Tính lại avgRating của Product;
         Long totalRating = Long.valueOf(0);
