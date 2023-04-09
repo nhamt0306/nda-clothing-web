@@ -25,9 +25,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
-
+import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -101,13 +102,32 @@ public class AuthenticationController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<?> getRequest(HttpServletRequest request){
+    public ResponseEntity<?> getRequest(HttpServletRequest request) {
         System.out.println("go to the login page");
         String username = request.getParameter("userName");
         SignInForm signInForm = new SignInForm();
         signInForm.setUsername(username);
         signInForm.setPassword(username);
 
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(signInForm.getUsername(), signInForm.getPassword())
+//        );
+//        // Set token lên hệ thống
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        // Tạo jwt token
+//        String token = jwtProvider.createToken(authentication.getName());
+//        // Lấy ra thông tin người dùng hiện tại trên hệ thống
+//        UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+//        // Trả về kết quả.
+
         return login(signInForm);
+//        login(signInForm);
+
+//        URI urlPayment = new URI("http://localhost:3000");
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setLocation(urlPayment);
+//        httpHeaders.set("token",token);
+//        httpHeaders.set("name", userPrinciple.getName());
+//        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 }

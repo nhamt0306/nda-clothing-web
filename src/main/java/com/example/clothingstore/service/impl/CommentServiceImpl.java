@@ -1,14 +1,18 @@
 package com.example.clothingstore.service.impl;
 
-import com.example.clothingstore.config.LocalVariable;
 import com.example.clothingstore.model.CommentEntity;
-import com.example.clothingstore.model.TypeEntity;
+import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.repository.CommentRepository;
 import com.example.clothingstore.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,5 +52,22 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Long countCommentByProductId(Long product_id) {
         return commentRepository.countProductCommentById(product_id);
+    }
+
+    @Override
+    public List<CommentEntity> filterByRating(Long rating, Long productId) {
+        return commentRepository.findAllByRatingAndProductEntityId(rating, productId);
+    }
+
+    @Override
+    public List<CommentEntity> findAllCommentPagingByProductId(Long productId, Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Page<CommentEntity> pagedResult = commentRepository.findAllByProductEntityId(productId, paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<CommentEntity>();
+        }
     }
 }

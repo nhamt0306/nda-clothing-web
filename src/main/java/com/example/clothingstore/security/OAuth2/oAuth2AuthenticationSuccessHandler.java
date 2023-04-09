@@ -85,6 +85,7 @@ public class oAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // sua port sang 3000 --> ban thong tin token len url --> url nay get thong tin, sau do chuyen thong tin sang url trang home
         return UriComponentsBuilder.fromUriString("").host("localhost").port(8099).path("/login")
                 .queryParam("userName", oAuth2User.getAttribute("email").toString())
+//                .queryParam("token", token)
 //                .queryParam("email", (Object) oAuth2User.getAttribute("email"))
                 .build().toUriString();
     }
