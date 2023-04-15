@@ -1,11 +1,18 @@
 package com.example.clothingstore.dto;
 
-public class CommentDTO {
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.Serializable;
+
+@Data
+public class CommentDTO implements Serializable {
     private Long id;
     private String comContent;
     private Long comRating;
     private Long userId;
     private Long productId;
+    private MultipartFile image;
 
     private Long transactionId;
 

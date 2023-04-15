@@ -42,6 +42,8 @@ public class TypeController {
         for (TypeEntity type : typeEntityList)
         {
             TypeMapper mapper = new TypeMapper(type.getQuantity(), type.getPrice(), type.getSize(), type.getColor(), type.getSale(), type.getSold(), type.getProductEntity().getId());
+            mapper.setImportQuantity(type.getImportQuantity());
+            mapper.setImportPrice(type.getImportPrice());
             responseList.add(mapper);
         }
         return ResponseEntity.ok(responseList);
@@ -52,6 +54,8 @@ public class TypeController {
         try {
             TypeEntity type = typeService.findTypeById(id);
             TypeMapper mapper = new TypeMapper(type.getQuantity(), type.getPrice(), type.getSize(), type.getColor(), type.getSale(), type.getSold(), type.getProductEntity().getId());
+            mapper.setImportQuantity(type.getImportQuantity());
+            mapper.setImportPrice(type.getImportPrice());
             return ResponseEntity.ok(mapper);
         }
         catch (Exception e)
@@ -68,6 +72,8 @@ public class TypeController {
             for (TypeEntity type : typeEntityList)
             {
                 TypeMapper mapper = new TypeMapper(type.getQuantity(), type.getPrice(), type.getSize(), type.getColor(), type.getSale(), type.getSold(), type.getProductEntity().getId());
+                mapper.setImportQuantity(type.getImportQuantity());
+                mapper.setImportPrice(type.getImportPrice());
                 responseList.add(mapper);
             }
             return ResponseEntity.ok(responseList);
@@ -116,6 +122,13 @@ public class TypeController {
             {
                 return new ResponseEntity<>("Cannot find product with id = "+ id, HttpStatus.NOT_FOUND);
             }
+            //check type exist
+            TypeEntity typeCheck = typeService.getTypeByColorAndSizeAndProductId(typeDTO.get("color"), Long.parseLong(typeDTO.get("size")), id);
+            if(typeCheck != null)
+            {
+                return new ResponseEntity<>("This type existed with id="+typeCheck.getId(), HttpStatus.NOT_FOUND);
+            }
+
             TypeEntity type = new TypeEntity();
             type.setColor(typeDTO.get("color"));
             type.setSize(Long.parseLong(typeDTO.get("size")));
@@ -123,11 +136,15 @@ public class TypeController {
             type.setPrice(Long.parseLong(typeDTO.get("price")));
             type.setProductEntity(productService.findProductById(id));
             type.setSale(0L);
+            type.setImportPrice(Long.parseLong(typeDTO.get("importPrice")));
+            type.setImportQuantity(Long.parseLong(typeDTO.get("importQuantity")));
             type.setSold(0L);
             type.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             type.setCreate_at(new Timestamp(System.currentTimeMillis()));
             typeService.save(type);
             TypeMapper mapper = new TypeMapper(type.getQuantity(), type.getPrice(), type.getSize(), type.getColor(), type.getSale(), type.getSold(), type.getProductEntity().getId());
+            mapper.setImportQuantity(type.getImportQuantity());
+            mapper.setImportPrice(type.getImportPrice());
             typeMappers.add(mapper);
         }
         return typeMappers;
@@ -220,6 +237,47 @@ public class TypeController {
                     typeEntity.getSale(),
                     typeEntity.getSold(),
                     typeEntity.getProductEntity().getId());
+            typeMappers.add(mapper);
+        }
+        return typeMappers;
+    }
+
+
+    @PutMapping("/admin/type/import/{productId}")
+    public Object importTypeForProduct(@PathVariable long productId, @RequestBody Object req) throws ParseException {
+        // check if product not exists
+        if (!productService.existByProductId(productId)){
+            return new ResponseEntity<>("Cannot find product with id = " + productId, HttpStatus.NOT_FOUND);
+        }
+
+        List<Map<String, String>> typeListReq = (List<Map<String, String>>) req;
+        List<TypeMapper> typeMappers = new ArrayList<>();
+
+        //add import quantity
+        for (Map<String, String> typeDTO : typeListReq)
+        {
+            TypeEntity typeEntity = typeService.getTypeByColorAndSizeAndProductId(typeDTO.get("color"), Long.parseLong(typeDTO.get("size")), productId);
+            // if type exists
+            if (typeEntity != null) {
+                if (!typeEntity.getStatus().equals(LocalVariable.activeStatus)) {
+                    typeEntity.setStatus(LocalVariable.activeStatus);
+                }
+                typeEntity.setImportQuantity(typeEntity.getImportQuantity()+ Long.parseLong(typeDTO.get("importQuantity")));
+            }
+            else {
+                return new ResponseEntity<>("Cannot find product with type id = " + typeEntity.getId(), HttpStatus.NOT_FOUND);
+            }
+            typeService.save(typeEntity);
+
+            TypeMapper mapper = new TypeMapper(typeEntity.getQuantity(),
+                    typeEntity.getPrice(),
+                    typeEntity.getSize(),
+                    typeEntity.getColor(),
+                    typeEntity.getSale(),
+                    typeEntity.getSold(),
+                    typeEntity.getProductEntity().getId());
+            mapper.setImportQuantity(typeEntity.getImportQuantity());
+            mapper.setImportPrice(typeEntity.getImportPrice());
             typeMappers.add(mapper);
         }
         return typeMappers;

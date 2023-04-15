@@ -11,12 +11,14 @@ public class TypeEntity extends BaseClassEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long quantity;
+    private Long quantity;//number product now
     private Long price;
     private Long size;
     private String color;
     private Long sale;
-    private Long sold;
+    private Long importPrice;
+    private Long importQuantity;
+    private Long sold; //number sold
     private String status = "Active";
 
     // Relationship with table ProductEntity
@@ -49,6 +51,22 @@ public class TypeEntity extends BaseClassEntity{
         this.sale = sale;
         this.sold = sold;
         this.status = status;
+    }
+
+    public Long getImportQuantity() {
+        return importQuantity;
+    }
+
+    public void setImportQuantity(Long importQuantity) {
+        this.importQuantity = importQuantity;
+    }
+
+    public Long getImportPrice() {
+        return importPrice;
+    }
+
+    public void setImportPrice(Long importPrice) {
+        this.importPrice = importPrice;
     }
 
     public Long getSale() {

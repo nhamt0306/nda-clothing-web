@@ -55,7 +55,7 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId) {
-        return typeRepository.getTypeEntityByColorAndSizeAndProductEntityId(color, size, productId);
+        return typeRepository.getTypeByColorSizeProductId(color, size, productId);
     }
 
     @Override
