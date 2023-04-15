@@ -50,7 +50,6 @@ public class ProductEntity extends BaseClassEntity {
     @JoinColumn(name = "categoryId", nullable = false, referencedColumnName = "id")
     private CategoryEntity categoryEntity;
 
-
     // Constructor, Getter and Setter
     public ProductEntity() {
     }

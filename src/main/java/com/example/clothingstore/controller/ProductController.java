@@ -98,70 +98,75 @@ public class ProductController {
         Page<ProductEntity> productEntityList;
         ProductPagingResponse productPagingResponse;
 
-        if (pageNo < 1 || pageSize < 1) {
+        try {
+            if (pageNo < 1 || pageSize < 1) {
+                productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+                return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
+            }
+
+            productEntityList = productService.getAllProductByFiltering(pageNo - 1, pageSize, sortBy, catId, rating, keyword);
+
+            if (productEntityList.getTotalElements() == 0) {
+                productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+                return new ResponseEntity<>(productPagingResponse, HttpStatus.NOT_FOUND);
+            }
+
+            if (pageNo > productEntityList.getTotalPages()) {
+                productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+                return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
+            }
+
+            List<ProductMapper> responseProductList = new ArrayList<>();
+            for (ProductEntity productEntity : productEntityList)
+            {
+                if (!productEntity.getTypeEntities().isEmpty())
+                {
+                    ProductMapper productMapper = new ProductMapper(
+                            productEntity.getId(),
+                            productEntity.getName(),
+                            productEntity.getDescription(),
+                            productEntity.getImage(),
+                            productEntity.getAvgRating(),
+                            productEntity.getTypeEntities().get(0).getPrice(),
+                            productEntity.getTypeEntities().get(0).getSize(),
+                            productEntity.getTypeEntities().get(0).getColor(),
+                            productEntity.getTypeEntities().get(0).getSale(),
+                            productEntity.getTypeEntities().get(0).getSold(),
+                            productEntity.getTypeEntities().get(0).getQuantity(),
+                            productEntity.getCategoryEntity().getId(),
+                            productEntity.getCategoryEntity().getName(),
+                            commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
+                            productEntity.getStatus()
+                    );
+                    responseProductList.add(productMapper);
+                }
+                else
+                {
+                    ProductMapper productMapper = new ProductMapper(
+                            productEntity.getId(),
+                            productEntity.getName(),
+                            productEntity.getDescription(),
+                            productEntity.getImage(),
+                            productEntity.getAvgRating(),
+                            Long.valueOf(0L), Long.valueOf(0L),
+                            "Đang cập nhật",
+                            Long.valueOf(0L),
+                            Long.valueOf(0L),
+                            Long.valueOf(0L),
+                            productEntity.getCategoryEntity().getId(),
+                            productEntity.getCategoryEntity().getName(),
+                            commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
+                            productEntity.getStatus()
+                    );
+                    responseProductList.add(productMapper);
+                }
+            }
+            productPagingResponse = new ProductPagingResponse(responseProductList, productEntityList.getTotalElements());
+            return productPagingResponse;
+        } catch(Exception e) {
             productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
             return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
         }
-
-        productEntityList = productService.getAllProductByFiltering(pageNo - 1, pageSize, sortBy, catId, rating, keyword);
-
-        if (productEntityList.getTotalElements() == 0) {
-            productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
-            return new ResponseEntity<>(productPagingResponse, HttpStatus.NOT_FOUND);
-        }
-
-        if (pageNo > productEntityList.getTotalPages()) {
-            productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
-            return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
-        }
-
-        List<ProductMapper> responseProductList = new ArrayList<>();
-        for (ProductEntity productEntity : productEntityList)
-        {
-            if (!productEntity.getTypeEntities().isEmpty())
-            {
-                ProductMapper productMapper = new ProductMapper(
-                        productEntity.getId(),
-                        productEntity.getName(),
-                        productEntity.getDescription(),
-                        productEntity.getImage(),
-                        productEntity.getAvgRating(),
-                        productEntity.getTypeEntities().get(0).getPrice(),
-                        productEntity.getTypeEntities().get(0).getSize(),
-                        productEntity.getTypeEntities().get(0).getColor(),
-                        productEntity.getTypeEntities().get(0).getSale(),
-                        productEntity.getTypeEntities().get(0).getSold(),
-                        productEntity.getTypeEntities().get(0).getQuantity(),
-                        productEntity.getCategoryEntity().getId(),
-                        productEntity.getCategoryEntity().getName(),
-                        commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
-                        productEntity.getStatus()
-                );
-                responseProductList.add(productMapper);
-            }
-            else
-            {
-                ProductMapper productMapper = new ProductMapper(
-                        productEntity.getId(),
-                        productEntity.getName(),
-                        productEntity.getDescription(),
-                        productEntity.getImage(),
-                        productEntity.getAvgRating(),
-                        Long.valueOf(0L), Long.valueOf(0L),
-                        "Đang cập nhật",
-                        Long.valueOf(0L),
-                        Long.valueOf(0L),
-                        Long.valueOf(0L),
-                        productEntity.getCategoryEntity().getId(),
-                        productEntity.getCategoryEntity().getName(),
-                        commentService.countCommentByProductId(productEntity.getId()) == null ? 0L : commentService.countCommentByProductId(productEntity.getId()),
-                        productEntity.getStatus()
-                );
-                responseProductList.add(productMapper);
-            }
-        }
-        productPagingResponse = new ProductPagingResponse(responseProductList, productEntityList.getTotalElements());
-        return productPagingResponse;
     }
 
     @GetMapping("/product/{id}")

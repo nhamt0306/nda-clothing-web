@@ -125,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
             Page<ProductEntity> productEntities;
             Pageable paging;
 
-            if(sortBy.charAt(0) == '-') {
+            if (sortBy.charAt(0) == '-') {
                 paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy.substring(1)));
             } else {
                 paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, sortBy));
