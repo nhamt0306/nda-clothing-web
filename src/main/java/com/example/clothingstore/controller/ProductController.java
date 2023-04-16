@@ -5,6 +5,7 @@ import com.example.clothingstore.dto.ProductDTO;
 import com.example.clothingstore.config.mapper.ProductMapper;
 import com.example.clothingstore.config.mapper.ProductPagingResponse;
 import com.example.clothingstore.model.CategoryEntity;
+import com.example.clothingstore.model.ElasticProduct;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.CategoryServiceImpl;
@@ -160,6 +161,65 @@ public class ProductController {
                     );
                     responseProductList.add(productMapper);
                 }
+            }
+            productPagingResponse = new ProductPagingResponse(responseProductList, productEntityList.getTotalElements());
+            return productPagingResponse;
+        } catch(Exception e) {
+            productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+            return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/product/elastic-search")
+    public Object getAllProductsElasticSearch(@RequestParam(defaultValue = "1") Integer pageNo,
+                                 @RequestParam(defaultValue = "8") Integer pageSize,
+                                 @RequestParam(defaultValue = "id") String sortBy,
+                                 @RequestParam(defaultValue = "") Long catId,
+                                 @RequestParam(defaultValue = "") Integer rating,
+                                 @RequestParam(defaultValue = "") String keyword) {
+        Page<ElasticProduct> productEntityList;
+        ProductPagingResponse productPagingResponse;
+
+        try {
+            if (pageNo < 1 || pageSize < 1) {
+                productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+                return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
+            }
+
+            productEntityList = productService.getElasticSearchProductByFiltering(pageNo - 1, pageSize, sortBy, catId, rating, keyword);
+
+            if (productEntityList.getTotalElements() == 0) {
+                productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+                return new ResponseEntity<>(productPagingResponse, HttpStatus.NOT_FOUND);
+            }
+
+            if (pageNo > productEntityList.getTotalPages()) {
+                productPagingResponse = new ProductPagingResponse(new ArrayList<>(), 0);
+                return new ResponseEntity<>(productPagingResponse, HttpStatus.BAD_REQUEST);
+            }
+
+            List<ProductMapper> responseProductList = new ArrayList<>();
+            for (ElasticProduct elasticProduct : productEntityList)
+            {
+                    ProductMapper productMapper = new ProductMapper(
+                            elasticProduct.getId(),
+                            elasticProduct.getName(),
+                            elasticProduct.getDescription(),
+                            elasticProduct.getImage(),
+                            Long.parseLong(elasticProduct.getAvgRating()),
+                            elasticProduct.getPrice(),
+                            Long.parseLong(elasticProduct.getSize()),
+                            elasticProduct.getColor(),
+                            Long.parseLong(elasticProduct.getSale()),
+                            elasticProduct.getSold(),
+                            Long.parseLong(elasticProduct.getQuantity()),
+                            elasticProduct.getId(),
+                            elasticProduct.getName(),
+                            Long.parseLong(elasticProduct.getCountComment()),
+                            elasticProduct.getStatus()
+                    );
+                    responseProductList.add(productMapper);
+
             }
             productPagingResponse = new ProductPagingResponse(responseProductList, productEntityList.getTotalElements());
             return productPagingResponse;

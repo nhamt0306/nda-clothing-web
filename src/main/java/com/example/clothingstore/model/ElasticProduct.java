@@ -27,8 +27,8 @@ public class ElasticProduct {
     @Field(type = Text)
     private String avgRating;
 
-    @Field(type = Text)
-    private String price;
+    @Field(type = Long)
+    private Long price;
 
     @Field(type = Text)
     private String size;
@@ -39,8 +39,8 @@ public class ElasticProduct {
     @Field(type = Text)
     private String sale;
 
-    @Field(type = Text)
-    private String sold;
+    @Field(type = Long)
+    private Long sold;
 
     @Field(type = Text)
     private String quantity;
@@ -57,7 +57,7 @@ public class ElasticProduct {
     @Field(type = Text)
     private String status;
 
-    public ElasticProduct(java.lang.Long id, String name, String description, String image, String avgRating, String price, String size, String color, String sale, String sold, String quantity, String categoryId, String categoryName, String countComment, String status) {
+    public ElasticProduct(java.lang.Long id, String name, String description, String image, String avgRating, java.lang.Long price, String size, String color, String sale, java.lang.Long sold, String quantity, String categoryId, String categoryName, String countComment, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -115,11 +115,11 @@ public class ElasticProduct {
         this.avgRating = avgRating;
     }
 
-    public String getPrice() {
+    public java.lang.Long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(java.lang.Long price) {
         this.price = price;
     }
 
@@ -147,11 +147,11 @@ public class ElasticProduct {
         this.sale = sale;
     }
 
-    public String getSold() {
+    public java.lang.Long getSold() {
         return sold;
     }
 
-    public void setSold(String sold) {
+    public void setSold(java.lang.Long sold) {
         this.sold = sold;
     }
 
