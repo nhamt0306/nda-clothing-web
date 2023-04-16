@@ -2,58 +2,62 @@ package com.example.clothingstore.model;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.Setting;
+
 import static org.springframework.data.elasticsearch.annotations.FieldType.Text;
 import static org.springframework.data.elasticsearch.annotations.FieldType.Long;
+
 import javax.persistence.Id;
 
 @Document(indexName = "product")
+@Setting(settingPath = "/index-config.json")
 public class ElasticProduct {
     @Id
     private Long id;
 
-    @Field(type = Text)
+    @Field(type = Text, analyzer = "custom_analyzer")
     private String name;
 
-    @Field(type = Text)
+    @Field(type = Text, analyzer = "custom_analyzer")
     private String description;
 
     @Field()
     private String image;
 
-    @Field(type = Long)
-    private Long avgRating;
+    @Field(type = Text)
+    private String avgRating;
+
+    @Field(type = Text)
+    private String price;
 
     @Field(type = Long)
-    private Long price;
-
-    @Field(type = Long)
-    private Long size;
+    private String size;
 
     @Field()
     private String color;
 
     @Field(type = Long)
-    private Long sale;
+    private String sale;
 
     @Field(type = Long)
-    private Long sold;
+    private String sold;
 
     @Field(type = Long)
-    private Long quantity;
+    private String quantity;
 
     @Field(type = Long)
-    private Long categoryId;
+    private String categoryId;
 
     @Field()
     private String categoryName;
 
     @Field(type = Long)
-    private Long countComment;
+    private String countComment;
 
     @Field()
     private String status;
 
-    public ElasticProduct(java.lang.Long id, String name, String description, String image, java.lang.Long avgRating, java.lang.Long price, java.lang.Long size, String color, java.lang.Long sale, java.lang.Long sold, java.lang.Long quantity, java.lang.Long categoryId, String categoryName, java.lang.Long countComment, String status) {
+    public ElasticProduct(java.lang.Long id, String name, String description, String image, String avgRating, String price, String size, String color, String sale, String sold, String quantity, String categoryId, String categoryName, String countComment, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -103,27 +107,27 @@ public class ElasticProduct {
         this.image = image;
     }
 
-    public java.lang.Long getAvgRating() {
+    public String getAvgRating() {
         return avgRating;
     }
 
-    public void setAvgRating(java.lang.Long avgRating) {
+    public void setAvgRating(String avgRating) {
         this.avgRating = avgRating;
     }
 
-    public java.lang.Long getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(java.lang.Long price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public java.lang.Long getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(java.lang.Long size) {
+    public void setSize(String size) {
         this.size = size;
     }
 
@@ -135,35 +139,35 @@ public class ElasticProduct {
         this.color = color;
     }
 
-    public java.lang.Long getSale() {
+    public String getSale() {
         return sale;
     }
 
-    public void setSale(java.lang.Long sale) {
+    public void setSale(String sale) {
         this.sale = sale;
     }
 
-    public java.lang.Long getSold() {
+    public String getSold() {
         return sold;
     }
 
-    public void setSold(java.lang.Long sold) {
+    public void setSold(String sold) {
         this.sold = sold;
     }
 
-    public java.lang.Long getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(java.lang.Long quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
-    public java.lang.Long getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(java.lang.Long categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -175,11 +179,11 @@ public class ElasticProduct {
         this.categoryName = categoryName;
     }
 
-    public java.lang.Long getCountComment() {
+    public String getCountComment() {
         return countComment;
     }
 
-    public void setCountComment(java.lang.Long countComment) {
+    public void setCountComment(String countComment) {
         this.countComment = countComment;
     }
 
