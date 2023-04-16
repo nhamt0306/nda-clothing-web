@@ -30,31 +30,31 @@ public class ElasticProduct {
     @Field(type = Text)
     private String price;
 
-    @Field(type = Long)
+    @Field(type = Text)
     private String size;
 
     @Field()
     private String color;
 
-    @Field(type = Long)
+    @Field(type = Text)
     private String sale;
 
-    @Field(type = Long)
+    @Field(type = Text)
     private String sold;
 
-    @Field(type = Long)
+    @Field(type = Text)
     private String quantity;
 
-    @Field(type = Long)
+    @Field(type = Text)
     private String categoryId;
 
-    @Field()
+    @Field(type = Text, analyzer = "custom_analyzer")
     private String categoryName;
 
-    @Field(type = Long)
+    @Field(type = Text)
     private String countComment;
 
-    @Field()
+    @Field(type = Text)
     private String status;
 
     public ElasticProduct(java.lang.Long id, String name, String description, String image, String avgRating, String price, String size, String color, String sale, String sold, String quantity, String categoryId, String categoryName, String countComment, String status) {
