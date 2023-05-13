@@ -2,6 +2,7 @@ package com.example.clothingstore.controller;
 
 import com.example.clothingstore.config.mapper.*;
 import com.example.clothingstore.dto.CommentDTO;
+import com.example.clothingstore.dto.CommentDTOV1;
 import com.example.clothingstore.model.*;
 import com.example.clothingstore.security.principal.UserDetailService;
 import com.example.clothingstore.service.impl.*;
@@ -48,8 +49,8 @@ public class CommentController {
         return ResponseEntity.ok(commentMappers);
     }
     // Tạo comment --> Tính lại avg Rating của product;
-    @PostMapping("/user/comment/create")
-    public Object createComment(@ModelAttribute CommentDTO commentDTO) throws ParseException {
+    @PostMapping("/user/comment/create-v2")
+    public Object createCommentV2(@ModelAttribute CommentDTO commentDTO) throws ParseException {
         // set isComment to true
         TransactionEntity transactionEntity = transactionService.getById(commentDTO.getTransactionId());
 
@@ -80,6 +81,43 @@ public class CommentController {
                 commentEntity1.setImage("");
         }
         commentService.save(commentEntity1);
+        // Tính lại avgRating của Product;
+        Long totalRating = Long.valueOf(0);
+        Long totalComment = Long.valueOf(0);
+        for(CommentEntity commentEntity : commentService.findByProductId(commentDTO.getProductId()))
+        {
+            totalRating = totalRating + commentEntity.getRating();
+            totalComment = totalComment + 1;
+        }
+        Double avgRating = Double.valueOf(totalRating) / Double.valueOf(totalComment);
+        // Set vào Product;
+        ProductEntity productEntity = productService.findProductById(commentDTO.getProductId());
+        productEntity.setAvgRating(avgRating.longValue());
+        productService.save(productEntity);
+        return "Create comment success!";
+    }
+
+
+    @PostMapping("/user/comment/create")
+    public Object createComment(@RequestBody CommentDTOV1 commentDTO) throws ParseException {
+        // set isComment to true
+        TransactionEntity transactionEntity = transactionService.getById(commentDTO.getTransactionId());
+
+        if (transactionEntity.getCommented() == true) {
+            return new ResponseEntity<>("Transaction has already been commented", HttpStatus.CONFLICT);
+        }
+        transactionEntity.setCommented(true);
+
+        CommentEntity commentEntity1 = new CommentEntity();
+        commentEntity1.setContent(commentDTO.getComContent());
+        commentEntity1.setRating(commentDTO.getComRating());
+        commentEntity1.setUserId(userDetailService.getCurrentUser().getId());
+        commentEntity1.setProductEntity(productService.findProductById(commentDTO.getProductId()));
+        commentEntity1.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+        commentEntity1.setCreate_at(new Timestamp(System.currentTimeMillis()));
+
+        commentService.save(commentEntity1);
+        transactionService.save(transactionEntity);
         // Tính lại avgRating của Product;
         Long totalRating = Long.valueOf(0);
         Long totalComment = Long.valueOf(0);
