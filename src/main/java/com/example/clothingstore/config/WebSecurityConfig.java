@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable().
-                authorizeRequests().antMatchers("/failed","/oauth2/**","/login","/register","/category/**","/type/**","/product/**","/typeProduct/**","/order/**", "/comment/product/**","/profile/**", "/recoveryPassword/*").permitAll()
+                authorizeRequests().antMatchers("/failed","/oauth2/**","/login","/register","/category/**","/type/**","/product/**","/typeProduct/**","/order/**", "/comment/product/**","/profile/**", "/recoveryPassword/*", "/comment").permitAll()
                 .antMatchers().hasAnyRole(ADMIN.name(), USER.name()) //Các API cần đăng nhập bằng tk admin, user
                 .antMatchers("/admin/**").hasAuthority("ADMIN") //Các API cần đăng nhập bằng tk admin
                 .antMatchers("/user/**").hasAuthority(USER.name()) //Các API cần đăng nhập bằng tk user
