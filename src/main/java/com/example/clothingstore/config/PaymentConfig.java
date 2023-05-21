@@ -16,8 +16,8 @@ public class PaymentConfig {
     public static final String IPDEFAULT = "0:0:0:0:0:0:0:1";
     public static final String VERSIONVNPAY = "2.1.0";
     public static final String COMMAND = "querydr";
-    public static final String TMNCODE = "36XXODUS";
-    public static final String CHECKSUM = "BGIOXFSBCPAPCEJBMJGMNGWBASGVGLKR";
+    public static final String TMNCODE = "MNKKATVZ"; // sandbox account
+    public static final String CHECKSUM = "QXGPSIJBIQLZYKQFYBWKLLEOURZDTPEE";// sandbox account
     public static final String CURRCODE =  "VND";
     public static final String BANKCODE = "NCB";
     public static final String LOCALEDEFAULT = "vn";

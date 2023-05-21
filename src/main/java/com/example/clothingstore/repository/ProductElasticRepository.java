@@ -21,7 +21,7 @@ public interface ProductElasticRepository extends ElasticsearchRepository<Elasti
             "                                \"match\": {\n" +
             "                                    \"name\": {\n" +
             "                                        \"query\": \"?0\",\n" +
-            "                                        \"operator\": \"or\",\n" +
+            "                                        \"operator\": \"and\",\n" +
             "                                        \"zero_terms_query\": \"all\"\n" +
             "                                    }\n" +
             "                                }\n" +
