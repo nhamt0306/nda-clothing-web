@@ -21,4 +21,10 @@ public interface TypeRepository extends JpaRepository<TypeEntity, Long> {
     @Query(value = "SELECT * FROM clothing_store.types where color = :Color and size= :Size and product_id = :ProductId",nativeQuery = true)
     TypeEntity getTypeByColorSizeProductId(@Param("Color") String Color, @Param("Size") Long Size, @Param("ProductId") Long ProductId);
 
+
+    @Query(value = "SELECT id, create_at, update_at, color, price, quantity, sale, size, sum(sold) as sold, status, product_id, import_quantity, import_price FROM clothing_store.types \n" +
+            "WHERE year(update_at) = :Year and month(update_at) = :Month\n" +
+            "group by product_id\n" +
+            "order by sum(sold) desc", nativeQuery = true)
+    List<TypeEntity> statisticProductInMonth(@Param("Year") int Year, @Param("Month") int Month);
 }

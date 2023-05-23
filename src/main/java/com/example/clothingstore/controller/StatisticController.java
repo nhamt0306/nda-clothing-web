@@ -2,12 +2,17 @@ package com.example.clothingstore.controller;
 
 
 import com.example.clothingstore.config.mapper.StatisticMapper;
+import com.example.clothingstore.dto.ProductInMonthDTO;
+import com.example.clothingstore.model.TypeEntity;
 import com.example.clothingstore.service.impl.OrderServiceImpl;
+import com.example.clothingstore.service.impl.ProductServiceImpl;
+import com.example.clothingstore.service.impl.TypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -15,6 +20,11 @@ import java.util.*;
 public class StatisticController {
     @Autowired
     OrderServiceImpl orderService;
+    @Autowired
+    TypeServiceImpl typeService;
+    @Autowired
+    ProductServiceImpl productService;
+
     @GetMapping("/year")
     public String getStatisticByYear(){
         String res = orderService.getAllOrderByYear();
@@ -43,6 +53,26 @@ public class StatisticController {
             return "0";
         }
         return res;
+    }
+
+    @GetMapping("/product-chart")
+    public Object productChartInMonth(){
+        LocalDate localDate = LocalDate.now();
+        int year = localDate.getYear();
+        int month = localDate.getMonthValue();
+        List<TypeEntity> res = typeService.statisticProductInMonth(year, month);
+        if (res == null)
+        {
+            return "0";
+        }
+        List<ProductInMonthDTO> product = new ArrayList<>();
+        for(TypeEntity type : res){
+            ProductInMonthDTO productInMonthDTO = new ProductInMonthDTO();
+            productInMonthDTO.setSold(type.getSold());
+            productInMonthDTO.setName(type.getProductEntity().getName());
+            product.add(productInMonthDTO);
+        }
+        return product;
     }
 
     @GetMapping("/chart")
