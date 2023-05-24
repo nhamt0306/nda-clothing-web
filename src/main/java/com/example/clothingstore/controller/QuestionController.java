@@ -28,17 +28,22 @@ public class QuestionController {
    private String apiKey;
    
    @PostMapping("/questions")
-    public ResponseEntity<?> openAIQuestionResponse(@RequestBody QuestionDTO questionDTO) throws IOException {
+    public ResponseEntity<?> openAIQuestionResponse(@RequestBody QuestionDTO questionDTO)  {
        OpenAiService openAiService = new OpenAiService(apiKey);
-       String prompt = buildPrompt(questionDTO.getQuestion());
+       String prompt = buildPrompt();
 
        final List<ChatMessage> messages = new ArrayList<>();
        final ChatMessage systemMessage = new ChatMessage(
                ChatMessageRole.SYSTEM.value(),
                prompt
        );
+       final ChatMessage userMessage = new ChatMessage(
+               ChatMessageRole.USER.value(),
+               questionDTO.getQuestion()
+       );
 
        messages.add(systemMessage);
+       messages.add(userMessage);
 
        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                .builder()
@@ -57,7 +62,7 @@ public class QuestionController {
        return ResponseEntity.ok(choice.getMessage());
    }
 
-   private String buildPrompt(String question) throws IOException {
+   private String buildPrompt() {
        String promptStart = "You are an assistant Q&A bot create by ADNCloth, a clothing shop. \n" +
                "Your role is to answer a question that the customer asks base on the provided json only. " +
                "Vietnamese answers only. " +
@@ -69,6 +74,7 @@ public class QuestionController {
                " \"name\" is the name of the product," +
                " \"size\" is the product size," +
                " . \n";
+
        String json = "[\n" +
                "    {\n" +
                "        \"name\": \"Áo giữ nhiệt nam Modal Ultra Warm - mặc là ấm, thoáng khí\",\n" +
@@ -302,7 +308,6 @@ public class QuestionController {
                "        \"quantity\": 69,\n" +
                "    }\n" +
                "]";
-       String promptEnd = "\n Here is the question: " + question;
-       return promptStart + json + promptEnd;
+       return promptStart + json;
    }
 }
