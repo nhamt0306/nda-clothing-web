@@ -59,8 +59,7 @@ public class StatisticController {
     public Object productChartInMonth(){
         LocalDate localDate = LocalDate.now();
         int year = localDate.getYear();
-        int month = localDate.getMonthValue();
-        List<TypeEntity> res = typeService.statisticProductInMonth(year, month);
+        List<TypeEntity> res = typeService.statisticProductInMonth(year);
         if (res == null)
         {
             return "0";

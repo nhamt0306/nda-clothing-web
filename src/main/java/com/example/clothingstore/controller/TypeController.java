@@ -136,8 +136,8 @@ public class TypeController {
             type.setPrice(Long.parseLong(typeDTO.get("price")));
             type.setProductEntity(productService.findProductById(id));
             type.setSale(0L);
-            type.setImportPrice(Long.parseLong(typeDTO.get("importPrice")));
-            type.setImportQuantity(Long.parseLong(typeDTO.get("importQuantity")));
+            type.setImportPrice(Long.parseLong(typeDTO.get("price")));
+            type.setImportQuantity(Long.parseLong(typeDTO.get("quantity")));
             type.setSold(0L);
             type.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             type.setCreate_at(new Timestamp(System.currentTimeMillis()));
@@ -213,6 +213,8 @@ public class TypeController {
                 }
                 typeEntity.setQuantity(Long.parseLong(typeDTO.get("quantity")));
                 typeEntity.setPrice(Long.parseLong(typeDTO.get("price")));
+                typeEntity.setImportQuantity(typeEntity.getQuantity() +Long.parseLong(typeDTO.get("quantity")) );
+                typeEntity.setImportPrice(typeEntity.getPrice() +Long.parseLong(typeDTO.get("price")));
             }
 
             if (typeEntity == null) {
@@ -226,6 +228,8 @@ public class TypeController {
                 typeEntity.setSold(0L);
                 typeEntity.setUpdate_at(new Timestamp(System.currentTimeMillis()));
                 typeEntity.setCreate_at(new Timestamp(System.currentTimeMillis()));
+                typeEntity.setImportQuantity(typeEntity.getQuantity() +Long.parseLong(typeDTO.get("quantity")) );
+                typeEntity.setImportPrice(typeEntity.getPrice() +Long.parseLong(typeDTO.get("price")));
             }
 
             typeService.save(typeEntity);
