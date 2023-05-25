@@ -23,8 +23,8 @@ public interface TypeRepository extends JpaRepository<TypeEntity, Long> {
 
 
     @Query(value = "SELECT id, create_at, update_at, color, price, quantity, sale, size, sum(sold) as sold, status, product_id, import_quantity, import_price FROM clothing_store.types \n" +
-            "WHERE year(update_at) = :Year and month(update_at) = :Month\n" +
+            "WHERE year(update_at) = :Year" +
             "group by product_id\n" +
             "order by sum(sold) desc", nativeQuery = true)
-    List<TypeEntity> statisticProductInMonth(@Param("Year") int Year, @Param("Month") int Month);
+    List<TypeEntity> statisticProductInMonth(@Param("Year") int Year);
 }
