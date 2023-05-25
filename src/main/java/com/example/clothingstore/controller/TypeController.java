@@ -136,8 +136,8 @@ public class TypeController {
             type.setPrice(Long.parseLong(typeDTO.get("price")));
             type.setProductEntity(productService.findProductById(id));
             type.setSale(0L);
-            type.setImportPrice(Long.parseLong(typeDTO.get("importPrice")));
-            type.setImportQuantity(Long.parseLong(typeDTO.get("importQuantity")));
+            type.setImportPrice(type.getPrice()+Long.parseLong(typeDTO.get("price")));
+            type.setImportQuantity(type.getQuantity() + Long.parseLong(typeDTO.get("quantity")));
             type.setSold(0L);
             type.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             type.setCreate_at(new Timestamp(System.currentTimeMillis()));
