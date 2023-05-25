@@ -79,8 +79,8 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public List<TypeEntity> statisticProductInMonth(int year, int month) {
-        return typeRepository.statisticProductInMonth(year, month);
+    public List<TypeEntity> statisticProductInMonth(int year) {
+        return typeRepository.statisticProductInMonth(year);
     }
 
 }
