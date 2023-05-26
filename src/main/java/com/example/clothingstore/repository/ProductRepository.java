@@ -30,7 +30,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
             "WHERE (?1 is null or pro.name LIKE %?1%) " +
             "AND (?2 is null or pro.categoryEntity.id = ?2) " +
             "AND (?3 is null or pro.avgRating >= ?3) " +
-            "AND pro.status = 'Active' " +
+//            "AND pro.status = 'Active' " +
             "GROUP BY pro.id")
     Page<ProductEntity> findAllByFiltering(String keyword, Long catId, Integer rating, Pageable pageable);
 

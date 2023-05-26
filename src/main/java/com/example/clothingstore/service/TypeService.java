@@ -16,4 +16,5 @@ public interface TypeService {
 
     TypeEntity getTypeByColorAndSizeAndProductId(String color, Long size, Long productId);
     ColorAndTypeDTO getListColorAndSize(Long product);
+    List<TypeEntity> statisticProductInMonth(int year);
 }

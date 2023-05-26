@@ -77,4 +77,10 @@ public class TypeServiceImpl implements TypeService {
         ColorAndTypeDTO colorAndTypeDTO = new ColorAndTypeDTO(productId, colorList, sizeList);
         return colorAndTypeDTO;
     }
+
+    @Override
+    public List<TypeEntity> statisticProductInMonth(int year) {
+        return typeRepository.statisticProductInMonth(year);
+    }
+
 }

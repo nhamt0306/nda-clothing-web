@@ -92,7 +92,7 @@ public class ProductController {
     @GetMapping("/product")
     public Object getAllProducts(@RequestParam(defaultValue = "1") Integer pageNo,
                                             @RequestParam(defaultValue = "8") Integer pageSize,
-                                            @RequestParam(defaultValue = "id") String sortBy,
+                                            @RequestParam(defaultValue = "-id") String sortBy,
                                             @RequestParam(defaultValue = "") Long catId,
                                             @RequestParam(defaultValue = "") Integer rating,
                                             @RequestParam(defaultValue = "") String keyword) {
