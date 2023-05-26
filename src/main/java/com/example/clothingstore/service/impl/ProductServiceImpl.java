@@ -7,10 +7,10 @@ import com.example.clothingstore.model.CategoryEntity;
 import com.example.clothingstore.model.ElasticProduct;
 import com.example.clothingstore.model.ProductEntity;
 import com.example.clothingstore.model.TypeEntity;
-import com.example.clothingstore.repository.ProductElasticRepository;
+//import com.example.clothingstore.repository.ProductElasticRepository;
 import com.example.clothingstore.repository.ProductRepository;
 import com.example.clothingstore.service.ProductService;
-import com.example.clothingstore.utils.ElasticSynchronizer;
+//import com.example.clothingstore.utils.ElasticSynchronizer;
 import org.hibernate.mapping.Join;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +35,10 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     CloudinaryService cloudinaryService;
 
-    @Autowired
-    ProductElasticRepository productElasticRepository;
+//    @Autowired
+//    ProductElasticRepository productElasticRepository;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ElasticSynchronizer.class);
+//    private static final Logger LOG = LoggerFactory.getLogger(ElasticSynchronizer.class);
 
     @Override
     public List<ProductEntity> getAllProduct() {
@@ -177,37 +177,37 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Override
-    public Page<ElasticProduct> getElasticSearchProductByFiltering(Integer pageNo,
-                                                                   Integer pageSize,
-                                                                   String sortBy,
-                                                                   Long catId,
-                                                                   Integer rating,
-                                                                   String keyword) {
-        try {
-            Page<ElasticProduct> productEntities;
-            Pageable paging;
-            String lastItem;
-            String[] parts;
-
-            if (sortBy.charAt(0) == '-') {
-                parts = sortBy.substring(1).split("\\.");
-                lastItem = parts[parts.length - 1];
-                paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, lastItem));
-            } else {
-                parts = sortBy.split("\\.");
-                lastItem = parts[parts.length - 1];
-                paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, lastItem));
-            }
-
-            String catIdStr = catId == null ? "" : catId.toString();
-            String ratingStr = rating == null ? "" : rating.toString();
-
-            productEntities = productElasticRepository.searchElasticProductsByFiltering(keyword, catIdStr, ratingStr, paging);
-
-            return productEntities;
-        } catch(Exception e) {
-            throw new ResourceNotFoundException("Check your params");
-        }
-    }
+//    @Override
+//    public Page<ElasticProduct> getElasticSearchProductByFiltering(Integer pageNo,
+//                                                                   Integer pageSize,
+//                                                                   String sortBy,
+//                                                                   Long catId,
+//                                                                   Integer rating,
+//                                                                   String keyword) {
+//        try {
+//            Page<ElasticProduct> productEntities;
+//            Pageable paging;
+//            String lastItem;
+//            String[] parts;
+//
+//            if (sortBy.charAt(0) == '-') {
+//                parts = sortBy.substring(1).split("\\.");
+//                lastItem = parts[parts.length - 1];
+//                paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, lastItem));
+//            } else {
+//                parts = sortBy.split("\\.");
+//                lastItem = parts[parts.length - 1];
+//                paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.ASC, lastItem));
+//            }
+//
+//            String catIdStr = catId == null ? "" : catId.toString();
+//            String ratingStr = rating == null ? "" : rating.toString();
+//
+//            productEntities = productElasticRepository.searchElasticProductsByFiltering(keyword, catIdStr, ratingStr, paging);
+//
+//            return productEntities;
+//        } catch(Exception e) {
+//            throw new ResourceNotFoundException("Check your params");
+//        }
+//    }
 }
