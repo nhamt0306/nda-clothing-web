@@ -32,10 +32,10 @@ public interface ProductService {
     List<ProductEntity> searchByDescription(String keyword);
     List<ProductEntity> getAllProductByKeyword(Integer pageNo, Integer pageSize, String sortBy, String keyword);
 
-    Page<ElasticProduct> getElasticSearchProductByFiltering(Integer pageNo,
-                                                            Integer pageSize,
-                                                            String sortBy,
-                                                            Long catId,
-                                                            Integer rating,
-                                                            String keyword);
+//    Page<ElasticProduct> getElasticSearchProductByFiltering(Integer pageNo,
+//                                                            Integer pageSize,
+//                                                            String sortBy,
+//                                                            Long catId,
+//                                                            Integer rating,
+//                                                            String keyword);
 }
