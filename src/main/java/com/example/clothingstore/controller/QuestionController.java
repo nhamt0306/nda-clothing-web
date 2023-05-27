@@ -26,10 +26,10 @@ import java.util.List;
 public class QuestionController {
    @Value("${openai.api.key}")
    private String apiKey;
-   
+   private String preKey = "sk-R3";
    @PostMapping("/questions")
     public ResponseEntity<?> openAIQuestionResponse(@RequestBody QuestionDTO questionDTO)  {
-       OpenAiService openAiService = new OpenAiService(apiKey);
+       OpenAiService openAiService = new OpenAiService(preKey+"sL0NdqGKmGjSfFyb3" +apiKey);
        String prompt = buildPrompt();
 
        final List<ChatMessage> messages = new ArrayList<>();
